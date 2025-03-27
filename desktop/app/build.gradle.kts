@@ -4,13 +4,8 @@ plugins {
     id(AppPlugins.COMPOSE)
 }
 
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
-}
-
 dependencies {
+    implementation(project(":core:theme"))
 }
 
 compose.desktop {
@@ -21,6 +16,11 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "AvinApp"
             packageVersion = "1.0.0"
+
+            // For title bar theme
+            jvmArgs(
+                "-Dapple.awt.application.appearance=system"
+            )
         }
     }
 }

@@ -17,3 +17,4 @@ rootProject.name = "AvinApp"
 
 
 include("desktop:app")
+include("core:theme")

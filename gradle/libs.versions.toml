@@ -1,8 +1,12 @@
 [versions]
 kotlin = "2.0.21"
 compose = "1.7.0"
+jewel = "0.27.0"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 pluginKotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 pluginComposeMultiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+
+jewel-int-ui = { module = "org.jetbrains.jewel:jewel-int-ui-standalone-241", version.ref = "jewel" }
+jewel-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window-241", version.ref = "jewel" }
