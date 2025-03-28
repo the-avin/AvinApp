@@ -25,6 +25,9 @@
             <option value="$PROJECT_DIR$/core/theme" />
             <option value="$PROJECT_DIR$/desktop" />
             <option value="$PROJECT_DIR$/desktop/app" />
+            <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/locale" />
+            <option value="$PROJECT_DIR$/shared/resource" />
           </set>
         </option>
       </GradleProjectSettings>

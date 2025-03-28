@@ -1,11 +1,13 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    id(AppPlugins.COMPOSE)
+    id(AppPlugins.COMPOSE_UI)
 }
 
 dependencies {
     implementation(project(":core:theme"))
+    implementation(project(":shared:locale"))
+    implementation(project(":shared:resource"))
 }
 
 compose.desktop {

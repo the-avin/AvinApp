@@ -1,3 +1,3 @@
 plugins {
-    id(AppPlugins.COMPOSE)
+    id(AppPlugins.COMPOSE_UI)
 }

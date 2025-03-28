@@ -4,7 +4,6 @@ plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
     id("app_plugins.kotlin")
-    id("app_plugins.jewel")
 }
 
 repositories {

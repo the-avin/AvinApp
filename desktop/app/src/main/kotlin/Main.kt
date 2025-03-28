@@ -7,10 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
+import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
+import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.manager.resources.StringResource
 import com.avin.avinapp.theme.AppCustomTheme
 import com.avin.avinapp.theme.window.AppCustomWindow
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.Checkbox
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
@@ -22,26 +24,28 @@ import org.jetbrains.jewel.window.newFullscreenControls
 fun App(onDismiss: () -> Unit) {
     var isChecked by remember { mutableStateOf(true) }
 
-    AppCustomTheme {
-        AppCustomWindow(onCloseRequest = onDismiss, title = "Avin") {
-            TitleBar(
-                modifier = Modifier.newFullscreenControls(),
-                gradientStartColor = JewelTheme.colorPalette.purple[6].copy(.6f)
-            ) {
-                Text(text = "Hello Avin!")
-            }
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(JewelTheme.globalColors.panelBackground),
-                contentAlignment = Alignment.Center
-            ) {
-                CheckboxRow(
-                    checked = isChecked,
-                    onCheckedChange = { isChecked = it },
-                    modifier = Modifier.animateContentSize()
+    WithLocaleLanguageManager {
+        AppCustomTheme {
+            AppCustomWindow(onCloseRequest = onDismiss, title = "Avin") {
+                TitleBar(
+                    modifier = Modifier.newFullscreenControls(),
+                    gradientStartColor = JewelTheme.colorPalette.purple[6].copy(.6f)
                 ) {
-                    Text(text = if (isChecked) "Checked avin" else "Unchecked avin")
+                    Text(text = "${dynamicStringRes(StringResource.hello)} Avin!")
+                }
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(JewelTheme.globalColors.panelBackground),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CheckboxRow(
+                        checked = isChecked,
+                        onCheckedChange = { isChecked = it },
+                        modifier = Modifier.animateContentSize()
+                    ) {
+                        Text(text = if (isChecked) "Checked avin" else "Unchecked avin")
+                    }
                 }
             }
         }
