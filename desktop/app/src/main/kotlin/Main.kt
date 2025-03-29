@@ -9,16 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
 import com.avin.avinapp.manager.compose.LocalLanguageManager
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
-import com.avin.avinapp.manager.compose.dynamicStringRes
-import com.avin.avinapp.manager.resources.StringResource
 import com.avin.avinapp.theme.AppCustomTheme
 import com.avin.avinapp.theme.window.AppCustomWindow
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.theme.colorPalette
-import org.jetbrains.jewel.window.TitleBar
-import org.jetbrains.jewel.window.newFullscreenControls
 
 @Composable
 @Preview
@@ -29,12 +24,6 @@ fun App(onDismiss: () -> Unit) {
         val languageManager = LocalLanguageManager.current
         AppCustomTheme {
             AppCustomWindow(onCloseRequest = onDismiss, title = "Avin") {
-                TitleBar(
-                    modifier = Modifier.newFullscreenControls(),
-                    gradientStartColor = JewelTheme.colorPalette.purple[6].copy(.6f)
-                ) {
-                    Text(text = "${dynamicStringRes(StringResource.hello)} Avin!")
-                }
                 Box(
                     Modifier
                         .fillMaxSize()

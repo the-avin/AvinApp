@@ -26,3 +26,6 @@ compose.desktop {
         }
     }
 }
+
+
+val appFolder: String by extra { ".avin" }
