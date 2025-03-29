@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/desktop/app" />
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/shared/locale" />
+            <option value="$PROJECT_DIR$/shared/preferences" />
             <option value="$PROJECT_DIR$/shared/resource" />
             <option value="$PROJECT_DIR$/shared/utils" />
             <option value="$PROJECT_DIR$/shared/utils/app" />

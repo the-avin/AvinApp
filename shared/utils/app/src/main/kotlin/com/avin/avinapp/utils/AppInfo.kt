@@ -9,7 +9,7 @@ object AppInfo {
 
     private fun getHomeFolder() = System.getProperty("user.home")
 
-    fun getAppFolderFile() {
-        File(File(getHomeFolder(), APP_FOLDER), PREFERENCES_FILE)
+    fun getAppFolderFile(): File {
+        return File(File(getHomeFolder(), APP_FOLDER), PREFERENCES_FILE)
     }
 }

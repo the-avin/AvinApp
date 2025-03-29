@@ -3,6 +3,8 @@ kotlin = "2.0.21"
 compose = "1.7.0"
 jewel = "0.27.0"
 kotlinx-coroutines = "1.10.1"
+koin = "4.0.3"
+datastore = "1.1.1"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -13,3 +15,12 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 jewel-int-ui = { module = "org.jetbrains.jewel:jewel-int-ui-standalone-241", version.ref = "jewel" }
 jewel-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window-241", version.ref = "jewel" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+
+# Koin
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+
+# Datastore
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }

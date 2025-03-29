@@ -5,6 +5,10 @@ plugins {
 }
 
 dependencies {
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
+
+    // Locale modules
     implementation(project(":core:theme"))
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
