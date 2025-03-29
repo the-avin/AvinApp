@@ -5,7 +5,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.resource.Resource
 import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.component.painterResource
 import org.jetbrains.jewel.window.DecoratedWindow
 import org.jetbrains.jewel.window.DecoratedWindowScope
 import org.jetbrains.jewel.window.defaultDecoratedWindowStyle
@@ -17,7 +19,7 @@ fun AppCustomWindow(
     state: WindowState = rememberWindowState(),
     visible: Boolean = true,
     title: String = "",
-    icon: Painter? = null,
+    icon: Painter? = painterResource(Resource.image.LOGO),
     resizable: Boolean = true,
     enabled: Boolean = true,
     focusable: Boolean = true,

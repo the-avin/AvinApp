@@ -5,6 +5,7 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
+import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.pages.AppPages
 import org.koin.core.component.KoinComponent
 
@@ -14,7 +15,7 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         source = projects,
         serializer = null,
         key = AppPages.Projects.key,
-        childFactory = { _, context -> }
+        childFactory = { _, parentComponent -> ProjectsComponent(parentComponent) }
     )
 
     fun openProjects() {

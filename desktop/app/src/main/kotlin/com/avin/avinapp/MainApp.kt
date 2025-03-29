@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
 import com.avin.avinapp.components.RootComponent
 import com.avin.avinapp.components.toFlow
+import com.avin.avinapp.features.projects.ProjectsWindow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
 import com.avin.avinapp.preferences.AppPreferencesKeys
 import com.avin.avinapp.preferences.PreferencesStorage
@@ -39,28 +40,13 @@ object MainApp : KoinComponent {
     fun init() {
         rootComponent.openProjects()
         application {
-            var isChecked by remember { mutableStateOf(false) }
             AppletInitializer {
                 val projectsSlot by rootComponent.projectsSlot.toFlow().collectAsState(null)
                 projectsSlot?.child?.instance?.let {
-                    AppCustomWindow(onCloseRequest = rootComponent::closeProjects, title = "Avin") {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .background(JewelTheme.globalColors.panelBackground),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CheckboxRow(
-                                checked = isChecked,
-                                onCheckedChange = {
-                                    isChecked = it
-                                },
-                                modifier = Modifier.animateContentSize()
-                            ) {
-                                Text(text = if (isChecked) "Checked avin" else "Unchecked avin")
-                            }
-                        }
-                    }
+                    ProjectsWindow(
+                        component = it,
+                        onCloseRequest = rootComponent::closeProjects
+                    )
                 }
             }
         }
