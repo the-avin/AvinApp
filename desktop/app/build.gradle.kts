@@ -8,11 +8,16 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
 
+    // Decompose
+    implementation(libs.decompose)
+
+
     // Locale modules
     implementation(project(":core:theme"))
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
     implementation(project(":shared:preferences"))
+    implementation(project(":shared:utils:app"))
 }
 
 val nameSpace = "com.avin.avinapp"

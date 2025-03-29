@@ -5,6 +5,8 @@ jewel = "0.27.0"
 kotlinx-coroutines = "1.10.1"
 koin = "4.0.3"
 datastore = "1.1.1"
+decompose = "3.3.0"
+decompose-compose = "2.2.3"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -24,3 +26,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 # Datastore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# Decompose
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions-compose-jetpack = { module = "com.arkivanov.decompose:extensions-compose-jetpack", version.ref = "decompose-compose" }

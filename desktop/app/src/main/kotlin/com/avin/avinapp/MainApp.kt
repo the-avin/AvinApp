@@ -8,6 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.application
+import com.avin.avinapp.components.RootComponent
+import com.avin.avinapp.components.toFlow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
 import com.avin.avinapp.preferences.AppPreferencesKeys
 import com.avin.avinapp.preferences.PreferencesStorage
@@ -21,6 +23,7 @@ import org.koin.core.component.inject
 
 object MainApp : KoinComponent {
     private val preferences: PreferencesStorage by inject()
+    private val rootComponent: RootComponent by inject()
 
     @Composable
     private fun AppletInitializer(content: @Composable () -> Unit) {
@@ -34,24 +37,28 @@ object MainApp : KoinComponent {
     }
 
     fun init() {
+        rootComponent.openProjects()
         application {
             var isChecked by remember { mutableStateOf(false) }
             AppletInitializer {
-                AppCustomWindow(onCloseRequest = ::exitApplication, title = "Avin") {
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .background(JewelTheme.globalColors.panelBackground),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CheckboxRow(
-                            checked = isChecked,
-                            onCheckedChange = {
-                                isChecked = it
-                            },
-                            modifier = Modifier.animateContentSize()
+                val projectsSlot by rootComponent.projectsSlot.toFlow().collectAsState(null)
+                projectsSlot?.child?.instance?.let {
+                    AppCustomWindow(onCloseRequest = rootComponent::closeProjects, title = "Avin") {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(JewelTheme.globalColors.panelBackground),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text(text = if (isChecked) "Checked avin" else "Unchecked avin")
+                            CheckboxRow(
+                                checked = isChecked,
+                                onCheckedChange = {
+                                    isChecked = it
+                                },
+                                modifier = Modifier.animateContentSize()
+                            ) {
+                                Text(text = if (isChecked) "Checked avin" else "Unchecked avin")
+                            }
                         }
                     }
                 }

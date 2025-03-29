@@ -17,6 +17,7 @@ rootProject.name = "AvinApp"
 
 
 include("desktop:app")
+include("desktop:features:projects")
 include("core:theme")
 include("shared:resource")
 include("shared:locale")

@@ -5,7 +5,8 @@ import org.koin.core.context.startKoin
 fun startDi() {
     startKoin {
         modules(
-            localModule
+            localModule,
+            componentsModules
         )
     }
 }
