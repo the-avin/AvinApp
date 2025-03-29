@@ -2,6 +2,7 @@ package com.avin.avinapp.manager.container
 
 import com.avin.avinapp.locale.StringRes
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.*
 
 class LanguageContainerImpl : LanguageContainer {
@@ -18,10 +19,9 @@ class LanguageContainerImpl : LanguageContainer {
         try {
             val stream = this::class.java.classLoader.getResourceAsStream(resourcePath)
             stream?.use { properties.load(it) }
-            _translations.value = properties.entries.associate { it.key.toString() to it.value.toString() }
+            _translations.update { properties.entries.associate { it.key.toString() to it.value.toString() } }
         } catch (e: Exception) {
             e.printStackTrace()
-            _translations.value = emptyMap()
         }
     }
 
@@ -32,6 +32,6 @@ class LanguageContainerImpl : LanguageContainer {
 
     companion object {
         private const val DEFAULT_LANGUAGE = "en"
-        private const val LOCALE_FOLDER = "locale"
+        private const val LOCALE_FOLDER = "locales"
     }
 }

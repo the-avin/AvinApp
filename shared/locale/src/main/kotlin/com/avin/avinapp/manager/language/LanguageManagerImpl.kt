@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 
 class LanguageManagerImpl : LanguageManager {
     private val _container = MutableStateFlow<LanguageContainer?>(null)
-    val container = _container.asStateFlow()
+    override val container = _container.asStateFlow()
 
     override fun load(language: String?) {
         val newContainer = LanguageContainerImpl().apply { loadLanguage(language) }
