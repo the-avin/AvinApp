@@ -12,11 +12,14 @@ dependencies {
     implementation(project(":core:theme"))
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
+    implementation(project(":shared:preferences"))
 }
+
+val nameSpace = "com.avin.avinapp"
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "${nameSpace}.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
