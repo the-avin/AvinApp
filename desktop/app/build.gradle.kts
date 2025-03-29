@@ -28,11 +28,11 @@ val nameSpace = "com.avin.avinapp"
 compose.desktop {
     application {
         mainClass = "${nameSpace}.MainKt"
-
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "AvinApp"
-            packageVersion = "1.0.0"
+            packageName = ProjectInfo.APP_NAME
+            packageVersion = ProjectInfo.VERSION
+
             macOS { iconFile.set(project.file("icon.png")) }
             windows { iconFile.set(project.file("icon.png")) }
             linux { iconFile.set(project.file("icon.png")) }
@@ -44,6 +44,3 @@ compose.desktop {
         }
     }
 }
-
-
-val appFolder: String by extra { ".avin" }

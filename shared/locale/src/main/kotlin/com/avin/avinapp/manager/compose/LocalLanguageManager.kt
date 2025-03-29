@@ -18,7 +18,10 @@ fun rememberLocalLanguageManager(language: String?): LanguageManager {
 }
 
 @Composable
-fun WithLocaleLanguageManager(language: String? = null, content: @Composable () -> Unit) {
-    val manager = rememberLocalLanguageManager(language)
-    CompositionLocalProvider(LocalLanguageManager provides manager, content = content)
+fun WithLocaleLanguageManager(
+    language: String? = null,
+    languageManager: LanguageManager = rememberLocalLanguageManager(language),
+    content: @Composable () -> Unit
+) {
+    CompositionLocalProvider(LocalLanguageManager provides languageManager, content = content)
 }
