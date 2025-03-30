@@ -23,3 +23,7 @@ sqldelight {
         }
     }
 }
+
+tasks.register<Exec>("generateDb") {
+    commandLine("./gradlew", "generateSqlDelightInterface")
+}
