@@ -1,0 +1,12 @@
+CREATE TABLE Project (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL,
+    createdAt INTEGER NOT NULL
+);
+
+insertProject:
+INSERT INTO Project(name, path, createdAt) VALUES (?, ?, ?);
+
+selectAllProjects:
+SELECT * FROM Project;

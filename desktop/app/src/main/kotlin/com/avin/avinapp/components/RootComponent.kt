@@ -1,5 +1,7 @@
 package com.avin.avinapp.components
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
@@ -21,7 +23,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class RootComponent(context: ComponentContext) : BaseComponent(context), KoinComponent {
-    private val languageManager: LanguageManager by inject()
+    val languageManager: LanguageManager by inject()
     private val preferences: PreferencesStorage by inject()
 
     private val projects = SlotNavigation<AppPages.Projects>()
@@ -62,4 +64,8 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
     private fun loadAppName() {
         System.setProperty("apple.awt.application.name", languageManager.getText(Resource.string.appName))
     }
+
+
+    @Composable
+    fun getTheme() = preferences.get(AppPreferencesKeys.theme).collectAsState(null)
 }
