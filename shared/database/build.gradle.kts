@@ -1,6 +1,6 @@
 plugins {
     id(AppPlugins.KOTLIN)
-    id("app.cash.sqldelight") version "2.0.2"
+    alias(libs.plugins.sqldelight)
 }
 
 repositories {
@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation("app.cash.sqldelight:sqlite-driver:2.0.2")
+    implementation(libs.sqldelight.driver)
     implementation(libs.kotlinx.coroutines.core)
 
 

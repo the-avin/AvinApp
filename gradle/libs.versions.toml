@@ -7,6 +7,7 @@ koin = "4.0.3"
 datastore = "1.1.1"
 decompose = "3.3.0"
 decompose-compose = "2.2.3"
+sqldelight = "2.0.2"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -19,6 +20,9 @@ jewel-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
 
+# SQLDelight
+sqldelight-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+
 # Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -30,3 +34,8 @@ datastore-preferences = { module = "androidx.datastore:datastore-preferences", v
 # Decompose
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions-compose-jetpack = { module = "com.arkivanov.decompose:extensions-compose-jetpack", version.ref = "decompose-compose" }
+
+
+
+[plugins]
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
