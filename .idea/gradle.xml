@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/desktop/features" />
             <option value="$PROJECT_DIR$/desktop/features/projects" />
             <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/database" />
             <option value="$PROJECT_DIR$/shared/locale" />
             <option value="$PROJECT_DIR$/shared/preferences" />
             <option value="$PROJECT_DIR$/shared/resource" />

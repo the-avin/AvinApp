@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
 import com.avin.avinapp.components.RootComponent
 import com.avin.avinapp.components.toFlow
-import com.avin.avinapp.features.projects.ProjectsWindow
+import com.avin.avinapp.features.projects.page.ProjectsWindow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
 import com.avin.avinapp.theme.AppCustomTheme
 import org.koin.core.component.KoinComponent

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.koin.core.component.inject
 
 class RootComponent(context: ComponentContext) : BaseComponent(context), KoinComponent {
@@ -31,7 +32,7 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         source = projects,
         serializer = null,
         key = AppPages.Projects.key,
-        childFactory = { _, parentComponent -> ProjectsComponent(parentComponent) }
+        childFactory = { _, parentComponent -> ProjectsComponent(context = parentComponent, repository = get()) }
     )
 
     fun openProjects() {

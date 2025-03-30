@@ -1,8 +1,8 @@
-package com.avin.avinapp.features.projects
+package com.avin.avinapp.features.projects.page
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -11,10 +11,10 @@ import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.buttons.SecondaryButton
 import com.avin.avinapp.theme.window.AppCustomWindow
-import com.avin.avinapp.utils.compose.allPadding
-import com.avin.avinapp.utils.compose.topPadding
-import com.avin.avinapp.utils.compose.windowBackground
-import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
+import com.avin.avinapp.utils.compose.modifier.allPadding
+import com.avin.avinapp.utils.compose.modifier.windowBackground
+import org.jetbrains.jewel.ui.Orientation
+import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
@@ -23,19 +23,24 @@ fun ProjectsWindow(
     component: ProjectsComponent,
     onCloseRequest: () -> Unit,
 ) {
+    val projects by component.projects.collectAsState(emptyList())
+    val searchValue by component.searchValue.collectAsState()
     AppCustomWindow(onCloseRequest = onCloseRequest, title = dynamicStringRes(Resource.string.welcome)) {
         Column(modifier = Modifier.fillMaxSize().windowBackground().allPadding()) {
             Header(
-                searchState = component.searchState
+                searchValue = searchValue,
+                onSearchValueChange = component::search
             )
-            IndeterminateHorizontalProgressBar(modifier = Modifier.fillMaxWidth().topPadding())
+            Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
+            ProjectsList(projects = projects)
         }
     }
 }
 
 @Composable
 fun Header(
-    searchState: TextFieldState
+    searchValue: String,
+    onSearchValueChange: (String) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -43,7 +48,8 @@ fun Header(
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
-            state = searchState,
+            value = searchValue,
+            onValueChange = onSearchValueChange,
             modifier = Modifier.weight(1f),
             placeholder = { Text("Search") },
         )

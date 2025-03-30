@@ -10,6 +10,10 @@ repositories {
 
 dependencies {
     implementation("app.cash.sqldelight:sqlite-driver:2.0.2")
+    implementation(libs.kotlinx.coroutines.core)
+
+
+    implementation(project(":shared:utils:app"))
 }
 
 sqldelight {

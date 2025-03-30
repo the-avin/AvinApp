@@ -1,4 +1,4 @@
-package com.avin.avinapp.utils.compose
+package com.avin.avinapp.utils.compose.modifier
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable

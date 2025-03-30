@@ -6,7 +6,9 @@ fun startDi() {
     startKoin {
         modules(
             localModule,
-            componentsModules
+            componentsModules,
+            databaseModule,
+            repositoryModule
         )
     }
 }

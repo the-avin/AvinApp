@@ -6,10 +6,15 @@ import java.io.File
 object AppInfo {
     const val APP_FOLDER = ".avin"
     const val PREFERENCES_FILE = "preferences.preferences_pb"
+    const val DATABASE_FILE = "appdata.db"
 
     private fun getHomeFolder() = System.getProperty("user.home")
 
     fun getAppFolderFile(): File {
         return File(File(getHomeFolder(), APP_FOLDER), PREFERENCES_FILE)
+    }
+
+    fun getAppDatabaseFolderFile(): File {
+        return File(File(getHomeFolder(), APP_FOLDER), DATABASE_FILE)
     }
 }

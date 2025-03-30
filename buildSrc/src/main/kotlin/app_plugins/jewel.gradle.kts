@@ -9,6 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.jewel:jewel-int-ui-standalone-241:0.27.0")
-    implementation("org.jetbrains.jewel:jewel-int-ui-decorated-window-241:0.27.0")
+    implementation("org.jetbrains.jewel:jewel-int-ui-standalone-243:0.27.0")
+    implementation("org.jetbrains.jewel:jewel-int-ui-decorated-window-243:0.27.0")
 }

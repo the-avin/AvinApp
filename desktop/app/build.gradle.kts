@@ -14,6 +14,7 @@ dependencies {
 
     // Locale modules
     implementation(project(":core:theme"))
+    implementation(project(":shared:database"))
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
     implementation(project(":shared:preferences"))

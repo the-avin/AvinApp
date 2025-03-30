@@ -2,6 +2,11 @@ plugins {
     id(AppPlugins.COMPOSE_UI)
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 dependencies {
     // Decompose
     implementation(libs.decompose)
@@ -10,5 +15,6 @@ dependencies {
     implementation(project(":shared:utils:app"))
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:locale"))
+    implementation(project(":shared:database"))
     implementation(project(":shared:resource"))
 }

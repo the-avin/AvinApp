@@ -10,3 +10,6 @@ INSERT INTO Project(name, path, createdAt) VALUES (?, ?, ?);
 
 selectAllProjects:
 SELECT * FROM Project;
+
+selectProjectsByName:
+SELECT * FROM Project WHERE name LIKE '%' || :query || '%';
