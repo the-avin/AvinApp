@@ -15,4 +15,5 @@ object StringResource {
     val cancel = StringRes("cancel")
     val exists_file_message = StringRes("exists_file_message")
     val empty_fields_message = StringRes("empty_fields_message")
+    val addToGit = StringRes("add_to_git")
 }

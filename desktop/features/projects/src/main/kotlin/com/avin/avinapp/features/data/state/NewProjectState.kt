@@ -6,7 +6,8 @@ import com.avin.avinapp.utils.AppInfo
 @Immutable
 data class NewProjectState(
     val name: String = DEFAULT_PROJECT_NAME,
-    val path: String = createDefaultProjectsFolderPath()
+    val path: String = createDefaultProjectsFolderPath(),
+    val addToGit : Boolean = false
 ) {
     companion object {
         private const val DEFAULT_PROJECT_NAME = "My Application"

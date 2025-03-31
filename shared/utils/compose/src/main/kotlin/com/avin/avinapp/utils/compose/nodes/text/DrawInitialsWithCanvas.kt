@@ -36,7 +36,7 @@ fun DrawInitialsWithCanvas(text: String) {
                 cornerRadius = CornerRadius(2.dp.toPx())
             )
             val style = TextStyle(
-                color = Color.White, fontSize = size.height.toSp(), fontWeight = FontWeight.Light
+                color = Color.White, fontSize = size.height.div(initials.count()).toSp(), fontWeight = FontWeight.Light
             )
             val textResult = textMeasurer.measure(
                 initials, style = style

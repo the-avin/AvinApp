@@ -31,6 +31,7 @@ import com.avin.avinapp.utils.compose.nodes.field.RowFolderPickerField
 import com.avin.avinapp.utils.compose.nodes.field.RowTextField
 import com.avin.avinapp.utils.compose.nodes.text.WarningMessage
 import org.jetbrains.jewel.ui.Orientation
+import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.OutlinedButton
@@ -84,6 +85,13 @@ fun NewProjectWindow(
                     onPathChange = { component.updateState(state.copy(path = it)) },
                     label = dynamicStringRes(Resource.string.path),
                 )
+                Spacer(Modifier.height(12.dp))
+                CheckboxRow(
+                    checked = state.addToGit,
+                    onCheckedChange = { component.updateState(state.copy(addToGit = it)) },
+                ) {
+                    Text(dynamicStringRes(Resource.string.addToGit))
+                }
             }
             AnimatedVisibility(
                 visible = fileAlreadyExistsError,
@@ -115,6 +123,7 @@ fun NewProjectWindow(
                     Text(text = dynamicStringRes(Resource.string.cancel))
                 }
                 DefaultButton(onClick = {
+                    component.createProject().invokeOnCompletion { onCloseRequest() }
                 }, enabled = fileAlreadyExistsError.not() && fieldsEmptyError.not()) {
                     Text(text = dynamicStringRes(Resource.string.finish))
                 }

@@ -1,11 +1,13 @@
 package com.avin.avinapp.theme.window
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.resource.Resource
+import com.avin.avinapp.theme.compositions.LocalWindow
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.painterResource
 import org.jetbrains.jewel.window.DecoratedWindow
@@ -42,6 +44,9 @@ fun AppCustomWindow(
         onPreviewKeyEvent = onPreviewKeyEvent,
         onKeyEvent = onKeyEvent,
         style = style,
-        content = content
-    )
+    ) {
+        CompositionLocalProvider(LocalWindow provides window) {
+            content.invoke(this)
+        }
+    }
 }
