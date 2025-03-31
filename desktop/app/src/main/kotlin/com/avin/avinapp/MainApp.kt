@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
 import com.avin.avinapp.components.RootComponent
 import com.avin.avinapp.components.toFlow
+import com.avin.avinapp.features.new_project.page.NewProjectWindow
 import com.avin.avinapp.features.projects.page.ProjectsWindow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
 import com.avin.avinapp.theme.AppCustomTheme
@@ -34,10 +35,18 @@ object MainApp : KoinComponent {
         application {
             AppletInitializer {
                 val projectsSlot by rootComponent.projectsSlot.toFlow().collectAsState(null)
+                val newProjectSlot by rootComponent.newProjectSlot.toFlow().collectAsState(null)
                 projectsSlot?.child?.instance?.let {
                     ProjectsWindow(
                         component = it,
-                        onCloseRequest = rootComponent::closeProjects
+                        onCloseRequest = rootComponent::closeProjects,
+                        onNewProjectClick = rootComponent::openNewProject
+                    )
+                }
+                newProjectSlot?.child?.instance?.let {
+                    NewProjectWindow(
+                        component = it,
+                        onCloseRequest = rootComponent::closeNewProject,
                     )
                 }
             }

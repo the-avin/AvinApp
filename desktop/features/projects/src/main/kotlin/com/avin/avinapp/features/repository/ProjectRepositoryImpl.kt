@@ -1,9 +1,9 @@
-package com.avin.avinapp.features.projects.repository
+package com.avin.avinapp.features.repository
 
 import com.avin.avinapp.databases.AppDatabase
 import com.avin.avinapp.databases.utils.asFlow
-import com.avin.avinapp.features.projects.data.mappers.toDataListProject
-import com.avin.avinapp.features.projects.data.models.Project
+import com.avin.avinapp.features.data.mappers.toDataListProject
+import com.avin.avinapp.features.data.models.Project
 import com.avin.avinapp.time.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

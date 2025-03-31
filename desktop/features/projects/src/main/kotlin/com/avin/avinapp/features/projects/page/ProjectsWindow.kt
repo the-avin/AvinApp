@@ -12,9 +12,11 @@ import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.buttons.SecondaryButton
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.modifier.allPadding
+import com.avin.avinapp.utils.compose.modifier.topPadding
 import com.avin.avinapp.utils.compose.modifier.windowBackground
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
+import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
@@ -22,16 +24,23 @@ import org.jetbrains.jewel.ui.component.TextField
 fun ProjectsWindow(
     component: ProjectsComponent,
     onCloseRequest: () -> Unit,
+    onNewProjectClick: () -> Unit,
 ) {
     val projects by component.projects.collectAsState(emptyList())
     val searchValue by component.searchValue.collectAsState()
+    val loading by component.loading.collectAsState()
     AppCustomWindow(onCloseRequest = onCloseRequest, title = dynamicStringRes(Resource.string.welcome)) {
         Column(modifier = Modifier.fillMaxSize().windowBackground().allPadding()) {
             Header(
                 searchValue = searchValue,
-                onSearchValueChange = component::search
+                onSearchValueChange = component::search,
+                onNewProjectClick = onNewProjectClick
             )
-            Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
+            if (loading) {
+                IndeterminateHorizontalProgressBar(Modifier.fillMaxWidth().topPadding())
+            } else {
+                Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
+            }
             ProjectsList(projects = projects)
         }
     }
@@ -41,6 +50,7 @@ fun ProjectsWindow(
 fun Header(
     searchValue: String,
     onSearchValueChange: (String) -> Unit,
+    onNewProjectClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -53,7 +63,7 @@ fun Header(
             modifier = Modifier.weight(1f),
             placeholder = { Text("Search") },
         )
-        SecondaryButton(onClick = {}) {
+        SecondaryButton(onClick = onNewProjectClick) {
             Text(dynamicStringRes(Resource.string.newProject))
         }
         SecondaryButton(onClick = {}) {

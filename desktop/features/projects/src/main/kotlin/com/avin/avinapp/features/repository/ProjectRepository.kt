@@ -1,6 +1,6 @@
-package com.avin.avinapp.features.projects.repository
+package com.avin.avinapp.features.repository
 
-import com.avin.avinapp.features.projects.data.models.Project
+import com.avin.avinapp.features.data.models.Project
 import kotlinx.coroutines.flow.Flow
 
 interface ProjectRepository {

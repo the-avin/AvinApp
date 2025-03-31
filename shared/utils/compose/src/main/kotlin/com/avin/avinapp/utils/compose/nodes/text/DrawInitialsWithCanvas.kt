@@ -1,4 +1,4 @@
-package com.avin.avinapp.utils.compose.nodes
+package com.avin.avinapp.utils.compose.nodes.text
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size

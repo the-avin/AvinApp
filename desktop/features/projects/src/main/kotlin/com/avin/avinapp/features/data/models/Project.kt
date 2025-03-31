@@ -1,4 +1,4 @@
-package com.avin.avinapp.features.projects.data.models
+package com.avin.avinapp.features.data.models
 
 import androidx.compose.runtime.Immutable
 

@@ -1,7 +1,7 @@
-package com.avin.avinapp.features.projects.data.mappers
+package com.avin.avinapp.features.data.mappers
 
 import databases.Project as DbProject
-import com.avin.avinapp.features.projects.data.models.Project as DataProject
+import com.avin.avinapp.features.data.models.Project as DataProject
 
 fun DbProject.toDataProject(): DataProject {
     return DataProject(

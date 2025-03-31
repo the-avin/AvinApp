@@ -1,6 +1,5 @@
 package com.avin.avinapp.features.projects.page
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,17 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.avin.avinapp.features.projects.data.models.Project
-import com.avin.avinapp.utils.compose.nodes.DrawInitialsWithCanvas
+import com.avin.avinapp.features.data.models.Project
+import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
@@ -50,8 +43,8 @@ fun ProjectItem(project: Project) {
             .background(
                 if (isHovered) JewelTheme.colorPalette.blue[5].copy(.3f) else Color.Transparent
             )
-            .padding(8.dp)
             .hoverable(interactionSource)
+            .padding(8.dp)
 
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {

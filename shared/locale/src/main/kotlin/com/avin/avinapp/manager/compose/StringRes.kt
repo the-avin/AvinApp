@@ -10,3 +10,19 @@ fun dynamicStringRes(res: StringRes): String {
 
     return remember(container) { languageManager.getText(res) }
 }
+
+@Composable
+fun dynamicStringRes(res: StringRes, values: Map<String, String>): String {
+    val languageManager = LocalLanguageManager.current
+    val container by languageManager.container.collectAsState()
+
+    return remember(container) {
+        languageManager.getText(res).let {
+            var currentValue = it
+            values.forEach { (key, value) ->
+                currentValue = currentValue.replace("{${key}}", value)
+            }
+            currentValue
+        }
+    }
+}
