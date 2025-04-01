@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":shared:resource"))
     implementation(project(":shared:preferences"))
     implementation(project(":shared:utils:app"))
+    implementation(project(":shared:git"))
 
     // Features
     implementation(project(":desktop:features:projects"))

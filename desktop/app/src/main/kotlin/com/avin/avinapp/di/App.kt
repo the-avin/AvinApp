@@ -8,7 +8,8 @@ fun startDi() {
             localModule,
             componentsModules,
             databaseModule,
-            repositoryModule
+            repositoryModule,
+            otherModules
         )
     }
 }

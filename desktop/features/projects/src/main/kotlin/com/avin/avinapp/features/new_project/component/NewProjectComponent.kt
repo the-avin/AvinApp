@@ -4,11 +4,8 @@ import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.features.data.state.NewProjectState
 import com.avin.avinapp.features.repository.ProjectRepository
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 

@@ -9,6 +9,7 @@ decompose = "3.3.0"
 decompose-compose = "2.2.3"
 sqldelight = "2.0.2"
 filekit = "0.10.0-beta01"
+jgit = "6.8.0.202311291450-r"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -39,6 +40,9 @@ decompose-extensions-compose-jetpack = { module = "com.arkivanov.decompose:exten
 
 # File
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
+
+# File
+jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 
 [plugins]
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
