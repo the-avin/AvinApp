@@ -39,4 +39,6 @@ class ProjectRepositoryImpl(private val database: AppDatabase, private val proje
         path: String,
         withGit: Boolean
     ) = projectBuilder.newProject(name, path, withGit)
+
+    override fun canBuildProjectAtPath(path: String) = projectBuilder.canBuildProject(path)
 }

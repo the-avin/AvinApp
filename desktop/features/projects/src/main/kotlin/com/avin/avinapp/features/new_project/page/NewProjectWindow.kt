@@ -20,6 +20,7 @@ import com.avin.avinapp.core.data.state.new_project.isError
 import com.avin.avinapp.core.data.state.new_project.onError
 import com.avin.avinapp.core.data.state.new_project.onLoading
 import com.avin.avinapp.core.data.state.new_project.onSuccess
+import com.avin.avinapp.features.data.state.NewProjectState
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
@@ -46,12 +47,8 @@ fun NewProjectWindow(
     val scrollState = rememberScrollState()
     val state by component.state.collectAsState()
     val createStatus by component.status.collectAsState()
-    val fileAlreadyExistsError = remember(state) {
-        File(state.path).exists()
-    }
-    val fieldsEmptyError = remember(state) {
-        state.path.isEmpty() || state.name.isEmpty()
-    }
+    val projectAlreadyExistsError = component.projectAlreadyExistsError
+    val fieldsEmptyError = component.fieldsEmptyError
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = title,
@@ -95,27 +92,13 @@ fun NewProjectWindow(
                 ) {
                     Text(dynamicStringRes(Resource.string.addToGit))
                 }
+
             }
-            AnimatedVisibility(
-                visible = fileAlreadyExistsError,
-                enter = expandVertically(expandFrom = Alignment.CenterVertically) + fadeIn(),
-                exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically) + fadeOut()
-            ) {
-                WarningMessage(
-                    message = dynamicStringRes(Resource.string.exists_file_message, mapOf("path" to state.path)),
-                    modifier = Modifier.horizontalPadding()
-                )
-            }
-            AnimatedVisibility(
-                visible = fieldsEmptyError,
-                enter = expandVertically(expandFrom = Alignment.CenterVertically) + fadeIn(),
-                exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically) + fadeOut()
-            ) {
-                WarningMessage(
-                    message = dynamicStringRes(Resource.string.empty_fields_message),
-                    modifier = Modifier.horizontalPadding()
-                )
-            }
+            ErrorsSection(
+                projectAlreadyExistsError,
+                fieldsEmptyError,
+                state
+            )
             Divider(Orientation.Horizontal, modifier = Modifier.fillMaxWidth())
             Row(
                 modifier = Modifier.fillMaxWidth().bottomPadding().horizontalPadding(),
@@ -127,7 +110,7 @@ fun NewProjectWindow(
                 }
                 DefaultButton(onClick = {
                     component.createProject()
-                }, enabled = fileAlreadyExistsError.not() && fieldsEmptyError.not()) {
+                }, enabled = projectAlreadyExistsError.not() && fieldsEmptyError.not()) {
                     Text(text = dynamicStringRes(Resource.string.finish))
                 }
             }
@@ -150,5 +133,32 @@ fun NewProjectStatus.getMessage(): String {
         NewProjectStatus.Creating -> dynamicStringRes(Resource.string.creatingFiles)
         NewProjectStatus.AddGit -> dynamicStringRes(Resource.string.addingToGit)
         is NewProjectStatus.Error, is NewProjectStatus.Idle, is NewProjectStatus.Completed -> ""
+    }
+}
+
+
+@Composable
+fun ErrorsSection(projectAlreadyExistsError: Boolean, fieldsEmptyError: Boolean, state: NewProjectState) {
+    Column {
+        AnimatedVisibility(
+            visible = projectAlreadyExistsError,
+            enter = expandVertically(expandFrom = Alignment.CenterVertically) + fadeIn(),
+            exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically) + fadeOut()
+        ) {
+            WarningMessage(
+                message = dynamicStringRes(Resource.string.existsProjectMessage, mapOf("path" to state.path)),
+                modifier = Modifier.horizontalPadding()
+            )
+        }
+        AnimatedVisibility(
+            visible = fieldsEmptyError,
+            enter = expandVertically(expandFrom = Alignment.CenterVertically) + fadeIn(),
+            exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically) + fadeOut()
+        ) {
+            WarningMessage(
+                message = dynamicStringRes(Resource.string.emptyFieldsMessage),
+                modifier = Modifier.horizontalPadding().padding(top = 8.dp)
+            )
+        }
     }
 }

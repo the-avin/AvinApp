@@ -9,4 +9,6 @@ interface ProjectBuilder {
         path: String,
         withGit: Boolean
     ): Flow<NewProjectStatus>
+
+    fun canBuildProject(path: String): Boolean
 }

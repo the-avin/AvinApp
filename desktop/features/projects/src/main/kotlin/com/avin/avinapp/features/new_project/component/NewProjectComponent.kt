@@ -1,5 +1,6 @@
 package com.avin.avinapp.features.new_project.component
 
+import androidx.compose.runtime.*
 import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
@@ -22,14 +23,22 @@ class NewProjectComponent(
     private val _status = MutableStateFlow<NewProjectStatus>(NewProjectStatus.Idle)
     val status = _status.asStateFlow()
 
+    var projectAlreadyExistsError by mutableStateOf(false)
+    var fieldsEmptyError by mutableStateOf(false)
+
     var pickedFromPicker = false
 
     fun updateState(newProjectState: NewProjectState) {
+        if (_state.value.path != newProjectState.path) {
+            pickedFromPicker = true
+        }
         if (!pickedFromPicker && newProjectState.name != _state.value.name) {
             _state.update { newProjectState.copy(path = NewProjectState.getPath(newProjectState.name)) }
         } else {
             _state.update { newProjectState }
         }
+        projectAlreadyExistsError = !canBuildProjectAtCurrentPath()
+        fieldsEmptyError = checkFieldsEmptyError()
     }
 
     fun createProject() = scope.launch {
@@ -47,4 +56,7 @@ class NewProjectComponent(
             _status.update { newStatus }
         }
     }
+
+    private fun canBuildProjectAtCurrentPath() = repository.canBuildProjectAtPath(state.value.path)
+    private fun checkFieldsEmptyError() = state.value.path.isEmpty() || state.value.name.isEmpty()
 }

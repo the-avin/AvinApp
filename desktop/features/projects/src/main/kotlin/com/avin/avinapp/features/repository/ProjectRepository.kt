@@ -9,4 +9,5 @@ interface ProjectRepository {
     fun insertProject(name: String, path: String)
     fun searchProjects(query: String): Flow<List<Project>>
     fun createProject(name: String, path: String, withGit: Boolean): Flow<NewProjectStatus>
+    fun canBuildProjectAtPath(path: String): Boolean
 }

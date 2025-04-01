@@ -25,6 +25,14 @@ class ProjectBuilderImpl(private val gitManager: GitManager) : ProjectBuilder {
         }
     }
 
+    override fun canBuildProject(path: String): Boolean {
+        val file = File(path)
+        if (file.exists() && !file.isDirectory) return false
+        if (file.exists().not()) return true
+        val files = file.listFiles() ?: return false
+        return files.none { it.name == ProjectMeta.PROJECT_MANIFEST_FILE_NAME }
+    }
+
     private fun ensureFolderCreated(path: String) {
         val file = File(path)
         if (file.exists().not()) file.mkdirs()
