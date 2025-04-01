@@ -2,6 +2,7 @@ package com.avin.avinapp.theme.window
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.window.WindowState
@@ -12,8 +13,9 @@ import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.painterResource
 import org.jetbrains.jewel.window.DecoratedWindow
 import org.jetbrains.jewel.window.DecoratedWindowScope
-import org.jetbrains.jewel.window.defaultDecoratedWindowStyle
 import org.jetbrains.jewel.window.styling.DecoratedWindowStyle
+import org.jetbrains.jewel.window.styling.LocalDecoratedWindowStyle
+import java.awt.Color
 
 @Composable
 fun AppCustomWindow(
@@ -28,7 +30,7 @@ fun AppCustomWindow(
     alwaysOnTop: Boolean = false,
     onPreviewKeyEvent: (KeyEvent) -> Boolean = { false },
     onKeyEvent: (KeyEvent) -> Boolean = { false },
-    style: DecoratedWindowStyle = JewelTheme.defaultDecoratedWindowStyle,
+    style: DecoratedWindowStyle = LocalDecoratedWindowStyle.current,
     content: @Composable DecoratedWindowScope.() -> Unit,
 ) {
     DecoratedWindow(
@@ -45,6 +47,12 @@ fun AppCustomWindow(
         onKeyEvent = onKeyEvent,
         style = style,
     ) {
+        val panelColor = JewelTheme.globalColors.panelBackground
+        SideEffect {
+            panelColor.run {
+                window.background = Color(red, green, blue, alpha)
+            }
+        }
         CompositionLocalProvider(LocalWindow provides window) {
             content.invoke(this)
         }
