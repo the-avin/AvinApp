@@ -6,6 +6,7 @@ object StringResource {
     val appName = StringRes("app_name")
     val welcome = StringRes("welcome")
     val newProject = StringRes("new_project")
+    val creatingNewProject = StringRes("creating_new_project")
     val newProjectMessage = StringRes("new_project_message")
     val open = StringRes("open")
     val cloneRepository = StringRes("clone_repository")
@@ -16,4 +17,6 @@ object StringResource {
     val exists_file_message = StringRes("exists_file_message")
     val empty_fields_message = StringRes("empty_fields_message")
     val addToGit = StringRes("add_to_git")
+    val addingToGit = StringRes("adding_to_git")
+    val creatingFiles = StringRes("creating_files")
 }

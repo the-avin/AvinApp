@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
+import com.avin.avinapp.core.data.state.new_project.isError
 import com.avin.avinapp.core.data.state.new_project.onError
 import com.avin.avinapp.core.data.state.new_project.onLoading
 import com.avin.avinapp.core.data.state.new_project.onSuccess
@@ -132,8 +134,21 @@ fun NewProjectWindow(
         }
     }
     createStatus.onLoading {
-        LoadingDialog()
+        LoadingDialog(
+            currentMessage = createStatus.getMessage(),
+            title = dynamicStringRes(Resource.string.creatingNewProject),
+        )
     }.onSuccess {
         LaunchedEffect(Unit) { onCloseRequest() }
     }.onError { }
+}
+
+
+@Composable
+fun NewProjectStatus.getMessage(): String {
+    return when (this) {
+        NewProjectStatus.Creating -> dynamicStringRes(Resource.string.creatingFiles)
+        NewProjectStatus.AddGit -> dynamicStringRes(Resource.string.addingToGit)
+        is NewProjectStatus.Error, is NewProjectStatus.Idle, is NewProjectStatus.Completed -> ""
+    }
 }

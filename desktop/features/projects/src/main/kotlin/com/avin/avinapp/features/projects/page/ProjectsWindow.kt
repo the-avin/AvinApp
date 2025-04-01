@@ -13,6 +13,7 @@ import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.buttons.SecondaryButton
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.modifier.allPadding
+import com.avin.avinapp.utils.compose.modifier.horizontalPadding
 import com.avin.avinapp.utils.compose.modifier.topPadding
 import com.avin.avinapp.utils.compose.modifier.windowBackground
 import org.jetbrains.jewel.ui.Orientation
@@ -31,7 +32,7 @@ fun ProjectsWindow(
     val searchValue by component.searchValue.collectAsState()
     val loading by component.loading.collectAsState()
     AppCustomWindow(onCloseRequest = onCloseRequest, title = dynamicStringRes(Resource.string.welcome)) {
-        Column(modifier = Modifier.fillMaxSize().windowBackground().allPadding()) {
+        Column(modifier = Modifier.fillMaxSize().windowBackground().horizontalPadding().topPadding()) {
             Header(
                 searchValue = searchValue,
                 onSearchValueChange = component::search,
