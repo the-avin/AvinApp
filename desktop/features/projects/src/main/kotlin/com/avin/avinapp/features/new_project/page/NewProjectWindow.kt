@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -14,6 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.core.data.state.new_project.onError
+import com.avin.avinapp.core.data.state.new_project.onLoading
+import com.avin.avinapp.core.data.state.new_project.onSuccess
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
@@ -26,6 +30,7 @@ import com.avin.avinapp.utils.compose.modifier.windowBackground
 import com.avin.avinapp.utils.compose.nodes.field.RowFolderPickerField
 import com.avin.avinapp.utils.compose.nodes.field.RowTextField
 import com.avin.avinapp.utils.compose.nodes.text.WarningMessage
+import com.avin.avinapp.utils.compose.window.loading.LoadingDialog
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
 import java.io.File
@@ -38,6 +43,7 @@ fun NewProjectWindow(
     val title = dynamicStringRes(Resource.string.newProject)
     val scrollState = rememberScrollState()
     val state by component.state.collectAsState()
+    val createStatus by component.status.collectAsState()
     val fileAlreadyExistsError = remember(state) {
         File(state.path).exists()
     }
@@ -118,11 +124,16 @@ fun NewProjectWindow(
                     Text(text = dynamicStringRes(Resource.string.cancel))
                 }
                 DefaultButton(onClick = {
-                    component.createProject().invokeOnCompletion { onCloseRequest() }
+                    component.createProject()
                 }, enabled = fileAlreadyExistsError.not() && fieldsEmptyError.not()) {
                     Text(text = dynamicStringRes(Resource.string.finish))
                 }
             }
         }
     }
+    createStatus.onLoading {
+        LoadingDialog()
+    }.onSuccess {
+        LaunchedEffect(Unit) { onCloseRequest() }
+    }.onError { }
 }

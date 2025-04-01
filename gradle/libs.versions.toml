@@ -10,6 +10,7 @@ decompose-compose = "2.2.3"
 sqldelight = "2.0.2"
 filekit = "0.10.0-beta01"
 jgit = "6.8.0.202311291450-r"
+kaml = "0.74.0"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -44,5 +45,11 @@ filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs-compose", versi
 # File
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 
+# Kaml
+kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+
 [plugins]
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+
+# Serialization
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

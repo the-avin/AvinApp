@@ -17,5 +17,5 @@ dependencies {
     implementation(project(":shared:locale"))
     implementation(project(":shared:database"))
     implementation(project(":shared:resource"))
-    implementation(project(":shared:git"))
+    implementation(project(":core:project"))
 }

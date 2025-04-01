@@ -1,3 +1,10 @@
 plugins {
-    id(AppPlugins.KOTLIN)
+    id(AppPlugins.COMPOSE)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+
+dependencies {
+    implementation(project(":shared:git"))
+    implementation(libs.kaml)
 }

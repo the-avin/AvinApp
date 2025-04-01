@@ -1,5 +1,7 @@
 package com.avin.avinapp.di
 
+import com.avin.avinapp.core.builder.ProjectBuilder
+import com.avin.avinapp.core.builder.ProjectBuilderImpl
 import com.avin.avinapp.git.helper.GitHelper
 import com.avin.avinapp.git.helper.GitHelperImpl
 import com.avin.avinapp.git.manager.GitManager
@@ -11,4 +13,7 @@ import org.koin.dsl.module
 val otherModules = module {
     singleOf(::GitHelperImpl).bind<GitHelper>()
     singleOf(::GitManagerImpl).bind<GitManager>()
+
+    // Project builder
+    singleOf(::ProjectBuilderImpl).bind<ProjectBuilder>()
 }
