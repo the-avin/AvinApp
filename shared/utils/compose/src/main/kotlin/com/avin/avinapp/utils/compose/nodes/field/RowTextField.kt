@@ -34,6 +34,7 @@ fun RowTextField(
 fun RowFolderPickerField(
     path: String,
     onPathChange: (String) -> Unit,
+    onPickFromPicker: (() -> Unit)? = null,
     label: String
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -44,7 +45,8 @@ fun RowFolderPickerField(
         FolderPickerField(
             path = path,
             onPathChange = onPathChange,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onPickFromPicker = onPickFromPicker
         )
     }
 }

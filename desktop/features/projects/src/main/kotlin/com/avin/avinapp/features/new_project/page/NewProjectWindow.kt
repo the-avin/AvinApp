@@ -1,10 +1,6 @@
 package com.avin.avinapp.features.new_project.page
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -31,11 +27,7 @@ import com.avin.avinapp.utils.compose.nodes.field.RowFolderPickerField
 import com.avin.avinapp.utils.compose.nodes.field.RowTextField
 import com.avin.avinapp.utils.compose.nodes.text.WarningMessage
 import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.CheckboxRow
-import org.jetbrains.jewel.ui.component.DefaultButton
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.component.OutlinedButton
-import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.*
 import java.io.File
 
 @Composable
@@ -46,7 +38,7 @@ fun NewProjectWindow(
     val title = dynamicStringRes(Resource.string.newProject)
     val scrollState = rememberScrollState()
     val state by component.state.collectAsState()
-    val fileAlreadyExistsError = remember(state.path) {
+    val fileAlreadyExistsError = remember(state) {
         File(state.path).exists()
     }
     val fieldsEmptyError = remember(state) {
@@ -83,6 +75,9 @@ fun NewProjectWindow(
                 RowFolderPickerField(
                     path = state.path,
                     onPathChange = { component.updateState(state.copy(path = it)) },
+                    onPickFromPicker = {
+                        component.pickedFromPicker = true
+                    },
                     label = dynamicStringRes(Resource.string.path),
                 )
                 Spacer(Modifier.height(12.dp))

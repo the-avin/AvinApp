@@ -7,7 +7,7 @@ import com.avin.avinapp.utils.AppInfo
 data class NewProjectState(
     val name: String = DEFAULT_PROJECT_NAME,
     val path: String = createDefaultProjectsFolderPath(),
-    val addToGit : Boolean = false
+    val addToGit: Boolean = false
 ) {
     companion object {
         private const val DEFAULT_PROJECT_NAME = "My Application"
@@ -24,6 +24,11 @@ data class NewProjectState(
                 if (!newFolder.exists()) return newFolder.path
                 index++
             }
+        }
+
+        fun getPath(name: String): String {
+            val baseName = name.replace(" ", "")
+            return AppInfo.getDefaultProjectsFolderFile(baseName).path
         }
     }
 }

@@ -3,6 +3,8 @@ package com.avin.avinapp.utils.compose.nodes.field
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.icon.ColoredIcon
 import io.github.vinceglb.filekit.PlatformFile
@@ -15,6 +17,7 @@ import org.jetbrains.jewel.ui.component.TextField
 fun FolderPickerField(
     path: String,
     onPathChange: (String) -> Unit,
+    onPickFromPicker: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val folderPicker = rememberDirectoryPickerLauncher(
@@ -23,6 +26,7 @@ fun FolderPickerField(
         }
     ) {
         if (it?.path?.isNotEmpty() == true) {
+            onPickFromPicker?.invoke()
             onPathChange.invoke(it.path)
         }
     }
@@ -32,7 +36,7 @@ fun FolderPickerField(
         trailingIcon = {
             IconButton(onClick = {
                 folderPicker.launch()
-            }) {
+            }, modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)) {
                 ColoredIcon(
                     Resource.image.FOLDER
                 )

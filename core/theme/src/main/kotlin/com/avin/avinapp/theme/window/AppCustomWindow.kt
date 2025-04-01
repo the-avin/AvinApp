@@ -47,14 +47,20 @@ fun AppCustomWindow(
         onKeyEvent = onKeyEvent,
         style = style,
     ) {
-        val panelColor = JewelTheme.globalColors.panelBackground
-        SideEffect {
-            panelColor.run {
-                window.background = Color(red, green, blue, alpha)
-            }
-        }
+        ApplyWindowColors()
         CompositionLocalProvider(LocalWindow provides window) {
             content.invoke(this)
+        }
+    }
+}
+
+
+@Composable
+fun DecoratedWindowScope.ApplyWindowColors() {
+    val panelColor = JewelTheme.globalColors.panelBackground
+    SideEffect {
+        panelColor.run {
+            window.background = Color(red, green, blue, alpha)
         }
     }
 }
