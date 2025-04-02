@@ -13,3 +13,6 @@ SELECT * FROM Project;
 
 selectProjectsByName:
 SELECT * FROM Project WHERE name LIKE '%' || :query || '%';
+
+deleteProjectById:
+DELETE FROM Project WHERE id = :id;

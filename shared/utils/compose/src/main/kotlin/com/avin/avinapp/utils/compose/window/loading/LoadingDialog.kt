@@ -32,7 +32,7 @@ fun LoadingDialog(
         onCloseRequest = onCloseRequest,
         state = rememberDialogState(
             width = 300.dp,
-            height = 84.dp
+            height = 90.dp
         ),
         title = title,
         alwaysOnTop = true

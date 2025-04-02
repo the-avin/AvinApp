@@ -33,16 +33,16 @@ import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
 
 @Composable
-fun ProjectsList(projects: List<Project>) {
+fun ProjectsList(projects: List<Project>, onDeleteProject: (Project) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(vertical = 8.dp)) {
         items(projects, key = { it.id }) { project ->
-            ProjectItem(project = project)
+            ProjectItem(project = project, onDelete = { onDeleteProject(project) })
         }
     }
 }
 
 @Composable
-fun ProjectItem(project: Project) {
+fun ProjectItem(project: Project, onDelete: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
     Box(
@@ -69,6 +69,9 @@ fun ProjectItem(project: Project) {
                         FileHandler.openFolder(project.path)
                     }) {
                         Text(dynamicStringRes(Resource.string.openInFolder))
+                    }
+                    selectableItem(false, onClick = onDelete) {
+                        Text(dynamicStringRes(Resource.string.deleteProjectFromList))
                     }
                 }
             }

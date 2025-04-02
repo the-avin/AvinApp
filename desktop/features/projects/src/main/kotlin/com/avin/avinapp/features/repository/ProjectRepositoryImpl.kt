@@ -26,6 +26,10 @@ class ProjectRepositoryImpl(private val database: AppDatabase, private val proje
         )
     }
 
+    override fun deleteProject(projectId: Long) {
+        database.appDatabaseQueries.deleteProjectById(projectId)
+    }
+
     override fun searchProjects(query: String): Flow<List<Project>> {
         return database
             .appDatabaseQueries

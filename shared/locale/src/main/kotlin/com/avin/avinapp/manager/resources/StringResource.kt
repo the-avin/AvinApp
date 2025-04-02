@@ -19,6 +19,7 @@ object StringResource {
             Platform.isLinux() -> StringRes("open_in_file_manager")
             else -> StringRes("open_in_explorer")
         }
+    val deleteProjectFromList = StringRes("delete_project_from_list")
     val finish = StringRes("finish")
     val cancel = StringRes("cancel")
     val existsFileMessage = StringRes("exists_file_message")

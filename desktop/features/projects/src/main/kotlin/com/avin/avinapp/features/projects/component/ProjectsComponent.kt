@@ -2,10 +2,12 @@ package com.avin.avinapp.features.projects.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
+import com.avin.avinapp.features.data.models.Project
 import com.avin.avinapp.features.repository.ProjectRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class ProjectsComponent(context: ComponentContext, private val repository: ProjectRepository) : BaseComponent(context) {
     private val _searchValue = MutableStateFlow("")
@@ -25,5 +27,9 @@ class ProjectsComponent(context: ComponentContext, private val repository: Proje
 
     fun search(value: String) {
         _searchValue.update { value }
+    }
+
+    fun deleteProject(project: Project) = scope.launch {
+        repository.deleteProject(project.id)
     }
 }

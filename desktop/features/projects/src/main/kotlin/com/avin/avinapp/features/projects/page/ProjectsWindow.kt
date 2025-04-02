@@ -43,7 +43,7 @@ fun ProjectsWindow(
             } else {
                 Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
             }
-            ProjectsList(projects = projects)
+            ProjectsList(projects = projects, onDeleteProject = component::deleteProject)
         }
     }
 }
