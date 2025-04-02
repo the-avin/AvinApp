@@ -20,14 +20,21 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avin.avinapp.features.data.models.Project
+import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.platform.file.FileHandler
+import com.avin.avinapp.resource.Resource
+import com.avin.avinapp.utils.compose.nodes.menu.IconMenu
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.component.Dropdown
+import org.jetbrains.jewel.ui.component.IconButton
+import org.jetbrains.jewel.ui.component.ListComboBox
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
 
 @Composable
 fun ProjectsList(projects: List<Project>) {
-    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(vertical = 8.dp)) {
         items(projects, key = { it.id }) { project ->
             ProjectItem(project = project)
         }
@@ -55,6 +62,15 @@ fun ProjectItem(project: Project) {
             Column {
                 Text(project.name)
                 Text(project.path, fontSize = 12.sp)
+            }
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                IconMenu {
+                    selectableItem(false, onClick = {
+                        FileHandler.openFolder(project.path)
+                    }) {
+                        Text(dynamicStringRes(Resource.string.openInFolder))
+                    }
+                }
             }
         }
     }

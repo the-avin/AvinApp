@@ -1,6 +1,7 @@
 package com.avin.avinapp.manager.resources
 
 import com.avin.avinapp.locale.StringRes
+import com.avin.avinapp.platform.Platform
 
 object StringResource {
     val appName = StringRes("app_name")
@@ -12,6 +13,12 @@ object StringResource {
     val cloneRepository = StringRes("clone_repository")
     val name = StringRes("name")
     val path = StringRes("path")
+    val openInFolder: StringRes
+        get() = when {
+            Platform.isMac() -> StringRes("open_in_finder")
+            Platform.isLinux() -> StringRes("open_in_file_manager")
+            else -> StringRes("open_in_explorer")
+        }
     val finish = StringRes("finish")
     val cancel = StringRes("cancel")
     val existsFileMessage = StringRes("exists_file_message")
