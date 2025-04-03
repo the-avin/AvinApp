@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
 import com.avin.avinapp.components.RootComponent
 import com.avin.avinapp.components.toFlow
+import com.avin.avinapp.features.clone.page.CloneRepositoryWindow
 import com.avin.avinapp.features.new_project.page.NewProjectWindow
 import com.avin.avinapp.features.projects.page.ProjectsWindow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
@@ -36,17 +37,25 @@ object MainApp : KoinComponent {
             AppletInitializer {
                 val projectsSlot by rootComponent.projectsSlot.toFlow().collectAsState(null)
                 val newProjectSlot by rootComponent.newProjectSlot.toFlow().collectAsState(null)
+                val cloneRepositorySlot by rootComponent.cloneRepositorySlot.toFlow().collectAsState(null)
                 projectsSlot?.child?.instance?.let {
                     ProjectsWindow(
                         component = it,
                         onCloseRequest = rootComponent::closeProjects,
-                        onNewProjectClick = rootComponent::openNewProject
+                        onNewProjectClick = rootComponent::openNewProject,
+                        onOpenCloneRepository = rootComponent::openCloneRepository
                     )
                 }
                 newProjectSlot?.child?.instance?.let {
                     NewProjectWindow(
                         component = it,
                         onCloseRequest = rootComponent::closeNewProject,
+                    )
+                }
+                cloneRepositorySlot?.child?.instance?.let {
+                    CloneRepositoryWindow(
+                        component = it,
+                        onCloseRequest = rootComponent::closeCloneRepository,
                     )
                 }
             }

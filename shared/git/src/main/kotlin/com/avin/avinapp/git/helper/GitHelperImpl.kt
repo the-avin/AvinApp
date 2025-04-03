@@ -1,5 +1,6 @@
 package com.avin.avinapp.git.helper
 
+import com.avin.avinapp.git.utils.CustomProgressMonitor
 import org.eclipse.jgit.api.Git
 import java.io.File
 
@@ -32,6 +33,22 @@ class GitHelperImpl : GitHelper {
     override fun stageFiles(git: Git, vararg files: String): Boolean {
         return runCatching {
             git.add().apply { files.forEach { addFilepattern(it) } }.call()
+            true
+        }.getOrElse {
+            it.printStackTrace()
+            false
+        }
+    }
+
+    override fun cloneRepository(path: String, url: String, progressMonitor: CustomProgressMonitor): Boolean {
+        return runCatching {
+            Git.cloneRepository()
+                .setURI(url)
+                .setDirectory(File(path))
+                .setProgressMonitor(
+                    progressMonitor
+                )
+                .call()
             true
         }.getOrElse {
             it.printStackTrace()

@@ -6,11 +6,17 @@ import com.avin.avinapp.databases.AppDatabase
 import com.avin.avinapp.databases.utils.asFlow
 import com.avin.avinapp.features.data.mappers.toDataListProject
 import com.avin.avinapp.features.data.models.Project
+import com.avin.avinapp.git.manager.GitManager
+import com.avin.avinapp.git.utils.CustomProgressMonitor
 import com.avin.avinapp.time.getCurrentTimeMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ProjectRepositoryImpl(private val database: AppDatabase, private val projectBuilder: ProjectBuilder) :
+class ProjectRepositoryImpl(
+    private val database: AppDatabase,
+    private val projectBuilder: ProjectBuilder,
+    private val gitManager: GitManager
+) :
     ProjectRepository {
     override fun getProjects(): Flow<List<Project>> {
         return database
@@ -45,4 +51,6 @@ class ProjectRepositoryImpl(private val database: AppDatabase, private val proje
     ) = projectBuilder.newProject(name, path, withGit)
 
     override fun canBuildProjectAtPath(path: String) = projectBuilder.canBuildProject(path)
+    override fun cloneProject(path: String, url: String, progressMonitor: CustomProgressMonitor) =
+        gitManager.clone(path, url, progressMonitor)
 }

@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.avin.avinapp.MainApp
+import com.avin.avinapp.features.clone.component.CloneRepositoryComponent
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.language.LanguageManager
@@ -58,6 +59,23 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
 
     fun closeNewProject() {
         newProject.dismiss()
+    }
+
+
+    private val cloneRepository = SlotNavigation<AppPages.CloneRepository>()
+    val cloneRepositorySlot = childSlot(
+        source = cloneRepository,
+        serializer = null,
+        key = AppPages.CloneRepository.key,
+        childFactory = { _, parentComponent -> CloneRepositoryComponent(context = parentComponent, repository = get()) }
+    )
+
+    fun openCloneRepository() {
+        cloneRepository.activate(AppPages.CloneRepository)
+    }
+
+    fun closeCloneRepository() {
+        cloneRepository.dismiss()
     }
 
     private fun collectToLanguage() = scope.launch {

@@ -27,6 +27,7 @@ fun ProjectsWindow(
     component: ProjectsComponent,
     onCloseRequest: () -> Unit,
     onNewProjectClick: () -> Unit,
+    onOpenCloneRepository: () -> Unit,
 ) {
     val projects by component.projects.collectAsState(emptyList())
     val searchValue by component.searchValue.collectAsState()
@@ -36,7 +37,8 @@ fun ProjectsWindow(
             Header(
                 searchValue = searchValue,
                 onSearchValueChange = component::search,
-                onNewProjectClick = onNewProjectClick
+                onNewProjectClick = onNewProjectClick,
+                onOpenCloneRepository = onOpenCloneRepository
             )
             if (loading) {
                 IndeterminateHorizontalProgressBar(Modifier.fillMaxWidth().topPadding())
@@ -53,6 +55,7 @@ fun Header(
     searchValue: String,
     onSearchValueChange: (String) -> Unit,
     onNewProjectClick: () -> Unit,
+    onOpenCloneRepository: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -71,7 +74,7 @@ fun Header(
         SecondaryButton(onClick = {}) {
             Text(dynamicStringRes(Resource.string.open))
         }
-        SecondaryButton(onClick = {}) {
+        SecondaryButton(onClick = onOpenCloneRepository) {
             Text(dynamicStringRes(Resource.string.cloneRepository))
         }
     }

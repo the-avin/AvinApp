@@ -9,10 +9,12 @@ object StringResource {
     val newProject = StringRes("new_project")
     val creatingNewProject = StringRes("creating_new_project")
     val newProjectMessage = StringRes("new_project_message")
+    val cloneProjectMessage = StringRes("clone_project_message")
     val open = StringRes("open")
     val cloneRepository = StringRes("clone_repository")
     val name = StringRes("name")
     val path = StringRes("path")
+    val url = StringRes("url")
     val openInFolder: StringRes
         get() = when {
             Platform.isMac() -> StringRes("open_in_finder")

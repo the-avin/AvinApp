@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
 import com.avin.avinapp.core.data.state.new_project.isSuccess
+import com.avin.avinapp.core.meta.ProjectMeta
 import com.avin.avinapp.features.data.state.NewProjectState
 import com.avin.avinapp.features.repository.ProjectRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +35,7 @@ class NewProjectComponent(
             pickedFromPicker = true
         }
         if (!pickedFromPicker && newProjectState.name != _state.value.name) {
-            _state.update { newProjectState.copy(path = NewProjectState.getPath(newProjectState.name)) }
+            _state.update { newProjectState.copy(path = ProjectMeta.getDefaultProjectPath(newProjectState.name)) }
         } else {
             _state.update { newProjectState }
         }

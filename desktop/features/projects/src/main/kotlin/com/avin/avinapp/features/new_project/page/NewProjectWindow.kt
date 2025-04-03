@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
-import com.avin.avinapp.core.data.state.new_project.isError
 import com.avin.avinapp.core.data.state.new_project.onError
 import com.avin.avinapp.core.data.state.new_project.onLoading
 import com.avin.avinapp.core.data.state.new_project.onSuccess
@@ -36,7 +34,6 @@ import com.avin.avinapp.utils.compose.nodes.text.WarningMessage
 import com.avin.avinapp.utils.compose.window.loading.LoadingDialog
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
-import java.io.File
 
 @Composable
 fun NewProjectWindow(

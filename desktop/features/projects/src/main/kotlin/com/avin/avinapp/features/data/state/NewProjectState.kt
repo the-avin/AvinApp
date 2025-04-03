@@ -25,10 +25,5 @@ data class NewProjectState(
                 index++
             }
         }
-
-        fun getPath(name: String): String {
-            val baseName = name.replace(" ", "")
-            return AppInfo.getDefaultProjectsFolderFile(baseName).path
-        }
     }
 }

@@ -4,7 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.resource.Resource
@@ -29,7 +35,14 @@ fun AppCustomWindow(
     focusable: Boolean = true,
     alwaysOnTop: Boolean = false,
     onPreviewKeyEvent: (KeyEvent) -> Boolean = { false },
-    onKeyEvent: (KeyEvent) -> Boolean = { false },
+    onKeyEvent: (KeyEvent) -> Boolean = {
+        if (it.key.keyCode == Key.W.keyCode && (it.isMetaPressed || it.isCtrlPressed) && it.type == KeyEventType.KeyUp) {
+            onCloseRequest.invoke()
+            true
+        } else {
+            false
+        }
+    },
     style: DecoratedWindowStyle = LocalDecoratedWindowStyle.current,
     content: @Composable DecoratedWindowScope.() -> Unit,
 ) {

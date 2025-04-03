@@ -8,4 +8,7 @@ sealed class AppPages(val key: String) {
 
     @Serializable
     data object NewProject : AppPages("new_project")
+
+    @Serializable
+    data object CloneRepository : AppPages("clone_repository")
 }
