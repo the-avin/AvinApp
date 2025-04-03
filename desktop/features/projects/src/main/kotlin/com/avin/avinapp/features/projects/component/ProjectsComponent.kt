@@ -2,8 +2,8 @@ package com.avin.avinapp.features.projects.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
-import com.avin.avinapp.features.data.models.Project
-import com.avin.avinapp.features.repository.ProjectRepository
+import com.avin.avinapp.data.models.project.Project
+import com.avin.avinapp.data.repository.project.ProjectRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*

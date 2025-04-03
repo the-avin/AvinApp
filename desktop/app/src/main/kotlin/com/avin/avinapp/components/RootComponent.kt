@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.avin.avinapp.MainApp
 import com.avin.avinapp.features.clone.component.CloneRepositoryComponent
+import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.language.LanguageManager
@@ -76,6 +77,31 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
 
     fun closeCloneRepository() {
         cloneRepository.dismiss()
+    }
+
+
+    private val editor = SlotNavigation<AppPages.Editor>()
+    val editorSlot = childSlot(
+        source = editor,
+        serializer = null,
+        key = AppPages.Editor.KEY,
+        childFactory = { editorI, parentComponent ->
+            ProjectEditorComponent(
+                parentComponent,
+                editorI,
+                repository = get()
+            )
+        }
+    )
+
+    fun openEditor(
+        projectId: Long
+    ) {
+        editor.activate(AppPages.Editor(projectId = projectId))
+    }
+
+    fun closeEditor() {
+        editor.dismiss()
     }
 
     private fun collectToLanguage() = scope.launch {

@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":core:theme"))
     implementation(project(":shared:database"))
     implementation(project(":shared:locale"))
+    implementation(project(":shared:data"))
     implementation(project(":shared:resource"))
     implementation(project(":shared:preferences"))
     implementation(project(":shared:utils:app"))
@@ -24,6 +25,7 @@ dependencies {
 
     // Features
     implementation(project(":desktop:features:projects"))
+    implementation(project(":desktop:features:editor"))
 }
 
 val nameSpace = "com.avin.avinapp"

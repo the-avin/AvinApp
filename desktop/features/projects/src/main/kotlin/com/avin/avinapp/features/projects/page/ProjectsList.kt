@@ -1,6 +1,7 @@
 package com.avin.avinapp.features.projects.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -17,32 +18,39 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.avin.avinapp.features.data.models.Project
+import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.platform.file.FileHandler
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.utils.compose.nodes.menu.IconMenu
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.Dropdown
-import org.jetbrains.jewel.ui.component.IconButton
-import org.jetbrains.jewel.ui.component.ListComboBox
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
 
 @Composable
-fun ProjectsList(projects: List<Project>, onDeleteProject: (Project) -> Unit) {
+fun ProjectsList(
+    projects: List<Project>, onDeleteProject: (Project) -> Unit,
+    onOpenProject: (Long) -> Unit,
+) {
     LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(vertical = 8.dp)) {
         items(projects, key = { it.id }) { project ->
-            ProjectItem(project = project, onDelete = { onDeleteProject(project) })
+            ProjectItem(
+                project = project,
+                onDelete = { onDeleteProject(project) },
+                onOpenProject = { onOpenProject.invoke(project.id) })
         }
     }
 }
 
 @Composable
-fun ProjectItem(project: Project, onDelete: () -> Unit) {
+fun ProjectItem(
+    project: Project, onDelete: () -> Unit,
+    onOpenProject: () -> Unit,
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
     Box(
@@ -55,6 +63,11 @@ fun ProjectItem(project: Project, onDelete: () -> Unit) {
             .pointerHoverIcon(PointerIcon.Hand)
             .hoverable(interactionSource)
             .padding(8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    onOpenProject.invoke()
+                }
+            }
 
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {

@@ -11,10 +11,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DrawInitialsWithCanvas(text: String) {
+fun DrawInitialsWithCanvas(text: String, fontScale: Float = 1f, cornerRadius: Dp = 2.dp, boxSize: Dp = 24.dp) {
     val textMeasurer = rememberTextMeasurer()
     val initials = text.split(" ")
         .take(2)
@@ -29,14 +30,16 @@ fun DrawInitialsWithCanvas(text: String) {
 
             else -> Color.Gray
         }
-        Canvas(modifier = Modifier.size(24.dp)) {
+        Canvas(modifier = Modifier.size(boxSize)) {
             drawRoundRect(
                 color = backgroundColor,
                 size = size,
-                cornerRadius = CornerRadius(2.dp.toPx())
+                cornerRadius = CornerRadius(cornerRadius.toPx())
             )
             val style = TextStyle(
-                color = Color.White, fontSize = size.height.div(initials.count()).toSp(), fontWeight = FontWeight.Light
+                color = Color.White,
+                fontSize = size.height.times(fontScale).div(initials.count()).toSp(),
+                fontWeight = FontWeight.Light
             )
             val textResult = textMeasurer.measure(
                 initials, style = style

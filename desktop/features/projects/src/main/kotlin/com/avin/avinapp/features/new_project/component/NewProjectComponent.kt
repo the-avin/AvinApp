@@ -6,14 +6,13 @@ import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
 import com.avin.avinapp.core.data.state.new_project.isSuccess
 import com.avin.avinapp.core.meta.ProjectMeta
+import com.avin.avinapp.data.repository.project.ProjectRepository
 import com.avin.avinapp.features.data.state.NewProjectState
-import com.avin.avinapp.features.repository.ProjectRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 class NewProjectComponent(
     context: ComponentContext,

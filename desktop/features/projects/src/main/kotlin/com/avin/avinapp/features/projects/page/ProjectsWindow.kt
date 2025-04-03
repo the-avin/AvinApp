@@ -28,6 +28,7 @@ fun ProjectsWindow(
     onCloseRequest: () -> Unit,
     onNewProjectClick: () -> Unit,
     onOpenCloneRepository: () -> Unit,
+    onOpenProject: (Long) -> Unit,
 ) {
     val projects by component.projects.collectAsState(emptyList())
     val searchValue by component.searchValue.collectAsState()
@@ -45,7 +46,7 @@ fun ProjectsWindow(
             } else {
                 Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
             }
-            ProjectsList(projects = projects, onDeleteProject = component::deleteProject)
+            ProjectsList(projects = projects, onDeleteProject = component::deleteProject, onOpenProject = onOpenProject)
         }
     }
 }

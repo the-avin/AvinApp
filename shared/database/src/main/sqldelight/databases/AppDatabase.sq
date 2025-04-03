@@ -11,6 +11,9 @@ INSERT INTO Project(name, path, createdAt) VALUES (?, ?, ?);
 selectAllProjects:
 SELECT * FROM Project;
 
+selectProjectById:
+SELECT * FROM Project WHERE id = :id;
+
 selectProjectsByName:
 SELECT * FROM Project WHERE name LIKE '%' || :query || '%';
 

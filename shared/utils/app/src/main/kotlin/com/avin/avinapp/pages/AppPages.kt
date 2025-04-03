@@ -11,4 +11,13 @@ sealed class AppPages(val key: String) {
 
     @Serializable
     data object CloneRepository : AppPages("clone_repository")
+
+    @Serializable
+    data class Editor(
+        val projectId: Long
+    ) : AppPages("editor") {
+        companion object {
+            const val KEY = "editor"
+        }
+    }
 }

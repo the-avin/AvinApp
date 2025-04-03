@@ -3,9 +3,9 @@ package com.avin.avinapp.features.clone.component
 import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.core.meta.ProjectMeta
+import com.avin.avinapp.data.repository.project.ProjectRepository
 import com.avin.avinapp.features.data.state.CloneRepositoryState
 import com.avin.avinapp.features.data.status.CloneRepositoryStatus
-import com.avin.avinapp.features.repository.ProjectRepository
 import com.avin.avinapp.git.manager.GitManager
 import com.avin.avinapp.git.utils.CustomProgressMonitor
 import kotlinx.coroutines.flow.MutableStateFlow
