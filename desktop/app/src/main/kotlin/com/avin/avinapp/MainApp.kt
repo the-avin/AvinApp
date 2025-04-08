@@ -67,6 +67,7 @@ object MainApp : KoinComponent {
                         onNewProjectClick = rootComponent::openNewProject,
                         onCloneRepositoryClick = rootComponent::openCloneRepository,
                         onCloseRequest = rootComponent::closeEditor,
+                        onOpenProject = rootComponent::openEditor
                     )
                 }
             }

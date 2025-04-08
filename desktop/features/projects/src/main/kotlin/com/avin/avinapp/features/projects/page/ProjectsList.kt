@@ -62,12 +62,12 @@ fun ProjectItem(
             )
             .pointerHoverIcon(PointerIcon.Hand)
             .hoverable(interactionSource)
-            .padding(8.dp)
             .pointerInput(Unit) {
                 detectTapGestures {
                     onOpenProject.invoke()
                 }
             }
+            .padding(8.dp)
 
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {

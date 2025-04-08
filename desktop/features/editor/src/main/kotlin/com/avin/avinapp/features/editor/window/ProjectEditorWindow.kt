@@ -16,12 +16,14 @@ import org.jetbrains.jewel.window.newFullscreenControls
 @Composable
 fun ProjectEditorWindow(
     component: ProjectEditorComponent,
+    onOpenProject: (Long) -> Unit,
     onNewProjectClick: () -> Unit,
     onCloneRepositoryClick: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
     val project by component.project.collectAsState()
     val projectName = project?.name.orEmpty()
+    val recentProjects by component.recentProjects.collectAsState()
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = projectName,
@@ -33,7 +35,9 @@ fun ProjectEditorWindow(
         ) {
             EditorDropdown(
                 projectName = projectName,
+                recentProjects = recentProjects,
                 onNewProjectClick = onNewProjectClick,
+                onOpenProject = onOpenProject,
                 onCloneRepositoryClick = onCloneRepositoryClick,
             )
         }
