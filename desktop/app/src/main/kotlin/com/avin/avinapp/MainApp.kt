@@ -64,6 +64,8 @@ object MainApp : KoinComponent {
                 editorSlot?.child?.instance?.let {
                     ProjectEditorWindow(
                         component = it,
+                        onNewProjectClick = rootComponent::openNewProject,
+                        onCloneRepositoryClick = rootComponent::openCloneRepository,
                         onCloseRequest = rootComponent::closeEditor,
                     )
                 }

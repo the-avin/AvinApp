@@ -11,5 +11,7 @@ dependencies {
     implementation(libs.filekit.dialogs)
 
     implementation(project(":shared:utils:app"))
+    implementation(project(":shared:locale"))
+    implementation(project(":shared:resource"))
     implementation(project(":core:theme"))
 }
