@@ -19,6 +19,7 @@ fun ProjectEditorWindow(
     onOpenProject: (Long) -> Unit,
     onNewProjectClick: () -> Unit,
     onCloneRepositoryClick: () -> Unit,
+    onOpenFilePicker: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
     val project by component.project.collectAsState()
@@ -38,6 +39,7 @@ fun ProjectEditorWindow(
                 recentProjects = recentProjects,
                 onNewProjectClick = onNewProjectClick,
                 onOpenProject = onOpenProject,
+                onOpenFilePicker = onOpenFilePicker,
                 onCloneRepositoryClick = onCloneRepositoryClick,
             )
         }

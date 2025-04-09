@@ -24,6 +24,10 @@ sqldelight {
     }
 }
 
-tasks.register<Exec>("generateDb") {
-    commandLine("./gradlew", "generateSqlDelightInterface")
+tasks.register("prepareDatabase") {
+    dependsOn("generateSqlDelightInterface")
+
+    doLast {
+        println("SQLDelight interface generated successfully.")
+    }
 }

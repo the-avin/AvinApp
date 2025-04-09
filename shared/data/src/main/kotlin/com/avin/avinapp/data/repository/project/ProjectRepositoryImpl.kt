@@ -6,6 +6,7 @@ import com.avin.avinapp.data.models.project.toDataListProject
 import com.avin.avinapp.data.models.project.toDataProject
 import com.avin.avinapp.databases.AppDatabase
 import com.avin.avinapp.databases.utils.asFlow
+import com.avin.avinapp.databases.utils.runGettingLastId
 import com.avin.avinapp.git.manager.GitManager
 import com.avin.avinapp.git.utils.CustomProgressMonitor
 import com.avin.avinapp.time.getCurrentTimeMillis
@@ -25,10 +26,12 @@ class ProjectRepositoryImpl(
             .map { it.executeAsList().toDataListProject() }
     }
 
-    override fun insertProject(name: String, path: String) {
-        return database.appDatabaseQueries.insertProject(
-            name = name, path = path, createdAt = getCurrentTimeMillis()
-        )
+    override fun insertProject(name: String, path: String): Long {
+        return database.runGettingLastId {
+            database.appDatabaseQueries.insertProject(
+                name = name, path = path, createdAt = getCurrentTimeMillis()
+            )
+        }
     }
 
     override fun deleteProject(projectId: Long) {

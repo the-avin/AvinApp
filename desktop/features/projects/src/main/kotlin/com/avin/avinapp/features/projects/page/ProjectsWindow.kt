@@ -28,6 +28,7 @@ fun ProjectsWindow(
     onCloseRequest: () -> Unit,
     onNewProjectClick: () -> Unit,
     onOpenCloneRepository: () -> Unit,
+    onOpenFilePicker: () -> Unit,
     onOpenProject: (Long) -> Unit,
 ) {
     val projects by component.projects.collectAsState(emptyList())
@@ -39,6 +40,7 @@ fun ProjectsWindow(
                 searchValue = searchValue,
                 onSearchValueChange = component::search,
                 onNewProjectClick = onNewProjectClick,
+                onOpenFilePicker = onOpenFilePicker,
                 onOpenCloneRepository = onOpenCloneRepository
             )
             if (loading) {
@@ -56,6 +58,7 @@ fun Header(
     searchValue: String,
     onSearchValueChange: (String) -> Unit,
     onNewProjectClick: () -> Unit,
+    onOpenFilePicker: () -> Unit,
     onOpenCloneRepository: () -> Unit,
 ) {
     Row(
@@ -72,7 +75,7 @@ fun Header(
         SecondaryButton(onClick = onNewProjectClick) {
             Text(dynamicStringRes(Resource.string.newProject))
         }
-        SecondaryButton(onClick = {}) {
+        SecondaryButton(onClick = onOpenFilePicker) {
             Text(dynamicStringRes(Resource.string.open))
         }
         SecondaryButton(onClick = onOpenCloneRepository) {

@@ -46,7 +46,8 @@ object MainApp : KoinComponent {
                         onCloseRequest = rootComponent::closeProjects,
                         onNewProjectClick = rootComponent::openNewProject,
                         onOpenCloneRepository = rootComponent::openCloneRepository,
-                        onOpenProject = rootComponent::openEditor
+                        onOpenProject = rootComponent::openEditor,
+                        onOpenFilePicker = rootComponent::openProjectPicker
                     )
                 }
                 newProjectSlot?.child?.instance?.let {
@@ -67,7 +68,8 @@ object MainApp : KoinComponent {
                         onNewProjectClick = rootComponent::openNewProject,
                         onCloneRepositoryClick = rootComponent::openCloneRepository,
                         onCloseRequest = rootComponent::closeEditor,
-                        onOpenProject = rootComponent::openEditor
+                        onOpenProject = rootComponent::openEditor,
+                        onOpenFilePicker = rootComponent::openProjectPicker
                     )
                 }
             }

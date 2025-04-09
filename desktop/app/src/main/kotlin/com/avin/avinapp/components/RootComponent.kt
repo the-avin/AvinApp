@@ -8,6 +8,8 @@ import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.avin.avinapp.MainApp
+import com.avin.avinapp.core.loader.ProjectLoader
+import com.avin.avinapp.data.repository.project.ProjectRepository
 import com.avin.avinapp.features.clone.component.CloneRepositoryComponent
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
@@ -17,6 +19,8 @@ import com.avin.avinapp.pages.AppPages
 import com.avin.avinapp.preferences.AppPreferencesKeys
 import com.avin.avinapp.preferences.PreferencesStorage
 import com.avin.avinapp.resource.Resource
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.openDirectoryPicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
@@ -29,13 +33,20 @@ import org.koin.core.component.inject
 class RootComponent(context: ComponentContext) : BaseComponent(context), KoinComponent {
     val languageManager: LanguageManager by inject()
     private val preferences: PreferencesStorage by inject()
+    private val projectLoader: ProjectLoader by inject()
+    private val projectRepository: ProjectRepository by inject()
 
     private val projects = SlotNavigation<AppPages.Projects>()
     val projectsSlot = childSlot(
         source = projects,
         serializer = null,
         key = AppPages.Projects.key,
-        childFactory = { _, parentComponent -> ProjectsComponent(context = parentComponent, repository = get()) }
+        childFactory = { _, parentComponent ->
+            ProjectsComponent(
+                context = parentComponent,
+                repository = projectRepository
+            )
+        }
     )
 
     fun openProjects() {
@@ -51,7 +62,12 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         source = newProject,
         serializer = null,
         key = AppPages.NewProject.key,
-        childFactory = { _, parentComponent -> NewProjectComponent(context = parentComponent, repository = get()) }
+        childFactory = { _, parentComponent ->
+            NewProjectComponent(
+                context = parentComponent,
+                repository = projectRepository
+            )
+        }
     )
 
     fun openNewProject() {
@@ -68,7 +84,12 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         source = cloneRepository,
         serializer = null,
         key = AppPages.CloneRepository.key,
-        childFactory = { _, parentComponent -> CloneRepositoryComponent(context = parentComponent, repository = get()) }
+        childFactory = { _, parentComponent ->
+            CloneRepositoryComponent(
+                context = parentComponent,
+                repository = projectRepository
+            )
+        }
     )
 
     fun openCloneRepository() {
@@ -127,6 +148,17 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         System.setProperty("apple.awt.application.name", languageManager.getText(Resource.string.appName))
     }
 
+
+    fun openProjectPicker() = scope.launch(Dispatchers.IO) {
+        val directory = FileKit.openDirectoryPicker()
+        directory?.file?.let { file ->
+            if (projectLoader.isValidProject(file)) {
+                val manifest = projectLoader.loadManifest(file.path)
+                val id = projectRepository.insertProject(manifest.project.name, file.path)
+                openEditor(id)
+            }
+        }
+    }
 
     @Composable
     fun getTheme() = preferences.get(AppPreferencesKeys.theme).collectAsState(null)

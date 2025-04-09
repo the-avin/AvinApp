@@ -32,6 +32,7 @@ fun TitleBarScope.EditorDropdown(
     recentProjects: List<Project>,
     onOpenProject: (Long) -> Unit,
     onNewProjectClick: () -> Unit,
+    onOpenFilePicker: () -> Unit,
     onCloneRepositoryClick: () -> Unit,
 ) {
     Dropdown(menuContent = {
@@ -39,6 +40,11 @@ fun TitleBarScope.EditorDropdown(
             stringRes = Resource.string.newProject,
             icon = AllIconsKeys.General.Add,
             onClick = onNewProjectClick
+        )
+        iconTextItem(
+            stringRes = Resource.string.open,
+            icon = AllIconsKeys.Nodes.Folder,
+            onClick = onOpenFilePicker
         )
         iconTextItem(
             stringRes = Resource.string.cloneRepository,

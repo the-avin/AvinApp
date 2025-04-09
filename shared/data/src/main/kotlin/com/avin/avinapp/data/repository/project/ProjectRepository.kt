@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProjectRepository {
     fun getProjects(): Flow<List<Project>>
-    fun insertProject(name: String, path: String)
+    fun insertProject(name: String, path: String): Long
     fun deleteProject(projectId: Long)
     fun searchProjects(query: String): Flow<List<Project>>
     fun getById(id: Long): Project

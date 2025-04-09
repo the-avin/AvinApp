@@ -9,13 +9,16 @@ insertProject:
 INSERT INTO Project(name, path, createdAt) VALUES (?, ?, ?);
 
 selectAllProjects:
-SELECT * FROM Project;
+SELECT * FROM Project ORDER BY createdAt DESC;
 
 selectProjectById:
 SELECT * FROM Project WHERE id = :id;
 
 selectProjectsByName:
-SELECT * FROM Project WHERE name LIKE '%' || :query || '%';
+SELECT * FROM Project WHERE name LIKE '%' || :query || '%' ORDER BY createdAt DESC;
 
 deleteProjectById:
 DELETE FROM Project WHERE id = :id;
+
+lastInsertedRowId:
+SELECT last_insert_rowid();

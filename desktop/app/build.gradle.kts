@@ -12,6 +12,9 @@ dependencies {
     // Decompose
     implementation(libs.decompose)
 
+    // FileKit
+    implementation(libs.filekit.dialogs)
+
 
     // Locale modules
     implementation(project(":core:theme"))

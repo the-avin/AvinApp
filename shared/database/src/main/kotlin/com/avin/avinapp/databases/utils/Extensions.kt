@@ -1,6 +1,8 @@
 package com.avin.avinapp.databases.utils
 
 import app.cash.sqldelight.Query
+import app.cash.sqldelight.TransactionWithReturn
+import com.avin.avinapp.databases.AppDatabase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.flow.Flow
@@ -23,5 +25,15 @@ fun <T : Any> Query<T>.asFlow(): Flow<Query<T>> = flow {
         }
     } finally {
         removeListener(listener)
+    }
+}
+
+
+fun AppDatabase.runGettingLastId(
+    body: TransactionWithReturn<Long>.() -> Unit
+): Long {
+    return transactionWithResult {
+        body(this)
+        appDatabaseQueries.lastInsertedRowId().executeAsOne()
     }
 }
