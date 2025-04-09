@@ -5,7 +5,7 @@ import com.avin.avinapp.core.meta.ProjectMeta
 import com.charleskorn.kaml.Yaml
 import java.io.File
 
-class ProjectLoaderImpl : ProjectLoader {
+object ProjectLoaderImpl : ProjectLoader {
     override fun loadManifest(path: String): ProjectManifest {
         val file = File(path, ProjectMeta.PROJECT_MANIFEST_FILE_NAME)
         val fileContent = file.readText()

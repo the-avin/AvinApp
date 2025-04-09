@@ -18,5 +18,5 @@ val otherModules = module {
 
     // Project
     singleOf(::ProjectBuilderImpl).bind<ProjectBuilder>()
-    singleOf(::ProjectLoaderImpl).bind<ProjectLoader>()
+    single { ProjectLoaderImpl }.bind<ProjectLoader>()
 }

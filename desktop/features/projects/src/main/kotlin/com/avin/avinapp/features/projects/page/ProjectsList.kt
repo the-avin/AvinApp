@@ -15,21 +15,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avin.avinapp.data.models.project.Project
+import com.avin.avinapp.data.models.project.valid
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.platform.file.FileHandler
 import com.avin.avinapp.resource.Resource
+import com.avin.avinapp.utils.compose.modifier.grayscale
 import com.avin.avinapp.utils.compose.nodes.menu.IconMenu
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
+import org.jetbrains.jewel.ui.util.thenIf
 
 @Composable
 fun ProjectsList(
@@ -53,6 +58,7 @@ fun ProjectItem(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
+    val isValid = remember { project.valid }
     Box(
         Modifier
             .clip(RoundedCornerShape(4.dp))
@@ -60,13 +66,15 @@ fun ProjectItem(
             .background(
                 if (isHovered) JewelTheme.colorPalette.blue[5].copy(.3f) else Color.Transparent
             )
-            .pointerHoverIcon(PointerIcon.Hand)
             .hoverable(interactionSource)
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    onOpenProject.invoke()
-                }
+            .thenIf(isValid) {
+                pointerInput(Unit) {
+                    detectTapGestures {
+                        onOpenProject.invoke()
+                    }
+                }.pointerHoverIcon(PointerIcon.Hand)
             }
+            .thenIf(!isValid) { grayscale() }
             .padding(8.dp)
 
     ) {
@@ -78,10 +86,12 @@ fun ProjectItem(
             }
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
                 IconMenu {
-                    selectableItem(false, onClick = {
-                        FileHandler.openFolder(project.path)
-                    }) {
-                        Text(dynamicStringRes(Resource.string.openInFolder))
+                    if (isValid) {
+                        selectableItem(false, onClick = {
+                            FileHandler.openFolder(project.path)
+                        }) {
+                            Text(dynamicStringRes(Resource.string.openInFolder))
+                        }
                     }
                     selectableItem(false, onClick = onDelete) {
                         Text(dynamicStringRes(Resource.string.deleteProjectFromList))
