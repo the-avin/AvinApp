@@ -23,12 +23,17 @@ class CloneRepositoryComponent(
     private val _state = MutableStateFlow(CloneRepositoryState())
     val state = _state.asStateFlow()
 
+    var isAddedToDb = false
+
     private val _status = MutableStateFlow<CloneRepositoryStatus>(CloneRepositoryStatus.Idle)
     val status = _status.asStateFlow()
 
     private fun onEndCloning() {
         scope.launch {
-            repository.insertProject(GitManager.getRepositoryNameByURI(_state.value.url), _state.value.path)
+            if (!isAddedToDb) {
+                repository.insertProject(GitManager.getRepositoryNameByURI(_state.value.url), _state.value.path)
+                isAddedToDb = true
+            }
             _status.update { CloneRepositoryStatus.Completed }
         }
     }
