@@ -3,11 +3,7 @@ package com.avin.avinapp.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.dismiss
-import com.avin.avinapp.MainApp
 import com.avin.avinapp.core.loader.ProjectLoader
 import com.avin.avinapp.data.repository.project.ProjectRepository
 import com.avin.avinapp.features.clone.component.CloneRepositoryComponent
@@ -19,6 +15,7 @@ import com.avin.avinapp.pages.AppPages
 import com.avin.avinapp.preferences.AppPreferencesKeys
 import com.avin.avinapp.preferences.PreferencesStorage
 import com.avin.avinapp.resource.Resource
+import com.avin.avinapp.utils.SlotPageManager
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.openDirectoryPicker
 import kotlinx.coroutines.Dispatchers
@@ -27,104 +24,92 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import org.koin.core.component.inject
 
 class RootComponent(context: ComponentContext) : BaseComponent(context), KoinComponent {
-    val languageManager: LanguageManager by inject()
+
     private val preferences: PreferencesStorage by inject()
+    val languageManager: LanguageManager by inject()
     private val projectLoader: ProjectLoader by inject()
     private val projectRepository: ProjectRepository by inject()
 
-    private val projects = SlotNavigation<AppPages.Projects>()
+    // Pages
+    val projects = SlotPageManager<AppPages.Projects>()
+    val newProject = SlotPageManager<AppPages.NewProject>()
+    val cloneRepository = SlotPageManager<AppPages.CloneRepository>()
+    val editor = SlotPageManager<AppPages.Editor>()
+
+    // Slots
     val projectsSlot = childSlot(
-        source = projects,
+        source = projects.navigation,
         serializer = null,
         key = AppPages.Projects.key,
-        childFactory = { _, parentComponent ->
+        childFactory = { _, ctx ->
             ProjectsComponent(
-                context = parentComponent,
+                context = ctx,
                 repository = projectRepository
             )
         }
     )
 
-    fun openProjects() {
-        projects.activate(AppPages.Projects)
-    }
-
-    fun closeProjects() {
-        projects.dismiss()
-    }
-
-    private val newProject = SlotNavigation<AppPages.NewProject>()
     val newProjectSlot = childSlot(
-        source = newProject,
+        source = newProject.navigation,
         serializer = null,
         key = AppPages.NewProject.key,
-        childFactory = { _, parentComponent ->
+        childFactory = { _, ctx ->
             NewProjectComponent(
-                context = parentComponent,
+                context = ctx,
                 repository = projectRepository
             )
         }
     )
 
-    fun openNewProject() {
-        newProject.activate(AppPages.NewProject)
-    }
-
-    fun closeNewProject() {
-        newProject.dismiss()
-    }
-
-
-    private val cloneRepository = SlotNavigation<AppPages.CloneRepository>()
     val cloneRepositorySlot = childSlot(
-        source = cloneRepository,
+        source = cloneRepository.navigation,
         serializer = null,
         key = AppPages.CloneRepository.key,
-        childFactory = { _, parentComponent ->
+        childFactory = { _, ctx ->
             CloneRepositoryComponent(
-                context = parentComponent,
+                context = ctx,
                 repository = projectRepository
             )
         }
     )
 
-    fun openCloneRepository() {
-        cloneRepository.activate(AppPages.CloneRepository)
-    }
-
-    fun closeCloneRepository() {
-        cloneRepository.dismiss()
-    }
-
-
-    private val editor = SlotNavigation<AppPages.Editor>()
     val editorSlot = childSlot(
-        source = editor,
+        source = editor.navigation,
         serializer = null,
         key = AppPages.Editor.KEY,
-        childFactory = { editorI, parentComponent ->
+        childFactory = { config, ctx ->
             ProjectEditorComponent(
-                parentComponent,
-                editorI,
-                repository = get()
+                context = ctx,
+                info = config,
+                repository = projectRepository
             )
         }
     )
 
-    fun openEditor(
-        projectId: Long
-    ) {
-        editor.activate(AppPages.Editor(projectId = projectId))
+    // Navigation functions
+    fun openProjects() = projects.open(AppPages.Projects)
+    fun closeProjects() = projects.close()
+
+    fun openNewProject() = newProject.open(AppPages.NewProject)
+    fun closeNewProject() = newProject.close()
+
+    fun openCloneRepository() = cloneRepository.open(AppPages.CloneRepository)
+    fun closeCloneRepository() = cloneRepository.close()
+
+    fun openEditor(projectId: Long) {
+        closeProjects()
+        editor.open(AppPages.Editor(projectId))
     }
 
     fun closeEditor() {
-        editor.dismiss()
+        openProjects()
+        editor.close()
     }
 
+    // Language management
     private fun collectToLanguage() = scope.launch {
         preferences.get(AppPreferencesKeys.language).collectLatest {
             if (it != languageManager.container.value?.currentLanguage) {
@@ -149,6 +134,7 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
     }
 
 
+    // Project picker
     fun openProjectPicker() = scope.launch(Dispatchers.IO) {
         val directory = FileKit.openDirectoryPicker()
         directory?.file?.let { file ->
