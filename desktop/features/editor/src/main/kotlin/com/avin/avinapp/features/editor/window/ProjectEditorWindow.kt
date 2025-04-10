@@ -4,11 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.dsl.EditorDropdown
+import com.avin.avinapp.locale.StringRes
+import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.window.AppCustomWindow
+import com.avin.avinapp.utils.compose.menu.appendMenus
+import com.avin.avinapp.utils.compose.menu.buildMenu
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -30,6 +35,15 @@ fun ProjectEditorWindow(
         title = projectName,
         state = rememberWindowState(placement = WindowPlacement.Fullscreen)
     ) {
+        MenuBar {
+            buildMenu {
+                menu(Resource.string.newProject) {
+                    +submenu(Resource.string.open) {
+                        +item(Resource.string.newProject, action = { println("hello world") })
+                    }
+                }
+            }.also { appendMenus(it) }
+        }
         TitleBar(
             gradientStartColor = getColorForLetter(projectName.firstOrNull() ?: 'A').copy(.6f),
             modifier = Modifier.newFullscreenControls()

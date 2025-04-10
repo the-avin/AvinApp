@@ -47,7 +47,7 @@ fun DrawInitialsWithCanvas(text: String, fontScale: Float = 1f, cornerRadius: Dp
 
             val offset = Offset(
                 size.width.minus(textResult.size.width).div(2),
-                size.height.minus(textResult.size.height).div(2) - textResult.size.height.div(11),
+                size.height.minus(textResult.size.height).div(2),
             )
             drawText(
                 textResult, topLeft = offset

@@ -64,10 +64,10 @@ fun TitleBarScope.EditorDropdown(
             ) { project ->
                 val isValid = remember { project.valid }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.thenIf(!isValid) { grayscale() }.padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.thenIf(!isValid) { grayscale() }.padding(4.dp),
                 ) {
-                    DrawInitialsWithCanvas(project.name, boxSize = 20.dp)
+                    DrawInitialsWithCanvas(project.name, boxSize = 18.dp)
                     Column {
                         Text(project.name)
                         Text(project.path, fontSize = 10.sp, modifier = Modifier.alpha(.6f))
