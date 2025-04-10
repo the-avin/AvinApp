@@ -1,9 +1,18 @@
 package com.avin.avinapp.utils.compose.menu
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.window.MenuBarScope
 import androidx.compose.ui.window.MenuScope
 import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.utils.compose.foundation.menu.textItem
+import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.separator
+import org.jetbrains.jewel.ui.component.MenuScope as JewelMenuScope
 
 @Composable
 fun MenuBarScope.renderMenu(menus: List<Menu>) {
@@ -11,19 +20,19 @@ fun MenuBarScope.renderMenu(menus: List<Menu>) {
         Menu(
             text = dynamicStringRes(menu.name)
         ) {
-            appendContent(menu.content)
+            renderContent(menu.content)
         }
     }
 }
 
 
 @Composable
-private fun MenuScope.appendContent(content: List<MenuContent>) {
+private fun MenuScope.renderContent(content: List<MenuContent>) {
     content.forEach { item ->
         when (item) {
             is MenuContent.SubMenu -> {
                 Menu(text = dynamicStringRes(item.stringRes)) {
-                    appendContent(item.items)
+                    renderContent(item.items)
                 }
             }
 
@@ -32,6 +41,31 @@ private fun MenuScope.appendContent(content: List<MenuContent>) {
             }
 
             is MenuContent.Separator -> Separator()
+        }
+    }
+}
+
+fun JewelMenuScope.renderContent(content: List<MenuContent>) {
+    content.forEach { item ->
+        when (item) {
+            is MenuContent.SubMenu -> {
+                submenu(submenu = { renderContent(item.items) }) {
+                    Box(
+                        modifier = Modifier.pointerHoverIcon(
+                            PointerIcon.Hand
+                        ),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(dynamicStringRes(item.stringRes))
+                    }
+                }
+            }
+
+            is MenuContent.Item -> {
+                textItem(stringRes = item.stringRes, onClick = { item.action() })
+            }
+
+            is MenuContent.Separator -> separator()
         }
     }
 }

@@ -10,7 +10,7 @@ private val horizontalPadding = 16.dp
 fun Modifier.topPadding() = padding(top = verticalPadding)
 fun Modifier.bottomPadding() = padding(bottom = verticalPadding)
 fun Modifier.startPadding() = padding(start = horizontalPadding)
-fun Modifier.endPadding() = padding(start = horizontalPadding)
+fun Modifier.endPadding() = padding(end = horizontalPadding)
 
 fun Modifier.horizontalPadding() = padding(horizontal = horizontalPadding)
 fun Modifier.verticalPadding() = padding(vertical = verticalPadding)

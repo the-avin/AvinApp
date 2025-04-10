@@ -1,18 +1,24 @@
 package com.avin.avinapp.features.editor.window
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.dsl.EditorDropdown
+import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.menu.renderMenu
 import com.avin.avinapp.utils.compose.menu.buildMenu
+import com.avin.avinapp.utils.compose.modifier.endPadding
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -39,6 +45,8 @@ fun ProjectEditorWindow(
                 +menu(Resource.string.newProject) {
                     +submenu(Resource.string.open) {
                         +item(Resource.string.newProject, action = { println("hello world") })
+                        +separator()
+                        +item(Resource.string.newProject, action = { println("hello world") })
                     }
                 }
             }.also { renderMenu(it) }
@@ -54,6 +62,9 @@ fun ProjectEditorWindow(
                 onOpenProject = onOpenProject,
                 onOpenFilePicker = onOpenFilePicker,
                 onCloneRepositoryClick = onCloneRepositoryClick,
+            )
+            EditorTitleBarAction(
+                modifier = Modifier.align(Alignment.End).padding(end = 4.dp)
             )
         }
     }

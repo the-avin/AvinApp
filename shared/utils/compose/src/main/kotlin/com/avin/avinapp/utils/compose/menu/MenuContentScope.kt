@@ -25,3 +25,10 @@ class MenuContentScope {
 
     fun asList(): List<MenuContent> = _list.toList()
 }
+
+
+fun buildMenuContent(content: MenuContentScope.() -> Unit): List<MenuContent> {
+    val scope = MenuContentScope()
+    scope.content()
+    return scope.asList()
+}

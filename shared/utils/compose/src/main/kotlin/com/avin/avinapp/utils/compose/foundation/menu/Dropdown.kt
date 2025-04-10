@@ -53,6 +53,23 @@ fun MenuScope.iconTextItem(
     }
 }
 
+
+fun MenuScope.textItem(
+    stringRes: StringRes,
+    onClick: () -> Unit
+) {
+    simpleItem(onClick = onClick) {
+        Box(
+            modifier = Modifier.pointerHoverIcon(
+                PointerIcon.Hand
+            ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(dynamicStringRes(stringRes))
+        }
+    }
+}
+
 fun MenuScope.iconTextItem(
     stringRes: StringRes,
     icon: IconKey,
