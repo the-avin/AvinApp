@@ -6,7 +6,7 @@ import androidx.compose.ui.window.MenuScope
 import com.avin.avinapp.manager.compose.dynamicStringRes
 
 @Composable
-fun MenuBarScope.appendMenus(menus: List<Menu>) {
+fun MenuBarScope.renderMenu(menus: List<Menu>) {
     menus.forEach { menu ->
         Menu(
             text = dynamicStringRes(menu.name)
@@ -18,7 +18,7 @@ fun MenuBarScope.appendMenus(menus: List<Menu>) {
 
 
 @Composable
-fun MenuScope.appendContent(content: List<MenuContent>) {
+private fun MenuScope.appendContent(content: List<MenuContent>) {
     content.forEach { item ->
         when (item) {
             is MenuContent.SubMenu -> {

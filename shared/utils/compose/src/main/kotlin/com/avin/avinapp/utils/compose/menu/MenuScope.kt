@@ -10,10 +10,14 @@ data class Menu(
 class MenuScope {
     private val _menus = mutableListOf<Menu>()
 
-    fun menu(stringRes: StringRes, content: MenuContentScope.() -> Unit) {
+    fun menu(stringRes: StringRes, content: MenuContentScope.() -> Unit): Menu {
         val scope = MenuContentScope()
         scope.content()
-        _menus.add(Menu(name = stringRes, scope.asList()))
+        return Menu(name = stringRes, scope.asList())
+    }
+
+    operator fun Menu.unaryPlus() {
+        _menus += this
     }
 
     fun asList(): List<Menu> = _menus
