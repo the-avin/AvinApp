@@ -13,6 +13,9 @@ sealed class AppPages(val key: String) {
     data object CloneRepository : AppPages("clone_repository")
 
     @Serializable
+    data object Settings : AppPages("settings")
+
+    @Serializable
     data class Editor(
         val projectId: Long
     ) : AppPages("editor") {

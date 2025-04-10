@@ -10,6 +10,7 @@ object StringResource {
     val creatingNewProject = StringRes("creating_new_project")
     val newProjectMessage = StringRes("new_project_message")
     val cloneProjectMessage = StringRes("clone_project_message")
+    val settings = StringRes("settings")
     val open = StringRes("open")
     val cloneRepository = StringRes("clone_repository")
     val name = StringRes("name")

@@ -1,6 +1,5 @@
 package com.avin.avinapp.features.editor.window
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,9 +15,8 @@ import com.avin.avinapp.features.editor.dsl.EditorDropdown
 import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.window.AppCustomWindow
-import com.avin.avinapp.utils.compose.menu.renderMenu
 import com.avin.avinapp.utils.compose.menu.buildMenu
-import com.avin.avinapp.utils.compose.modifier.endPadding
+import com.avin.avinapp.utils.compose.menu.renderMenu
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -30,6 +28,7 @@ fun ProjectEditorWindow(
     onNewProjectClick: () -> Unit,
     onCloneRepositoryClick: () -> Unit,
     onOpenFilePicker: () -> Unit,
+    onOpenSettings: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
     val project by component.project.collectAsState()
@@ -64,6 +63,7 @@ fun ProjectEditorWindow(
                 onCloneRepositoryClick = onCloneRepositoryClick,
             )
             EditorTitleBarAction(
+                onOpenSettings = onOpenSettings,
                 modifier = Modifier.align(Alignment.End).padding(end = 4.dp)
             )
         }

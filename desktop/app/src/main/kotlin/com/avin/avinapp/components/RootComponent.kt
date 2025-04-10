@@ -34,10 +34,11 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
     private val projectRepository: ProjectRepository by inject()
 
     // Pages
-    val projects = SlotPageManager<AppPages.Projects>()
-    val newProject = SlotPageManager<AppPages.NewProject>()
-    val cloneRepository = SlotPageManager<AppPages.CloneRepository>()
-    val editor = SlotPageManager<AppPages.Editor>()
+    private val projects = SlotPageManager<AppPages.Projects>()
+    private val newProject = SlotPageManager<AppPages.NewProject>()
+    private val cloneRepository = SlotPageManager<AppPages.CloneRepository>()
+    private val editor = SlotPageManager<AppPages.Editor>()
+    private val settings = SlotPageManager<AppPages.Settings>()
 
     // Slots
     val projectsSlot = childSlot(
@@ -76,6 +77,13 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         }
     )
 
+    val settingsSlot = childSlot(
+        source = settings.navigation,
+        serializer = null,
+        key = AppPages.Settings.key,
+        childFactory = { config, ctx -> }
+    )
+
     val editorSlot = childSlot(
         source = editor.navigation,
         serializer = null,
@@ -98,6 +106,9 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
 
     fun openCloneRepository() = cloneRepository.open(AppPages.CloneRepository)
     fun closeCloneRepository() = cloneRepository.close()
+
+    fun openSettings() = settings.open(AppPages.Settings)
+    fun closeSettings() = settings.close()
 
     fun openEditor(projectId: Long) {
         closeProjects()

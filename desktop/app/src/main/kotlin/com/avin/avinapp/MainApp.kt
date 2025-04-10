@@ -40,6 +40,7 @@ object MainApp : KoinComponent {
                 val newProjectSlot by rootComponent.newProjectSlot.toFlow().collectAsState(null)
                 val cloneRepositorySlot by rootComponent.cloneRepositorySlot.toFlow().collectAsState(null)
                 val editorSlot by rootComponent.editorSlot.toFlow().collectAsState(null)
+                val settingsSlot by rootComponent.settingsSlot.toFlow().collectAsState(null)
                 projectsSlot?.child?.instance?.let {
                     ProjectsWindow(
                         component = it,
@@ -47,7 +48,8 @@ object MainApp : KoinComponent {
                         onNewProjectClick = rootComponent::openNewProject,
                         onOpenCloneRepository = rootComponent::openCloneRepository,
                         onOpenProject = rootComponent::openEditor,
-                        onOpenFilePicker = rootComponent::openProjectPicker
+                        onOpenFilePicker = rootComponent::openProjectPicker,
+                        onOpenSettings = rootComponent::openSettings,
                     )
                 }
                 newProjectSlot?.child?.instance?.let {
@@ -62,6 +64,8 @@ object MainApp : KoinComponent {
                         onCloseRequest = rootComponent::closeCloneRepository,
                     )
                 }
+                settingsSlot?.child?.instance?.let {
+                }
                 editorSlot?.child?.instance?.let {
                     ProjectEditorWindow(
                         component = it,
@@ -69,6 +73,7 @@ object MainApp : KoinComponent {
                         onCloneRepositoryClick = rootComponent::openCloneRepository,
                         onCloseRequest = rootComponent::closeEditor,
                         onOpenProject = rootComponent::openEditor,
+                        onOpenSettings = rootComponent::openSettings,
                         onOpenFilePicker = rootComponent::openProjectPicker
                     )
                 }
