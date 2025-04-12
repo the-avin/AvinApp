@@ -6,7 +6,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
@@ -39,7 +42,13 @@ fun ProjectsWindow(
     val projects by component.projects.collectAsState(emptyList())
     val searchValue by component.searchValue.collectAsState()
     val loading by component.loading.collectAsState()
-    AppCustomWindow(onCloseRequest = onCloseRequest, title = dynamicStringRes(Resource.string.welcome)) {
+    AppCustomWindow(
+        onCloseRequest = onCloseRequest,
+        title = dynamicStringRes(Resource.string.welcome),
+        state = rememberWindowState(
+            position = WindowPosition.Aligned(Alignment.Center),
+        )
+    ) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
             Column(modifier = Modifier.fillMaxSize().windowBackground().horizontalPadding().topPadding()) {
                 Header(

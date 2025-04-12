@@ -17,9 +17,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.scene.CanvasLayersComposeScene
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
@@ -51,7 +53,11 @@ fun ProjectEditorWindow(
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = projectName,
-        state = rememberWindowState(placement = WindowPlacement.Fullscreen)
+        state = rememberWindowState(
+            placement = WindowPlacement.Fullscreen,
+            position = WindowPosition.Aligned(Alignment.Center),
+            size = DpSize(1000.dp, 700.dp)
+        )
     ) {
         ProjectEditorTitleBar(
             projectName = projectName,

@@ -11,6 +11,7 @@ import com.avin.avinapp.features.editor.window.ProjectEditorWindow
 import com.avin.avinapp.features.new_project.page.NewProjectWindow
 import com.avin.avinapp.features.projects.page.ProjectsWindow
 import com.avin.avinapp.manager.compose.WithLocaleLanguageManager
+import com.avin.avinapp.settings.window.SettingsWindow
 import com.avin.avinapp.theme.AppCustomTheme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -65,6 +66,7 @@ object MainApp : KoinComponent {
                     )
                 }
                 settingsSlot?.child?.instance?.let {
+                    SettingsWindow(onCloseRequest = rootComponent::closeSettings)
                 }
                 editorSlot?.child?.instance?.let {
                     ProjectEditorWindow(

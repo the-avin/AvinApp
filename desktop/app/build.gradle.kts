@@ -30,6 +30,7 @@ dependencies {
     // Features
     implementation(project(":desktop:features:projects"))
     implementation(project(":desktop:features:editor"))
+    implementation(project(":desktop:features:settings"))
 }
 
 val nameSpace = "com.avin.avinapp"
