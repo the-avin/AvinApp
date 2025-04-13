@@ -33,9 +33,10 @@ fun Sidebar(
     currentPage: SettingsPage?,
     pages: List<SettingsPage>,
     onPageChange: (SettingsPage) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier.widthIn(min = 100.dp, max = 750.dp).fillMaxWidth(.3f),
+        modifier = modifier,
         contentPadding = PaddingValues(16.dp)
     ) {
         items(pages, key = { it.name.resId }) { page ->
