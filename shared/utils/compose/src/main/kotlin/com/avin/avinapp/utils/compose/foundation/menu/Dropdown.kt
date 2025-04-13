@@ -31,7 +31,7 @@ fun MenuScope.simpleItem(onClick: () -> Unit, content: @Composable () -> Unit) {
 
 fun MenuScope.iconTextItem(
     stringRes: StringRes,
-    icon: Painter,
+    icon: String,
     onClick: () -> Unit
 ) {
     simpleItem(onClick = onClick) {
@@ -43,7 +43,7 @@ fun MenuScope.iconTextItem(
             )
         ) {
             Icon(
-                painter = icon,
+                painter = painterResource(icon),
                 contentDescription = null,
                 tint = LocalContentColor.current,
                 modifier = Modifier.size(16.dp)

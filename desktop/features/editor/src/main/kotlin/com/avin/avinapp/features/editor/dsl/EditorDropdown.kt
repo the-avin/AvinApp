@@ -47,7 +47,7 @@ fun TitleBarScope.EditorDropdown(
         )
         iconTextItem(
             stringRes = Resource.string.open,
-            icon = AllIconsKeys.Nodes.Folder,
+            icon = Resource.image.FOLDER,
             onClick = onOpenFilePicker
         )
         iconTextItem(

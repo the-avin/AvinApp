@@ -2,18 +2,27 @@ package com.avin.avinapp.features.editor.window
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.scene.CanvasLayersComposeScene
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
@@ -24,14 +33,21 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.project.Project
+import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.features.editor.component.DevicesChooserDropdown
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
+import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.EditorDropdown
 import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
 import com.avin.avinapp.theme.AppCustomTheme
+import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
+import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
+import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.ToggleableIconButton
 import org.jetbrains.jewel.window.DecoratedWindowScope
 import org.jetbrains.jewel.window.TitleBar
 import org.jetbrains.jewel.window.newFullscreenControls
@@ -50,6 +66,9 @@ fun ProjectEditorWindow(
     val project by component.project.collectAsState()
     val projectName = project?.name.orEmpty()
     val recentProjects by component.recentProjects.collectAsState()
+    val devices by component.devices.collectAsState()
+    val currentDevice by component.currentDevice.collectAsState()
+    val currentPage by component.currentPage.collectAsState()
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = projectName,
@@ -61,34 +80,64 @@ fun ProjectEditorWindow(
     ) {
         ProjectEditorTitleBar(
             projectName = projectName,
+            devices = devices,
+            currentPage = currentPage,
+            currentDevice = currentDevice,
             recentProjects = recentProjects,
             onNewProjectClick = onNewProjectClick,
             onOpenProject = onOpenProject,
             onOpenFilePicker = onOpenFilePicker,
             onCloneRepositoryClick = onCloneRepositoryClick,
             onOpenSettings = onOpenSettings,
+            onDeviceSelected = component::setDevice
         )
-        val screenWidth = 1080
-        val screenHeight = 2424
-        val image = ImageBitmap(screenWidth, screenHeight)
-        val canvas = Canvas(image)
+        Row(modifier = Modifier.fillMaxSize()) {
+            Sidebar(
+                currentPage = currentPage,
+                onPageChanged = component::changePage
+            )
+            Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                when (currentPage) {
+                    is EditorPages.Screens -> {
 
-        CanvasLayersComposeScene(density = Density(10f), size = IntSize(screenWidth, screenHeight)).apply {
-            setContent {
-                AppCustomTheme {
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(Color.Red).padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        DefaultButton(onClick = {}) {
-                            Text("Hello World", style = TextStyle(color = Color.White))
+                        if (currentDevice != null) {
+                            val screenWidth = currentDevice!!.resolution.width
+                            val screenHeight = currentDevice!!.resolution.height
+                            val image = ImageBitmap(screenWidth, screenHeight)
+                            val canvas = Canvas(image)
+
+                            CanvasLayersComposeScene(
+                                density = Density(currentDevice!!.density),
+                                size = IntSize(screenWidth, screenHeight)
+                            ).apply {
+                                setContent {
+                                    AppCustomTheme {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            DefaultButton(onClick = {}) {
+                                                Text("Hello World", style = TextStyle(color = Color.White))
+                                            }
+                                        }
+                                    }
+                                }
+                            }.render(canvas, 1)
+
+                            Image(
+                                bitmap = image,
+                                contentDescription = "Rendered Image",
+                                modifier = Modifier.fillMaxHeight(.9f),
+                                contentScale = ContentScale.FillHeight
+                            )
                         }
                     }
+
+                    else -> {}
                 }
             }
-        }.render(canvas, 1)
-
-        Image(bitmap = image, contentDescription = "Rendered Image")
+        }
     }
 }
 
@@ -97,11 +146,15 @@ fun ProjectEditorWindow(
 fun DecoratedWindowScope.ProjectEditorTitleBar(
     projectName: String,
     recentProjects: List<Project>,
+    currentDevice: PreviewDevice?,
+    devices: List<PreviewDevice>,
+    currentPage: EditorPages,
     onOpenProject: (Long) -> Unit,
     onNewProjectClick: () -> Unit,
     onOpenFilePicker: () -> Unit,
     onCloneRepositoryClick: () -> Unit,
     onOpenSettings: () -> Unit,
+    onDeviceSelected: (PreviewDevice) -> Unit,
 ) {
     TitleBar(
         gradientStartColor = getColorForLetter(projectName.firstOrNull() ?: 'A').copy(.6f),
@@ -115,9 +168,44 @@ fun DecoratedWindowScope.ProjectEditorTitleBar(
             onOpenFilePicker = onOpenFilePicker,
             onCloneRepositoryClick = onCloneRepositoryClick,
         )
-        EditorTitleBarAction(
-            onOpenSettings = onOpenSettings,
-            modifier = Modifier.align(Alignment.End).padding(end = 4.dp)
-        )
+        Row(
+            modifier = Modifier.align(Alignment.End).padding(end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            EditorTitleBarAction(
+                onOpenSettings = onOpenSettings,
+            )
+        }
+        if (currentPage is EditorPages.Screens) {
+            DevicesChooserDropdown(
+                currentDevice = currentDevice,
+                devices = devices,
+                onDeviceSelected = onDeviceSelected
+            )
+        }
+    }
+}
+
+
+@Composable
+fun Sidebar(
+    currentPage: EditorPages,
+    onPageChanged: (EditorPages) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxHeight().padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        remember { EditorPages.pages }.forEach { page ->
+            ToggleableIconButton(
+                value = currentPage == page,
+                onValueChange = { onPageChanged.invoke(page) },
+                modifier = Modifier.size(28.dp)
+            ) {
+                ColoredIcon(page.icon)
+            }
+        }
     }
 }

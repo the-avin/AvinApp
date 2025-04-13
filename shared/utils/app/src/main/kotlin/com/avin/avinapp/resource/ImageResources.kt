@@ -5,4 +5,5 @@ object ImageResources {
     const val FOLDER = "icons/ic_folder.svg"
     const val WARNING = "icons/ic_warning.svg"
     const val MORE_VERT = "icons/ic_more_vert.svg"
+    const val MOBILE = "icons/ic_mobile.svg"
 }

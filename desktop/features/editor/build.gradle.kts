@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.decompose)
 
     implementation(project(":core:theme"))
+    implementation(project(":core:preview"))
     implementation(project(":shared:data"))
     implementation(project(":shared:utils:app"))
     implementation(project(":shared:utils:compose"))

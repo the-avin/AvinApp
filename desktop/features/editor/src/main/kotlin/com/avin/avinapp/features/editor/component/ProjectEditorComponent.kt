@@ -3,7 +3,10 @@ package com.avin.avinapp.features.editor.component
 import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.data.models.project.Project
+import com.avin.avinapp.data.repository.device.DevicesRepository
 import com.avin.avinapp.data.repository.project.ProjectRepository
+import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.pages.AppPages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +19,8 @@ import kotlinx.coroutines.launch
 class ProjectEditorComponent(
     context: ComponentContext,
     private val info: AppPages.Editor,
-    private val repository: ProjectRepository
+    private val repository: ProjectRepository,
+    private val devicesRepository: DevicesRepository
 ) : BaseComponent(context) {
     private val _project = MutableStateFlow<Project?>(null)
     val project = _project.asStateFlow()
@@ -24,10 +28,33 @@ class ProjectEditorComponent(
     private val _recentProjects = MutableStateFlow<List<Project>>(emptyList())
     val recentProjects = _recentProjects.asStateFlow()
 
+    private val _currentPage = MutableStateFlow<EditorPages>(EditorPages.Screens)
+    val currentPage = _currentPage.asStateFlow()
+
+    private val _devices = MutableStateFlow<List<PreviewDevice>>(emptyList())
+    val devices = _devices.asStateFlow()
+
+
+    private val _currentDevice = MutableStateFlow<PreviewDevice?>(null)
+    val currentDevice = _currentDevice.asStateFlow()
 
     init {
-        loadProject()
+        loadData()
         loadRecentProjects()
+    }
+
+    private fun loadData() = scope.launch(Dispatchers.IO) {
+        loadProject()
+        loadDevices()
+    }
+
+
+    private fun loadDevices() {
+        val newDevices = devicesRepository.getAllDevices()
+        _devices.update { newDevices }
+        newDevices.firstOrNull()?.let { device ->
+            _currentDevice.update { device }
+        }
     }
 
     private fun loadRecentProjects() = scope.launch(Dispatchers.IO) {
@@ -38,8 +65,16 @@ class ProjectEditorComponent(
             }
     }
 
-    private fun loadProject() = scope.launch {
+    private fun loadProject() {
         val newProject = runCatching { repository.getById(info.projectId) }.getOrNull()
         _project.update { newProject }
+    }
+
+    fun changePage(page: EditorPages) {
+        _currentPage.update { page }
+    }
+
+    fun setDevice(device: PreviewDevice) {
+        _currentDevice.update { device }
     }
 }

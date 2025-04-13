@@ -94,7 +94,8 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
             ProjectEditorComponent(
                 context = ctx,
                 info = config,
-                repository = projectRepository
+                repository = projectRepository,
+                devicesRepository = get()
             )
         }
     )

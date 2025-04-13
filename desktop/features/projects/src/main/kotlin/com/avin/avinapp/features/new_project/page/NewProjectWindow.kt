@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.core.data.state.new_project.NewProjectStatus
 import com.avin.avinapp.core.data.state.new_project.onError
@@ -49,7 +50,7 @@ fun NewProjectWindow(
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = title,
-        state = rememberWindowState(width = 700.dp, height = 500.dp),
+        state = rememberWindowState(width = 700.dp, height = 500.dp, position = WindowPosition(Alignment.Center)),
     ) {
         Column(
             Modifier.windowBackground().fillMaxSize(),

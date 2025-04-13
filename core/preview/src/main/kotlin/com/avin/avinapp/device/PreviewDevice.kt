@@ -7,7 +7,7 @@ data class PreviewDevice(
     val name: String,
     val resolution: Resolution,
     val type: DeviceType,
-    val density: Double
+    val density: Float
 ) {
     @Serializable
     data class Resolution(
