@@ -6,6 +6,7 @@ import com.avin.avinapp.data.models.settings.config.SettingsConfiguration
 import com.avin.avinapp.data.models.settings.page.SettingsPage
 import com.avin.avinapp.data.models.settings.config.SettingsType
 import com.avin.avinapp.locale.StringRes
+import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.preferences.PreferencesKey
 import com.avin.avinapp.preferences.PreferencesStorage
 import com.avin.avinapp.resource.Resource
@@ -23,10 +24,15 @@ class SettingsConfigurationProviderImpl(
 
     private val generalConfigurations: List<SettingsConfiguration<*>>
         get() = listOf(
-            booleanSetting(
+            enumSetting(
                 name = Resource.string.theme,
                 key = SettingsConfigurationProvider.Keys.themeKey,
-                defaultValue = { isSystemInDarkTheme() }
+                defaultValue = { dynamicStringRes(Resource.string.system) },
+                values = listOf(
+                    Resource.string.system,
+                    Resource.string.light,
+                    Resource.string.dark,
+                )
             )
         )
 
@@ -39,6 +45,21 @@ class SettingsConfigurationProviderImpl(
             name = name,
             initialValues = preferences.get(key),
             type = SettingsType.Checkbox,
+            defaultValue = defaultValue,
+            onValueChange = { preferences.set(key, it) }
+        )
+    }
+
+    private fun enumSetting(
+        name: StringRes,
+        key: PreferencesKey<String>,
+        defaultValue: @Composable () -> String,
+        values: List<StringRes>
+    ): SettingsConfiguration<String> {
+        return SettingsConfiguration(
+            name = name,
+            initialValues = preferences.get(key),
+            type = SettingsType.Enum(values),
             defaultValue = defaultValue,
             onValueChange = { preferences.set(key, it) }
         )

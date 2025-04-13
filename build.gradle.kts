@@ -1,2 +1,2 @@
-group = "com.avin.app"
+group = "com.avin.avinapp"
 version = ProjectInfo.VERSION

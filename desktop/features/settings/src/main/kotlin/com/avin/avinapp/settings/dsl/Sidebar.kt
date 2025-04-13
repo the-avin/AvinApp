@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +34,10 @@ fun Sidebar(
     pages: List<SettingsPage>,
     onPageChange: (SettingsPage) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxWidth(.3f), contentPadding = PaddingValues(16.dp)) {
+    LazyColumn(
+        modifier = Modifier.widthIn(min = 100.dp, max = 750.dp).fillMaxWidth(.3f),
+        contentPadding = PaddingValues(16.dp)
+    ) {
         items(pages, key = { it.name.resId }) { page ->
             val interactionSource = remember { MutableInteractionSource() }
             val isHovered by interactionSource.collectIsHoveredAsState()

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 sealed class SettingsType<T> {
     data object Checkbox : SettingsType<Boolean>()
-    data class Enum(val values: List<String>) : SettingsType<String>()
+    data class Enum(val values: List<StringRes>) : SettingsType<String>()
 }
 
 @Immutable
