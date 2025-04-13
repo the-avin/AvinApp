@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Samsung Galaxy S24 Ultra",
+    "resolution": {
+      "width": 480,
+      "height": 1060
+    },
+    "type": "MOBILE",
+    "density": 3.5
+  },
+  {
+    "name": "Google Pixel 8 Pro",
+    "resolution": {
+      "width": 450,
+      "height": 960
+    },
+    "type": "MOBILE",
+    "density": 3.5
+  },
+  {
+    "name": "OnePlus 12",
+    "resolution": {
+      "width": 412,
+      "height": 915
+    },
+    "type": "MOBILE",
+    "density": 3.0
+  },
+  {
+    "name": "Samsung Galaxy Tab S9+",
+    "resolution": {
+      "width": 800,
+      "height": 1280
+    },
+    "type": "TABLET",
+    "density": 2.0
+  },
+  {
+    "name": "Lenovo Tab P12 Pro",
+    "resolution": {
+      "width": 900,
+      "height": 1440
+    },
+    "type": "TABLET",
+    "density": 2.0
+  }
+]

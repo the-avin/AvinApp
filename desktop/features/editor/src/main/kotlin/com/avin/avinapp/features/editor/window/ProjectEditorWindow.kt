@@ -73,7 +73,7 @@ fun ProjectEditorWindow(
         val image = ImageBitmap(screenWidth, screenHeight)
         val canvas = Canvas(image)
 
-        CanvasLayersComposeScene(density = Density(5f), size = IntSize(screenWidth, screenHeight)).apply {
+        CanvasLayersComposeScene(density = Density(10f), size = IntSize(screenWidth, screenHeight)).apply {
             setContent {
                 AppCustomTheme {
                     Box(

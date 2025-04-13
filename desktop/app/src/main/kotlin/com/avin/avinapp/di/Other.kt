@@ -8,6 +8,7 @@ import com.avin.avinapp.git.helper.GitHelper
 import com.avin.avinapp.git.helper.GitHelperImpl
 import com.avin.avinapp.git.manager.GitManager
 import com.avin.avinapp.git.manager.GitManagerImpl
+import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -19,4 +20,7 @@ val otherModules = module {
     // Project
     singleOf(::ProjectBuilderImpl).bind<ProjectBuilder>()
     single { ProjectLoaderImpl }.bind<ProjectLoader>()
+
+    // Json
+    factory { Json { ignoreUnknownKeys = true; prettyPrint = true; encodeDefaults = true } }
 }

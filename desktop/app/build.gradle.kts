@@ -15,6 +15,9 @@ dependencies {
     // FileKit
     implementation(libs.filekit.dialogs)
 
+    // Kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
+
 
     // Locale modules
     implementation(project(":core:theme"))

@@ -4,6 +4,8 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(project(":shared:git"))
     implementation(project(":shared:utils:app"))
     implementation(project(":shared:preferences"))
@@ -11,4 +13,5 @@ dependencies {
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
     implementation(project(":core:project"))
+    implementation(project(":core:preview"))
 }
