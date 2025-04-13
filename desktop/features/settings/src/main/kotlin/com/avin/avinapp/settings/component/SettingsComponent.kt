@@ -27,7 +27,9 @@ class SettingsComponent(
     fun <T : Any> updateValue(
         config: SettingsConfiguration<T>,
         value: Any
-    ) = scope.launch(Dispatchers.IO) {
-        config.onValueChange.invoke(value as T)
+    ) {
+        scope.launch(Dispatchers.IO) {
+            config.onValueChange.invoke(value as T)
+        }
     }
 }

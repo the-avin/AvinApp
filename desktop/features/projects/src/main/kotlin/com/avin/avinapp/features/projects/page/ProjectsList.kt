@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import com.avin.avinapp.utils.compose.nodes.menu.IconMenu
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.VerticallyScrollableContainer
 import org.jetbrains.jewel.ui.theme.colorPalette
 import org.jetbrains.jewel.ui.util.thenIf
 
@@ -41,12 +43,19 @@ fun ProjectsList(
     projects: List<Project>, onDeleteProject: (Project) -> Unit,
     onOpenProject: (Long) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(vertical = 8.dp)) {
-        items(projects, key = { it.id }) { project ->
-            ProjectItem(
-                project = project,
-                onDelete = { onDeleteProject(project) },
-                onOpenProject = { onOpenProject.invoke(project.id) })
+    val lazyListState = rememberLazyListState()
+    VerticallyScrollableContainer(scrollState = lazyListState) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(vertical = 8.dp),
+            state = lazyListState
+        ) {
+            items(projects, key = { it.id }) { project ->
+                ProjectItem(
+                    project = project,
+                    onDelete = { onDeleteProject(project) },
+                    onOpenProject = { onOpenProject.invoke(project.id) })
+            }
         }
     }
 }

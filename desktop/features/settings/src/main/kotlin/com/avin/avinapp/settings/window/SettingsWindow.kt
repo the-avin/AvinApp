@@ -4,6 +4,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.data.models.settings.config.SettingsConfiguration
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.settings.component.SettingsComponent
@@ -25,6 +27,7 @@ import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.modifier.verticalPadding
 import com.avin.avinapp.utils.compose.nodes.drag_handler.DragHandler
 import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.VerticallyScrollableContainer
 
 @Composable
 fun SettingsWindow(
@@ -56,24 +59,39 @@ fun SettingsWindow(
                     onDrag = { sidebarWidth = coerceWidth(sidebarWidth + it) },
                     modifier = Modifier.verticalPadding()
                 )
-                LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxWidth()) {
-                    items(currentPage.configurations, key = { it.name.resId }) { configuration ->
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = dynamicStringRes(configuration.name),
-                            )
-                            ConfigurationItem(
-                                configuration = configuration,
-                                onValueChange = {
-                                    component.updateValue(configuration, it)
-                                }
-                            )
+                SettingsConfigurations(
+                    configurations = currentPage.configurations,
+                    onValueChange = { config, value -> component.updateValue(config, value) },
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SettingsConfigurations(
+    configurations: List<SettingsConfiguration<*>>,
+    onValueChange: (SettingsConfiguration<*>, Any) -> Unit
+) {
+    val lazyState = rememberLazyListState()
+    VerticallyScrollableContainer(scrollState = lazyState) {
+        LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxWidth(), state = lazyState) {
+            items(configurations, key = { it.name.resId }) { configuration ->
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = dynamicStringRes(configuration.name),
+                    )
+                    ConfigurationItem(
+                        configuration = configuration,
+                        onValueChange = {
+                            onValueChange(configuration, it)
                         }
-                    }
+                    )
                 }
             }
         }
