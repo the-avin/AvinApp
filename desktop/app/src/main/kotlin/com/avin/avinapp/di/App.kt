@@ -9,7 +9,8 @@ fun startDi() {
             componentsModules,
             databaseModule,
             repositoryModule,
-            otherModules
+            otherModules,
+            providersModule
         )
     }
 }

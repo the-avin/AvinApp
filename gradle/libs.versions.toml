@@ -1,7 +1,6 @@
 [versions]
 kotlin = "2.0.21"
 compose = "1.7.0"
-jewel = "0.27.0"
 kotlinx-coroutines = "1.10.1"
 koin = "4.0.3"
 datastore = "1.1.1"
@@ -11,6 +10,7 @@ sqldelight = "2.0.2"
 filekit = "0.10.0-beta01"
 jgit = "6.8.0.202311291450-r"
 kaml = "0.74.0"
+jewel = "0.26.0"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -21,6 +21,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 jewel-int-ui = { module = "org.jetbrains.jewel:jewel-int-ui-standalone-241", version.ref = "jewel" }
 jewel-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-window-241", version.ref = "jewel" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+jewel-foundation = { module = "org.jetbrains.jewel:jewel-foundation-243", version.ref = "jewel" }
 
 
 # SQLDelight

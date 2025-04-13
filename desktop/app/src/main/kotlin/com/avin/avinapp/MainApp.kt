@@ -66,7 +66,10 @@ object MainApp : KoinComponent {
                     )
                 }
                 settingsSlot?.child?.instance?.let {
-                    SettingsWindow(onCloseRequest = rootComponent::closeSettings)
+                    SettingsWindow(
+                        component = it,
+                        onCloseRequest = rootComponent::closeSettings
+                    )
                 }
                 editorSlot?.child?.instance?.let {
                     ProjectEditorWindow(

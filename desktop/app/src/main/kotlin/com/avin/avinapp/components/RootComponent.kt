@@ -15,6 +15,7 @@ import com.avin.avinapp.pages.AppPages
 import com.avin.avinapp.preferences.AppPreferencesKeys
 import com.avin.avinapp.preferences.PreferencesStorage
 import com.avin.avinapp.resource.Resource
+import com.avin.avinapp.settings.component.SettingsComponent
 import com.avin.avinapp.utils.SlotPageManager
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.openDirectoryPicker
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.koin.core.component.inject
 
 class RootComponent(context: ComponentContext) : BaseComponent(context), KoinComponent {
@@ -81,7 +83,7 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
         source = settings.navigation,
         serializer = null,
         key = AppPages.Settings.key,
-        childFactory = { config, ctx -> }
+        childFactory = { config, ctx -> SettingsComponent(context = ctx, provider = get()) }
     )
 
     val editorSlot = childSlot(

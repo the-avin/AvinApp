@@ -11,10 +11,12 @@ object StringResource {
     val newProjectMessage = StringRes("new_project_message")
     val cloneProjectMessage = StringRes("clone_project_message")
     val settings = StringRes("settings")
+    val general = StringRes("general")
     val open = StringRes("open")
     val cloneRepository = StringRes("clone_repository")
     val name = StringRes("name")
     val path = StringRes("path")
+    val theme = StringRes("theme")
     val url = StringRes("url")
     val openInFolder: StringRes
         get() = when {
