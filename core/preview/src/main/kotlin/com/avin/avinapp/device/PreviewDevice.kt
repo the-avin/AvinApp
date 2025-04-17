@@ -1,5 +1,6 @@
 package com.avin.avinapp.device
 
+import androidx.compose.ui.geometry.Size
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,3 +21,7 @@ data class PreviewDevice(
 enum class DeviceType {
     MOBILE, TABLET
 }
+
+
+val PreviewDevice.Resolution.size: Size
+    get() = Size(width.toFloat(), height.toFloat())

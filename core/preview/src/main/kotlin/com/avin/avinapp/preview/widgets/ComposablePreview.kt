@@ -13,16 +13,23 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.data.RenderedComponentInfo
+import com.avin.avinapp.device.size
 import com.avin.avinapp.preview.state.PreviewState
 import org.jetbrains.jewel.ui.component.CircularProgressIndicator
+import org.jetbrains.jewel.ui.util.thenIf
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -33,59 +40,77 @@ fun ComposablePreview(
 ) {
     val currentDevice = state.currentDevice ?: return
 
+    var imageSize by remember { mutableStateOf(Size.Zero) }
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
-    var hoveredComponent by remember { mutableStateOf<RenderedComponentInfo?>(null) }
 
-    if (state.currentImage != null) {
-        var imageSize by remember { mutableStateOf(IntSize.Zero) }
+    val mappedHoverPosition = hoverPosition?.let {
+        mapPointerToDevice(it, imageSize, currentDevice.resolution.size)
+    }
 
-        Box(
-            modifier = modifier
-                .background(Color.White)
-                .pointerMoveFilter(
-                    onMove = {
-                        hoverPosition = it
-                        true
-                    },
-                    onExit = {
-                        hoverPosition = null
-                        hoveredComponent = null
-                        false
-                    }
-                )
-                .drawWithContent {
-                    drawContent()
-                    hoveredComponent?.let {
-                        val scaleX = imageSize.width.toFloat() / currentDevice.resolution.width
-                        val scaleY = imageSize.height.toFloat() / currentDevice.resolution.height
-                        val topLeft = Offset(it.position.x * scaleX, it.position.y * scaleY)
-                        val size = Size(it.size.width * scaleX, it.size.height * scaleY)
-                        drawRect(Color.Red, topLeft, size, style = Stroke(2.dp.toPx()))
-                    }
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                bitmap = state.currentImage!!,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .onGloballyPositioned {
-                        imageSize = it.size
-                    },
-                contentScale = ContentScale.FillHeight
-            )
-            if (state.isRendering) CircularProgressIndicator()
-        }
-
-        LaunchedEffect(hoverPosition, imageSize, collector.components) {
-            val pos = hoverPosition ?: return@LaunchedEffect
-            val scaleX = currentDevice.resolution.width / imageSize.width.toFloat()
-            val scaleY = currentDevice.resolution.height / imageSize.height.toFloat()
-            val mappedPos = Offset(pos.x * scaleX, pos.y * scaleY)
-            hoveredComponent = collector.components.findLast {
-                Rect(it.position, it.size).contains(mappedPos)
-            }
+    val hoveredComponent = remember(mappedHoverPosition, collector.components) {
+        mappedHoverPosition?.let { pos ->
+            collector.components.findLast { Rect(it.position, it.size).contains(pos) }
         }
     }
+
+    Box(
+        modifier = modifier
+            .background(Color.White)
+            .onPointerEvent(PointerEventType.Move) {
+                it.changes.lastOrNull()?.position?.let {
+                    hoverPosition = it
+                }
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                hoverPosition = null
+            }
+            .thenIf(hoveredComponent != null) {
+                pointerHoverIcon(PointerIcon.Hand)
+            }
+            .drawWithContent {
+                drawContent()
+                hoveredComponent?.let {
+                    drawComponentHighlight(it, imageSize, currentDevice.resolution.size)
+                }
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        RenderImage(state.currentImage, onSizeChanged = { imageSize = it })
+        if (state.isRendering) CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun RenderImage(bitmap: ImageBitmap?, onSizeChanged: (Size) -> Unit) {
+    if (bitmap == null) return
+    Image(
+        bitmap = bitmap,
+        contentDescription = null,
+        modifier = Modifier
+            .fillMaxHeight()
+            .onGloballyPositioned { onSizeChanged(it.size.toSize()) },
+        contentScale = ContentScale.FillHeight
+    )
+}
+
+private fun mapPointerToDevice(
+    pointer: Offset,
+    imageSize: Size,
+    deviceSize: Size
+): Offset {
+    val scaleX = deviceSize.width / imageSize.width.toFloat()
+    val scaleY = deviceSize.height / imageSize.height.toFloat()
+    return Offset(pointer.x * scaleX, pointer.y * scaleY)
+}
+
+private fun DrawScope.drawComponentHighlight(
+    component: RenderedComponentInfo,
+    imageSize: Size,
+    deviceSize: Size
+) {
+    val scaleX = imageSize.width.toFloat() / deviceSize.width
+    val scaleY = imageSize.height.toFloat() / deviceSize.height
+    val topLeft = Offset(component.position.x * scaleX, component.position.y * scaleY)
+    val size = Size(component.size.width * scaleX, component.size.height * scaleY)
+    drawRect(Color.Red, topLeft, size, style = Stroke(2.dp.toPx()))
 }
