@@ -12,5 +12,7 @@ interface ComposableRenderer {
     companion object {
         const val TYPE = "type"
         const val CHILDREN = "children"
+
+        const val RENDER_NANO_TIME = 66_000_000L // (66ms ~ 15fps)
     }
 }

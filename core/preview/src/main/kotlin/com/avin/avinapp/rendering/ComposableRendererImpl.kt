@@ -39,7 +39,7 @@ class ComposableRendererImpl : ComposableRenderer {
                     renderComposable(json).invoke()
                 }
             }
-        }.render(canvas, 1)
+        }.render(canvas, ComposableRenderer.RENDER_NANO_TIME)
 
         image
     }
