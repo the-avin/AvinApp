@@ -40,6 +40,7 @@ import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.EditorDropdown
 import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
+import com.avin.avinapp.features.editor.dsl.ProjectEditorTitleBar
 import com.avin.avinapp.preview.state.rememberPreviewState
 import com.avin.avinapp.preview.widgets.ComposablePreview
 import com.avin.avinapp.rendering.ComposableRendererImpl
@@ -131,52 +132,6 @@ fun ProjectEditorWindow(
 
 
 @Composable
-fun DecoratedWindowScope.ProjectEditorTitleBar(
-    projectName: String,
-    recentProjects: List<Project>,
-    currentDevice: PreviewDevice?,
-    devices: List<PreviewDevice>,
-    currentPage: EditorPages,
-    onOpenProject: (Long) -> Unit,
-    onNewProjectClick: () -> Unit,
-    onOpenFilePicker: () -> Unit,
-    onCloneRepositoryClick: () -> Unit,
-    onOpenSettings: () -> Unit,
-    onDeviceSelected: (PreviewDevice) -> Unit,
-) {
-    TitleBar(
-        gradientStartColor = getColorForLetter(projectName.firstOrNull() ?: 'A').copy(.6f),
-        modifier = Modifier.newFullscreenControls()
-    ) {
-        EditorDropdown(
-            projectName = projectName,
-            recentProjects = recentProjects,
-            onNewProjectClick = onNewProjectClick,
-            onOpenProject = onOpenProject,
-            onOpenFilePicker = onOpenFilePicker,
-            onCloneRepositoryClick = onCloneRepositoryClick,
-        )
-        Row(
-            modifier = Modifier.align(Alignment.End).padding(end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            EditorTitleBarAction(
-                onOpenSettings = onOpenSettings,
-            )
-        }
-        if (currentPage is EditorPages.Screens) {
-            DevicesChooserDropdown(
-                currentDevice = currentDevice,
-                devices = devices,
-                onDeviceSelected = onDeviceSelected
-            )
-        }
-    }
-}
-
-
-@Composable
 fun Sidebar(
     currentPage: EditorPages,
     onPageChanged: (EditorPages) -> Unit,
@@ -192,7 +147,7 @@ fun Sidebar(
                 onValueChange = { onPageChanged.invoke(page) },
                 modifier = Modifier.size(28.dp)
             ) {
-                ColoredIcon(page.icon)
+                ColoredIcon(page.icon, modifier = Modifier.size(20.dp))
             }
         }
     }

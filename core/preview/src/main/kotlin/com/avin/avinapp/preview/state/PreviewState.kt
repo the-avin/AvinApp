@@ -1,7 +1,5 @@
 package com.avin.avinapp.preview.state
 
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.device.PreviewDevice
@@ -12,7 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -53,11 +50,12 @@ class PreviewState(
         val device = currentDevice ?: return
 
         renderJob?.cancel()
-        renderJob = scope.launch {
+        renderJob = scope.launch(scope.coroutineContext) {
             isRendering = true
             try {
                 mutex.withLock {
-                    currentImage = renderer.renderImage(json, device)
+                    val newImage = renderer.renderImage(json, device)
+                    currentImage = newImage
                 }
             } catch (_: CancellationException) {
             } catch (_: Exception) {
@@ -67,12 +65,10 @@ class PreviewState(
         }
     }
 
-    suspend fun renderPreview(json: JsonObject) {
+    fun renderPreview(json: JsonObject) {
         lastObject = json
         if (currentDevice == null) return
-        withContext(scope.coroutineContext) {
-            invalidate()
-        }
+        invalidate()
     }
 }
 
