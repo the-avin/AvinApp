@@ -1,5 +1,6 @@
 plugins {
     id(AppPlugins.COMPOSE_UI)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 repositories {
@@ -10,6 +11,9 @@ repositories {
 dependencies {
     // Decompose
     implementation(libs.decompose)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":core:theme"))
     implementation(project(":core:preview"))

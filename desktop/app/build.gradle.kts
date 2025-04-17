@@ -18,6 +18,10 @@ dependencies {
     // Kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.ktor)
+
 
     // Locale modules
     implementation(project(":core:theme"))

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,10 +40,16 @@ import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.EditorDropdown
 import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
+import com.avin.avinapp.preview.state.rememberPreviewState
+import com.avin.avinapp.preview.widgets.ComposablePreview
+import com.avin.avinapp.rendering.ComposableRendererImpl
 import com.avin.avinapp.theme.AppCustomTheme
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
@@ -67,8 +74,10 @@ fun ProjectEditorWindow(
     val projectName = project?.name.orEmpty()
     val recentProjects by component.recentProjects.collectAsState()
     val devices by component.devices.collectAsState()
-    val currentDevice by component.currentDevice.collectAsState()
     val currentPage by component.currentPage.collectAsState()
+    val rendererState = rememberPreviewState(
+        devices = devices,
+    )
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = projectName,
@@ -82,15 +91,22 @@ fun ProjectEditorWindow(
             projectName = projectName,
             devices = devices,
             currentPage = currentPage,
-            currentDevice = currentDevice,
+            currentDevice = rendererState.currentDevice,
             recentProjects = recentProjects,
             onNewProjectClick = onNewProjectClick,
             onOpenProject = onOpenProject,
             onOpenFilePicker = onOpenFilePicker,
             onCloneRepositoryClick = onCloneRepositoryClick,
             onOpenSettings = onOpenSettings,
-            onDeviceSelected = component::setDevice
+            onDeviceSelected = rendererState::selectDevice
         )
+        LaunchedEffect(Unit) {
+            rendererState.renderPreview(
+                JsonObject(
+                    mapOf("type" to JsonPrimitive("Project"))
+                )
+            )
+        }
         Row(modifier = Modifier.fillMaxSize()) {
             Sidebar(
                 currentPage = currentPage,
@@ -100,38 +116,10 @@ fun ProjectEditorWindow(
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {
-
-                        if (currentDevice != null) {
-                            val screenWidth = currentDevice!!.resolution.width
-                            val screenHeight = currentDevice!!.resolution.height
-                            val image = ImageBitmap(screenWidth, screenHeight)
-                            val canvas = Canvas(image)
-
-                            CanvasLayersComposeScene(
-                                density = Density(currentDevice!!.density),
-                                size = IntSize(screenWidth, screenHeight)
-                            ).apply {
-                                setContent {
-                                    AppCustomTheme {
-                                        Box(
-                                            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            DefaultButton(onClick = {}) {
-                                                Text("Hello World", style = TextStyle(color = Color.White))
-                                            }
-                                        }
-                                    }
-                                }
-                            }.render(canvas, 1)
-
-                            Image(
-                                bitmap = image,
-                                contentDescription = "Rendered Image",
-                                modifier = Modifier.fillMaxHeight(.9f),
-                                contentScale = ContentScale.FillHeight
-                            )
-                        }
+                        ComposablePreview(
+                            state = rendererState,
+                            modifier = Modifier.fillMaxHeight(.9f)
+                        )
                     }
 
                     else -> {}

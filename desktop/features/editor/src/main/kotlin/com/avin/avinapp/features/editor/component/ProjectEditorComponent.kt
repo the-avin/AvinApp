@@ -35,9 +35,6 @@ class ProjectEditorComponent(
     val devices = _devices.asStateFlow()
 
 
-    private val _currentDevice = MutableStateFlow<PreviewDevice?>(null)
-    val currentDevice = _currentDevice.asStateFlow()
-
     init {
         loadData()
         loadRecentProjects()
@@ -52,9 +49,6 @@ class ProjectEditorComponent(
     private fun loadDevices() {
         val newDevices = devicesRepository.getAllDevices()
         _devices.update { newDevices }
-        newDevices.firstOrNull()?.let { device ->
-            _currentDevice.update { device }
-        }
     }
 
     private fun loadRecentProjects() = scope.launch(Dispatchers.IO) {
@@ -72,9 +66,5 @@ class ProjectEditorComponent(
 
     fun changePage(page: EditorPages) {
         _currentPage.update { page }
-    }
-
-    fun setDevice(device: PreviewDevice) {
-        _currentDevice.update { device }
     }
 }
