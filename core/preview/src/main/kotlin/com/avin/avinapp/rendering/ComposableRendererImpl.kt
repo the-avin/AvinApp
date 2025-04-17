@@ -1,13 +1,21 @@
 package com.avin.avinapp.rendering
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.scene.CanvasLayersComposeScene
 import androidx.compose.ui.scene.ComposeScene
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
+import com.avin.avinapp.collector.ComponentRenderCollector
+import com.avin.avinapp.collector.NewLocalComponentRenderCollector
+import com.avin.avinapp.collector.trackRender
 import com.avin.avinapp.device.PreviewDevice
 import com.avin.avinapp.theme.AppCustomTheme
 import kotlinx.coroutines.Dispatchers
@@ -18,12 +26,18 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Text
 
-class ComposableRendererImpl : ComposableRenderer {
+class ComposableRendererImpl(
+    private val collector: ComponentRenderCollector
+) : ComposableRenderer {
     override fun renderComposable(json: JsonObject): @Composable () -> Unit {
         val type = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull ?: "Unknown"
         return {
-            DefaultButton(onClick = {}) {
-                Text(type)
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                NewLocalComponentRenderCollector(collector) {
+                    DefaultButton(onClick = {}, modifier = Modifier.trackRender("test")) {
+                        Text(type)
+                    }
+                }
             }
         }
     }
@@ -51,3 +65,7 @@ class ComposableRendererImpl : ComposableRenderer {
             size = IntSize(device.resolution.width, device.resolution.height)
         )
 }
+
+
+@Composable
+fun rememberComposableRenderer(collector: ComponentRenderCollector) = remember { ComposableRendererImpl(collector) }

@@ -2,9 +2,10 @@ package com.avin.avinapp.preview.state
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
+import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.device.PreviewDevice
 import com.avin.avinapp.rendering.ComposableRenderer
-import com.avin.avinapp.rendering.ComposableRendererImpl
+import com.avin.avinapp.rendering.rememberComposableRenderer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -75,13 +76,17 @@ class PreviewState(
 @Composable
 fun rememberPreviewState(
     devices: List<PreviewDevice>,
+    collector: ComponentRenderCollector,
     initialDevice: PreviewDevice? = devices.firstOrNull(),
-    renderer: ComposableRenderer = ComposableRendererImpl()
+    renderer: ComposableRenderer = rememberComposableRenderer(collector)
 ): PreviewState {
     val scope = rememberCoroutineScope()
     val state = remember {
         PreviewState(
-            devices = devices, initialDevice = initialDevice, scope = scope, renderer = renderer
+            devices = devices,
+            initialDevice = initialDevice,
+            scope = scope,
+            renderer = renderer,
         )
     }
     LaunchedEffect(devices) {

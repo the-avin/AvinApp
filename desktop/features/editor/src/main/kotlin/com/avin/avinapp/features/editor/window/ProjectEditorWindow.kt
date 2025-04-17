@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.collector.rememberComponentRenderCollector
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.ProjectEditorTitleBar
@@ -44,8 +45,10 @@ fun ProjectEditorWindow(
     val recentProjects by component.recentProjects.collectAsState()
     val devices by component.devices.collectAsState()
     val currentPage by component.currentPage.collectAsState()
+    val collector = rememberComponentRenderCollector()
     val rendererState = rememberPreviewState(
         devices = devices,
+        collector = collector
     )
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
@@ -82,6 +85,7 @@ fun ProjectEditorWindow(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             ComposablePreview(
                                 state = rendererState,
+                                collector = collector,
                                 modifier = Modifier.fillMaxHeight(.9f)
                             )
                             DefaultButton(onClick = {
