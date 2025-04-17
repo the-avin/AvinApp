@@ -124,7 +124,7 @@ fun Sidebar(
                 onValueChange = { onPageChanged.invoke(page) },
                 modifier = Modifier.size(28.dp)
             ) {
-                ColoredIcon(page.icon, modifier = Modifier.size(20.dp))
+                ColoredIcon(page.icon, modifier = Modifier.size(18.dp))
             }
         }
     }

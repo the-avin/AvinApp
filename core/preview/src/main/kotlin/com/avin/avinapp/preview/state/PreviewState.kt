@@ -13,6 +13,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.JsonObject
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 @Stable
 class PreviewState(
@@ -55,8 +57,11 @@ class PreviewState(
             isRendering = true
             try {
                 mutex.withLock {
-                    val newImage = renderer.renderImage(json, device)
-                    currentImage = newImage
+                    val renderTime = measureTimeMillis {
+                        val newImage = renderer.renderImage(json, device)
+                        currentImage = newImage
+                    }
+                    println("Rendering took $renderTime ms for ${device.name}")
                 }
             } catch (_: CancellationException) {
             } catch (_: Exception) {
