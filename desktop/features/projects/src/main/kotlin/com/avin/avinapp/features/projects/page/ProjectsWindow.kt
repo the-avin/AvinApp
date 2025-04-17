@@ -6,7 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
@@ -14,19 +13,14 @@ import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.buttons.SecondaryButton
-import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
+import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.modifier.allPadding
 import com.avin.avinapp.utils.compose.modifier.horizontalPadding
 import com.avin.avinapp.utils.compose.modifier.topPadding
 import com.avin.avinapp.utils.compose.modifier.windowBackground
 import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.component.Icon
-import org.jetbrains.jewel.ui.component.IconButton
-import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
-import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.TextField
+import org.jetbrains.jewel.ui.component.*
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
 
 @Composable
@@ -49,6 +43,7 @@ fun ProjectsWindow(
             position = WindowPosition.Aligned(Alignment.Center),
         )
     ) {
+        window.ApplyWindowMinimumSize()
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
             Column(modifier = Modifier.fillMaxSize().windowBackground().horizontalPadding().topPadding()) {
                 Header(

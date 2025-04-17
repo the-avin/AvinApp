@@ -20,7 +20,7 @@ import org.jetbrains.jewel.ui.component.Text
 
 class ComposableRendererImpl : ComposableRenderer {
     override fun renderComposable(json: JsonObject): @Composable () -> Unit {
-        val type = json["type"]?.jsonPrimitive?.contentOrNull ?: "Unknown"
+        val type = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull ?: "Unknown"
         return {
             DefaultButton(onClick = {}) {
                 Text(type)

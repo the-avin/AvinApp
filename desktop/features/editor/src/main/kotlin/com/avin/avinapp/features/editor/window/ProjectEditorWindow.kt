@@ -1,54 +1,25 @@
 package com.avin.avinapp.features.editor.window
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.scene.CanvasLayersComposeScene
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import com.avin.avinapp.data.models.project.Project
-import com.avin.avinapp.device.PreviewDevice
-import com.avin.avinapp.features.editor.component.DevicesChooserDropdown
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
-import com.avin.avinapp.features.editor.dsl.EditorDropdown
-import com.avin.avinapp.features.editor.dsl.EditorTitleBarAction
 import com.avin.avinapp.features.editor.dsl.ProjectEditorTitleBar
 import com.avin.avinapp.preview.state.rememberPreviewState
 import com.avin.avinapp.preview.widgets.ComposablePreview
-import com.avin.avinapp.rendering.ComposableRendererImpl
-import com.avin.avinapp.theme.AppCustomTheme
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
-import com.avin.avinapp.utils.compose.utils.getColorForLetter
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
@@ -56,9 +27,6 @@ import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.ToggleableIconButton
-import org.jetbrains.jewel.window.DecoratedWindowScope
-import org.jetbrains.jewel.window.TitleBar
-import org.jetbrains.jewel.window.newFullscreenControls
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -101,26 +69,31 @@ fun ProjectEditorWindow(
             onOpenSettings = onOpenSettings,
             onDeviceSelected = rendererState::selectDevice
         )
-        LaunchedEffect(Unit) {
-            rendererState.renderPreview(
-                JsonObject(
-                    mapOf("type" to JsonPrimitive("Project"))
-                )
-            )
-        }
         Row(modifier = Modifier.fillMaxSize()) {
             Sidebar(
                 currentPage = currentPage,
                 onPageChanged = component::changePage
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
+
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {
-                        ComposablePreview(
-                            state = rendererState,
-                            modifier = Modifier.fillMaxHeight(.9f)
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            ComposablePreview(
+                                state = rendererState,
+                                modifier = Modifier.fillMaxHeight(.9f)
+                            )
+                            DefaultButton(onClick = {
+                                rendererState.renderPreview(
+                                    JsonObject(
+                                        mapOf("type" to JsonPrimitive("Project"))
+                                    )
+                                )
+                            }) {
+                                Text("Render")
+                            }
+                        }
                     }
 
                     else -> {}
