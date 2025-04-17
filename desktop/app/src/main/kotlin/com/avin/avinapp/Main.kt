@@ -1,11 +1,11 @@
 package com.avin.avinapp
 
 import com.avin.avinapp.di.startDi
-import com.avin.avinapp.utils.ImageLoader
+import com.avin.avinapp.utils.ImageLoaderConfiguration
 
 
 fun main() {
     startDi()
-    ImageLoader.configure()
+    ImageLoaderConfiguration.configure()
     MainApp.init()
 }

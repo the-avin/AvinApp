@@ -24,6 +24,7 @@ import com.avin.avinapp.settings.component.SettingsComponent
 import com.avin.avinapp.settings.dsl.ConfigurationItem
 import com.avin.avinapp.settings.dsl.Sidebar
 import com.avin.avinapp.theme.window.AppCustomWindow
+import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.modifier.verticalPadding
 import com.avin.avinapp.utils.compose.nodes.drag_handler.DragHandler
 import org.jetbrains.jewel.ui.component.Text
@@ -44,6 +45,7 @@ fun SettingsWindow(
         ),
         title = title
     ) {
+        window.ApplyWindowMinimumSize()
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             fun coerceWidth(width: Dp) = width.coerceIn(100.dp, 400.dp)
             var sidebarWidth by remember { mutableStateOf(coerceWidth(maxWidth * .3f)) }

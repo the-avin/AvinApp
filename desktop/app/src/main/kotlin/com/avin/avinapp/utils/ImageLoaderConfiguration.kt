@@ -4,7 +4,7 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 
-object ImageLoader {
+object ImageLoaderConfiguration {
     fun configure() {
         SingletonImageLoader.setSafe {
             ImageLoader.Builder(it)

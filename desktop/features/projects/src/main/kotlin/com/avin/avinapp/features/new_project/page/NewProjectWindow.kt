@@ -25,6 +25,7 @@ import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.layout.endWithCustomSpace
+import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.modifier.bottomPadding
 import com.avin.avinapp.utils.compose.modifier.horizontalPadding
 import com.avin.avinapp.utils.compose.modifier.topPadding
@@ -52,6 +53,7 @@ fun NewProjectWindow(
         title = title,
         state = rememberWindowState(width = 700.dp, height = 500.dp, position = WindowPosition(Alignment.Center)),
     ) {
+        window.ApplyWindowMinimumSize()
         Column(
             Modifier.windowBackground().fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
