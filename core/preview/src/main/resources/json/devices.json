@@ -6,7 +6,7 @@
       "width": 1440,
       "height": 3120
     },
-    "density": 3.0
+    "density": 3.15625
   },
   {
     "name": "Google Pixel 8 Pro",
@@ -15,7 +15,7 @@
       "width": 1344,
       "height": 2992
     },
-    "density": 3.0
+    "density": 3.05625
   },
   {
     "name": "OnePlus 12",
@@ -24,24 +24,24 @@
       "width": 1440,
       "height": 3168
     },
-    "density": 3.0
+    "density": 3.1875
   },
   {
     "name": "Samsung Galaxy Tab S9+",
     "type": "TABLET",
     "resolution": {
-      "width": 1600,
-      "height": 2560
+      "width": 1752,
+      "height": 2800
     },
-    "density": 2.0
+    "density": 1.6625
   },
   {
     "name": "Lenovo Tab P12 Pro",
     "type": "TABLET",
     "resolution": {
-      "width": 1800,
-      "height": 2880
+      "width": 1600,
+      "height": 2560
     },
-    "density": 2.0
+    "density": 1.5
   }
 ]
