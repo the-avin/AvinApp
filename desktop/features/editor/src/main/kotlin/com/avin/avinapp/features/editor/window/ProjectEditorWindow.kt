@@ -16,7 +16,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.collector.rememberComponentRenderCollector
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
-import com.avin.avinapp.features.editor.dsl.ProjectEditorTitleBar
+import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.preview.state.rememberPreviewState
 import com.avin.avinapp.preview.widgets.ComposablePreview
 import com.avin.avinapp.theme.icon.ColoredIcon

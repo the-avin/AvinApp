@@ -1,10 +1,8 @@
-package com.avin.avinapp.features.editor.dsl
+package com.avin.avinapp.features.editor.dsl.titlebar
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -15,12 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.data.models.project.valid
-import com.avin.avinapp.manager.compose.dynamicStringRes
-import com.avin.avinapp.platform.file.FileHandler
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.utils.compose.foundation.menu.iconTextItem
 import com.avin.avinapp.utils.compose.modifier.grayscale
-import com.avin.avinapp.utils.compose.nodes.menu.IconMenu
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Text

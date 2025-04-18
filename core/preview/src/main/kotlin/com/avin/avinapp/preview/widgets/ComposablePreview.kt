@@ -3,7 +3,9 @@ package com.avin.avinapp.preview.widgets
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,6 +30,7 @@ import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.data.RenderedComponentInfo
 import com.avin.avinapp.device.size
 import com.avin.avinapp.preview.state.PreviewState
+import com.avin.avinapp.utils.compose.utils.aspectRatio
 import org.jetbrains.jewel.ui.component.CircularProgressIndicator
 import org.jetbrains.jewel.ui.util.thenIf
 
@@ -40,7 +43,7 @@ fun ComposablePreview(
 ) {
     val currentDevice = state.currentDevice ?: return
 
-    var imageSize by remember { mutableStateOf(Size.Zero) }
+    val imageSize = state.componentSize
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
 
     val mappedHoverPosition = hoverPosition?.let {
@@ -53,30 +56,35 @@ fun ComposablePreview(
         }
     }
 
-    Box(
-        modifier = modifier
-            .background(Color.White)
-            .onPointerEvent(PointerEventType.Move) {
-                it.changes.lastOrNull()?.position?.let {
-                    hoverPosition = it
+    BoxWithConstraints(modifier = modifier) {
+        val width = maxHeight * currentDevice.resolution.size.aspectRatio
+        Box(
+            modifier = Modifier
+                .width(width)
+                .fillMaxHeight()
+                .background(Color.White)
+                .onPointerEvent(PointerEventType.Move) {
+                    it.changes.lastOrNull()?.position?.let { position ->
+                        hoverPosition = position
+                    }
                 }
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                hoverPosition = null
-            }
-            .thenIf(hoveredComponent != null) {
-                pointerHoverIcon(PointerIcon.Hand)
-            }
-            .drawWithContent {
-                drawContent()
-                hoveredComponent?.let {
-                    drawComponentHighlight(it, imageSize, currentDevice.resolution.size)
+                .onPointerEvent(PointerEventType.Exit) {
+                    hoverPosition = null
                 }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        RenderImage(state.currentImage, onSizeChanged = { imageSize = it })
-        if (state.isRendering) CircularProgressIndicator()
+                .thenIf(hoveredComponent != null) {
+                    pointerHoverIcon(PointerIcon.Hand)
+                }
+                .drawWithContent {
+                    drawContent()
+                    hoveredComponent?.let {
+                        drawComponentHighlight(it, imageSize, currentDevice.resolution.size)
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            RenderImage(state.currentImage, onSizeChanged = { state.componentSize = it })
+            if (state.isRendering) CircularProgressIndicator()
+        }
     }
 }
 

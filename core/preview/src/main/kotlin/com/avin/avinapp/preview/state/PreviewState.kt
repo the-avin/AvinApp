@@ -1,6 +1,7 @@
 package com.avin.avinapp.preview.state
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.device.PreviewDevice
@@ -34,6 +35,8 @@ class PreviewState(
 
     var isRendering by mutableStateOf(false)
         private set
+
+    internal var componentSize = Size.Zero
 
     @Volatile
     private var renderJob: Job? = null

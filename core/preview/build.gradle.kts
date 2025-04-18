@@ -12,4 +12,5 @@ dependencies {
 
 
     implementation(project(":core:theme"))
+    implementation(project(":shared:utils:compose"))
 }

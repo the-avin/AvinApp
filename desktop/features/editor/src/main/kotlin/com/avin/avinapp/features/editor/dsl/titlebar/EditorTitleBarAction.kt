@@ -1,4 +1,4 @@
-package com.avin.avinapp.features.editor.dsl
+package com.avin.avinapp.features.editor.dsl.titlebar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

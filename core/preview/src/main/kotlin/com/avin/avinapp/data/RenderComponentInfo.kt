@@ -7,6 +7,6 @@ import androidx.compose.ui.geometry.Size
 @Immutable
 data class RenderedComponentInfo(
     val id: String,
-    val size: Size,
-    val position: Offset
+    val size: Size = Size.Zero,
+    val position: Offset = Offset.Zero
 )
