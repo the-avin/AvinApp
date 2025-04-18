@@ -21,6 +21,7 @@ import com.avin.avinapp.preview.state.rememberPreviewState
 import com.avin.avinapp.preview.widgets.ComposablePreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
+import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
@@ -59,6 +60,7 @@ fun ProjectEditorWindow(
             size = DpSize(1000.dp, 700.dp)
         )
     ) {
+        window.ApplyWindowMinimumSize(800, 500)
         ProjectEditorTitleBar(
             projectName = projectName,
             devices = devices,

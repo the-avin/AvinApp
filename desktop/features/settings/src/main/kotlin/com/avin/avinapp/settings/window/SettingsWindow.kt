@@ -58,7 +58,11 @@ fun SettingsWindow(
                 )
                 DragHandler(
                     orientation = Orientation.Horizontal,
-                    onDrag = { sidebarWidth = coerceWidth(sidebarWidth + it) },
+                    onDrag = {
+                        val previewValue = sidebarWidth
+                        sidebarWidth = coerceWidth(sidebarWidth + it)
+                        sidebarWidth - previewValue
+                    },
                     modifier = Modifier.verticalPadding()
                 )
                 SettingsConfigurations(
@@ -78,7 +82,11 @@ fun SettingsConfigurations(
 ) {
     val lazyState = rememberLazyListState()
     VerticallyScrollableContainer(scrollState = lazyState) {
-        LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxWidth(), state = lazyState) {
+        LazyColumn(
+            contentPadding = PaddingValues(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            state = lazyState
+        ) {
             items(configurations, key = { it.name.resId }) { configuration ->
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

@@ -5,7 +5,6 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -28,7 +27,8 @@ fun DragHandler(
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
-    val reverseDirection = LocalLayoutDirection.current == LayoutDirection.Rtl && orientation == Orientation.Horizontal
+    val reverseDirection =
+        LocalLayoutDirection.current == LayoutDirection.Rtl && orientation == Orientation.Horizontal
     Box(
         modifier = modifier.width(4.dp)
             .draggable(
@@ -36,7 +36,7 @@ fun DragHandler(
                     onDrag.invoke(with(density) { delta.toDp() })
                 },
                 orientation = orientation,
-                reverseDirection = reverseDirection
+                reverseDirection = reverseDirection,
             )
             .pointerHoverIcon(
                 PointerIcon(
