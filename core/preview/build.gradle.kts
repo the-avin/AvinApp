@@ -17,7 +17,8 @@ dependencies {
     // Material 3
     implementation(compose.material3)
 
-
+    // Modules
     implementation(project(":core:theme"))
+    implementation(project(":shared:data"))
     implementation(project(":shared:utils:compose"))
 }
