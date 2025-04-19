@@ -16,6 +16,7 @@ import com.avin.avinapp.data.models.project.valid
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.utils.compose.foundation.menu.iconTextItem
 import com.avin.avinapp.utils.compose.modifier.grayscale
+import com.avin.avinapp.utils.compose.modifier.startPadding
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Text
@@ -70,12 +71,17 @@ fun TitleBarScope.EditorDropdown(
                 }
             }
         }
-    }, modifier = Modifier.align(Alignment.Start)) {
+    }, modifier = Modifier.align(Alignment.Start).padding(start = 12.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            DrawInitialsWithCanvas(projectName, fontScale = .8f, cornerRadius = 4.dp, boxSize = 20.dp)
+            DrawInitialsWithCanvas(
+                projectName,
+                fontScale = .8f,
+                cornerRadius = 4.dp,
+                boxSize = 20.dp
+            )
             Text(projectName)
         }
     }

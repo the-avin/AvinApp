@@ -82,7 +82,6 @@ fun ComposablePreviewImpl(
             modifier = Modifier
                 .width(width)
                 .fillMaxHeight()
-                .background(Color.White)
                 .handlePointerEvents(
                     onMove = { position -> hoverPosition = position },
                     onExit = { hoverPosition = null }

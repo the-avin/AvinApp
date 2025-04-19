@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,6 +43,7 @@ fun ProjectEditorWindow(
     onOpenSettings: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
+    var count by remember { mutableStateOf(1) }
     val project by component.project.collectAsState()
     val projectName = project?.name.orEmpty()
     val recentProjects by component.recentProjects.collectAsState()
@@ -91,9 +94,10 @@ fun ProjectEditorWindow(
                                 modifier = Modifier.fillMaxHeight(.9f)
                             )
                             DefaultButton(onClick = {
+                                count++
                                 rendererState.renderPreview(
                                     JsonObject(
-                                        mapOf("type" to JsonPrimitive("Project"))
+                                        mapOf("type" to JsonPrimitive(count))
                                     )
                                 )
                             }) {

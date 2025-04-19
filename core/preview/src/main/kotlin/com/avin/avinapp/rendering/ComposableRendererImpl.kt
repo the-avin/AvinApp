@@ -35,11 +35,11 @@ class ComposableRendererImpl(
     val invokeComposableService: InvokeComposableService = InvokeComposableServiceImpl()
 ) : ComposableRenderer {
     override fun renderComposable(json: JsonObject): @Composable () -> Unit {
-        val type = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull ?: "Unknown"
+        val count = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull?.toInt() ?: 1
         return {
             NewLocalComponentRenderCollector(collector) {
                 Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-                    repeat(10) {
+                    repeat(count) {
                         invokeComposableService.invokeCaching(
                             it.toString(),
                             currentComposer,
@@ -63,7 +63,9 @@ class ComposableRendererImpl(
                         renderComposable(json).invoke()
                     }
                 }
-            }.render(canvas, ComposableRenderer.RENDER_NANO_TIME)
+                render(canvas, ComposableRenderer.RENDER_NANO_TIME)
+                close()
+            }
 
             image
         }
