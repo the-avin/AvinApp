@@ -13,11 +13,10 @@ import java.lang.reflect.Method
 class InvokeComposableServiceImpl : InvokeComposableService {
     var listener: InvokeComposableServiceListener? = null
 
+
+    // TODO: it's temporarily has a Composable annotation for test
     @Composable
-    override fun invoke(
-        composer: Composer,
-        descriptor: ComposableDescriptor,
-    ) {
+    override fun invoke(id: String, composer: Composer, descriptor: ComposableDescriptor) {
         val method = findMethod(
             targetClass = descriptor.targetClass,
             functionName = descriptor.functionName,
@@ -26,7 +25,7 @@ class InvokeComposableServiceImpl : InvokeComposableService {
         ) ?: error("Function not found: ${descriptor.functionName}")
         val onClick: () -> Unit = { println("Button clicked!") }
 
-        val modifier = Modifier.trackRender("1")
+        val modifier = Modifier.trackRender(id)
         val enabled = true
         val shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
         val colors = androidx.compose.material3.ButtonDefaults.buttonColors()
@@ -58,13 +57,13 @@ class InvokeComposableServiceImpl : InvokeComposableService {
 
     @Composable
     override fun invokeCaching(
+        id: String,
         composer: Composer,
         descriptor: ComposableDescriptor
     ) {
         runCatching {
-            invoke(composer, descriptor)
+            invoke(id, composer, descriptor)
         }.onFailure {
-            it.printStackTrace()
             listener?.onError(it)
         }
     }

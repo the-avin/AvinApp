@@ -1,12 +1,13 @@
 package com.avin.avinapp.rendering
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -37,11 +38,14 @@ class ComposableRendererImpl(
         val type = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull ?: "Unknown"
         return {
             NewLocalComponentRenderCollector(collector) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    invokeComposableService.invokeCaching(
-                        currentComposer,
-                        buttonDescriptor
-                    )
+                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                    repeat(10) {
+                        invokeComposableService.invokeCaching(
+                            it.toString(),
+                            currentComposer,
+                            buttonDescriptor
+                        )
+                    }
                 }
             }
         }
@@ -64,7 +68,7 @@ class ComposableRendererImpl(
             image
         }
 
-    @OptIn(InternalComposeUiApi::class)
+    @OptIn(InternalComposeUiApi::class, ExperimentalComposeUiApi::class)
     private fun getScene(device: PreviewDevice): ComposeScene =
         CanvasLayersComposeScene(
             density = Density(device.density),
