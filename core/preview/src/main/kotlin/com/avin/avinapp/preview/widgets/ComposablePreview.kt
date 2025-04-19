@@ -20,6 +20,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerIcon
@@ -151,5 +152,10 @@ private fun DrawScope.drawComponentHighlight(
     val topLeft =
         Offset(component.position.x * inverseScale.x, component.position.y * inverseScale.y)
     val size = Size(component.size.width * inverseScale.x, component.size.height * inverseScale.y)
-    drawRect(color, topLeft, size, style = Stroke(2.dp.toPx()))
+    drawRect(
+        color,
+        topLeft,
+        size,
+        style = Stroke(2.dp.toPx(), pathEffect = PathEffect.cornerPathEffect(12f))
+    )
 }

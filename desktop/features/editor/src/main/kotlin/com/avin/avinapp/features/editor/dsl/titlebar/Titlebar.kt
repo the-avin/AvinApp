@@ -32,7 +32,7 @@ fun DecoratedWindowScope.ProjectEditorTitleBar(
 ) {
     TitleBar(
         gradientStartColor = getColorForLetter(projectName.firstOrNull() ?: 'A').copy(.6f),
-        modifier = Modifier.newFullscreenControls()
+//        modifier = Modifier.newFullscreenControls()
     ) {
         EditorDropdown(
             projectName = projectName,
