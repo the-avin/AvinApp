@@ -5,7 +5,10 @@ plugins {
 
 
 dependencies {
+    // Yaml
+    implementation(libs.kaml)
+
+    // Modules
     implementation(project(":shared:git"))
     implementation(project(":shared:utils:app"))
-    implementation(libs.kaml)
 }

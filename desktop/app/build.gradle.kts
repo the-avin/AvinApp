@@ -22,6 +22,11 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.ktor)
 
+    // Scripting
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:2.1.20")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.1.20")
+    implementation("org.jetbrains.kotlin:kotlin-script-runtime:2.1.20")
+    implementation("org.jetbrains.kotlin:kotlin-script-util:1.8.22")
 
     // Locale modules
     implementation(project(":core:theme"))
