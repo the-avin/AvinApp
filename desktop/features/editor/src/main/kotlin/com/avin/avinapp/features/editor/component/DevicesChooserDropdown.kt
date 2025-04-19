@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.icon.ColoredIcon
 import org.jetbrains.jewel.foundation.theme.LocalContentColor

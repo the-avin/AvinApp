@@ -5,7 +5,7 @@ import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.data.repository.device.DevicesRepository
 import com.avin.avinapp.data.repository.project.ProjectRepository
-import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.pages.AppPages
 import kotlinx.coroutines.Dispatchers

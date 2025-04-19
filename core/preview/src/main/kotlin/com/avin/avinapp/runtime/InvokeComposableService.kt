@@ -7,4 +7,7 @@ import com.avin.avinapp.data.models.widget.ComposableDescriptor
 interface InvokeComposableService {
     @Composable
     fun invoke(composer: Composer, descriptor: ComposableDescriptor)
+
+    @Composable
+    fun invokeCaching(composer: Composer, descriptor: ComposableDescriptor)
 }

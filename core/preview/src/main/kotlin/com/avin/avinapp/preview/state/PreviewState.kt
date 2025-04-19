@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.collector.ComponentRenderCollector
-import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.rendering.ComposableRenderer
 import com.avin.avinapp.rendering.rememberComposableRenderer
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.JsonObject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.system.measureTimeMillis
-import kotlin.time.measureTime
 
 @Stable
 class PreviewState(

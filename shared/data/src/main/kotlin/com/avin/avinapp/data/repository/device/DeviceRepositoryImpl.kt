@@ -1,6 +1,6 @@
 package com.avin.avinapp.data.repository.device
 
-import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.data.models.device.PreviewDevice
 import kotlinx.serialization.json.Json
 
 class DeviceRepositoryImpl(

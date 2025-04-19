@@ -1,4 +1,4 @@
-package com.avin.avinapp.device
+package com.avin.avinapp.data.models.device
 
 import androidx.compose.ui.geometry.Size
 import kotlinx.serialization.Serializable

@@ -1,9 +1,11 @@
 plugins {
     id(AppPlugins.KOTLIN)
     id(AppPlugins.COMPOSE)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
+    // Serializer
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":shared:git"))
@@ -13,5 +15,4 @@ dependencies {
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
     implementation(project(":core:project"))
-    implementation(project(":core:preview"))
 }

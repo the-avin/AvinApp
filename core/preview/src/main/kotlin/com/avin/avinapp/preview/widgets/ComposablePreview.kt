@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.data.RenderedComponentInfo
 import com.avin.avinapp.data.findTopMostComponentByPosition
-import com.avin.avinapp.device.size
+import com.avin.avinapp.data.models.device.size
 import com.avin.avinapp.preview.state.PreviewState
 import com.avin.avinapp.utils.calculateScale
 import com.avin.avinapp.utils.compose.modifier.handlePointerEvents

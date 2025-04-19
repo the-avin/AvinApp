@@ -2,7 +2,7 @@ package com.avin.avinapp.rendering
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
-import com.avin.avinapp.device.PreviewDevice
+import com.avin.avinapp.data.models.device.PreviewDevice
 import kotlinx.serialization.json.JsonObject
 
 interface ComposableRenderer {
