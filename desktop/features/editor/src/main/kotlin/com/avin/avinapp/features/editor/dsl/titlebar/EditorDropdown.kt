@@ -10,11 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.data.models.project.valid
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.utils.compose.foundation.menu.iconTextItem
+import com.avin.avinapp.utils.compose.foundation.menu.simpleItems
 import com.avin.avinapp.utils.compose.modifier.grayscale
 import com.avin.avinapp.utils.compose.modifier.startPadding
 import com.avin.avinapp.utils.compose.nodes.text.DrawInitialsWithCanvas
@@ -39,6 +41,7 @@ fun TitleBarScope.EditorDropdown(
         iconTextItem(
             stringRes = Resource.string.newProject,
             icon = AllIconsKeys.General.Add,
+            isStartItem = true,
             onClick = onNewProjectClick
         )
         iconTextItem(
@@ -53,10 +56,11 @@ fun TitleBarScope.EditorDropdown(
         )
         if (recentProjects.isNotEmpty()) {
             separator()
-            items(
-                recentProjects,
-                isSelected = { false },
-                onItemClick = { if (it.valid) onOpenProject.invoke(it.id) }
+            simpleItems(
+                items = recentProjects,
+                onClick = {
+                    if (it.valid) onOpenProject.invoke(it.id)
+                }
             ) { project ->
                 val isValid = remember { project.valid }
                 Row(
@@ -66,7 +70,12 @@ fun TitleBarScope.EditorDropdown(
                     DrawInitialsWithCanvas(project.name, boxSize = 18.dp)
                     Column {
                         Text(project.name)
-                        Text(project.path, fontSize = 10.sp, modifier = Modifier.alpha(.6f))
+                        Text(
+                            project.path,
+                            fontSize = 10.sp,
+                            modifier = Modifier.alpha(.6f),
+                            lineHeight = 1.1.em
+                        )
                     }
                 }
             }

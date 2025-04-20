@@ -42,12 +42,8 @@ fun ConfigurationItem(
                 isEditable = false,
                 onSelectedItemChange = { onValueChange(it) },
                 modifier = Modifier.width(120.dp),
-                maxPopupHeight = 100.dp
+                maxPopupHeight = 100.dp,
             )
-        }
-
-        else -> {
-            Text("Unsupported setting type")
         }
     }
 }

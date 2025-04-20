@@ -46,7 +46,7 @@ private fun MenuScope.renderContent(content: List<MenuContent>) {
 }
 
 fun JewelMenuScope.renderContent(content: List<MenuContent>) {
-    content.forEach { item ->
+    content.forEachIndexed { index, item ->
         when (item) {
             is MenuContent.SubMenu -> {
                 submenu(submenu = { renderContent(item.items) }) {
@@ -62,7 +62,11 @@ fun JewelMenuScope.renderContent(content: List<MenuContent>) {
             }
 
             is MenuContent.Item -> {
-                textItem(stringRes = item.stringRes, onClick = { item.action() })
+                textItem(
+                    stringRes = item.stringRes,
+                    isStartItem = index == 0,
+                    isEndItem = index == content.size - 1,
+                    onClick = { item.action() })
             }
 
             is MenuContent.Separator -> separator()

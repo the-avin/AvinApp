@@ -10,7 +10,7 @@ sqldelight = "2.0.2"
 filekit = "0.10.0-beta01"
 jgit = "6.8.0.202311291450-r"
 kaml = "0.74.0"
-jewel = "0.26.0"
+jewel = "1.0.0-SNAPSHOT"
 kotlinx-serialization = "1.8.1"
 coil = "3.1.0"
 

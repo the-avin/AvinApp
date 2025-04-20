@@ -74,7 +74,7 @@ class ComposableRendererImpl(
     private fun getScene(device: PreviewDevice): ComposeScene =
         CanvasLayersComposeScene(
             density = Density(device.density),
-            size = IntSize(device.resolution.width, device.resolution.height)
+            size = IntSize(device.resolution.width, device.resolution.height),
         )
 }
 

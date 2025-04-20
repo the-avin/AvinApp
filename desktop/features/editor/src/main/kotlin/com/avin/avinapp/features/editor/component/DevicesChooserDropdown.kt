@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.icon.ColoredIcon
+import com.avin.avinapp.utils.compose.foundation.menu.simpleItem
+import com.avin.avinapp.utils.compose.foundation.menu.simpleItems
 import org.jetbrains.jewel.foundation.theme.LocalContentColor
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Icon
@@ -25,7 +27,11 @@ fun DevicesChooserDropdown(
 ) {
     Dropdown(
         menuContent = {
-            items(devices, isSelected = { currentDevice == it }, onItemClick = onDeviceSelected) {
+            simpleItems(
+                devices,
+                isSelected = { currentDevice == it },
+                onClick = onDeviceSelected
+            ) {
                 Row(
                     modifier = Modifier.padding(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -44,7 +50,10 @@ fun DevicesChooserDropdown(
         }
     ) {
         currentDevice?.let {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 ColoredIcon(
                     Resource.image.MOBILE
                 )
