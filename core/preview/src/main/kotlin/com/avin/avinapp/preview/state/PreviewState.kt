@@ -64,7 +64,7 @@ class PreviewState(
                         val newImage = renderer.renderImage(json, device)
                         currentImage = newImage
                     }
-                    AppLogger.debug(LOG_TAG, "Rendering took $renderTime ms for ${device.name}")
+                    AppLogger.info(LOG_TAG, "Rendering took $renderTime ms for ${device.name}")
                 }
             } catch (_: CancellationException) {
             } catch (_: Exception) {

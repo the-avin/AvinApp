@@ -1,15 +1,17 @@
 package com.avin.avinapp.logger
 
 import androidx.compose.runtime.snapshots.Snapshot
+import java.util.logging.ConsoleHandler
 import java.util.logging.Level
 import java.util.logging.Logger
+import java.util.logging.SimpleFormatter
 
 object AppLogger {
     @Volatile
     var isEnabled: Boolean = true
 
     private val nativeLogger: Logger by lazy {
-        Logger.getLogger(AppLogger::class.simpleName)
+        Logger.getLogger(AppLogger::class.simpleName).applyLogLevels()
     }
 
     fun debug(tag: String, message: String, throwable: Throwable? = null) {
@@ -52,4 +54,18 @@ object AppLogger {
             }
         }
     }
+}
+
+
+private fun Logger.applyLogLevels(): Logger = apply {
+    level = Level.FINE
+    useParentHandlers = false
+
+    handlers.forEach { removeHandler(it) }
+
+    val consoleHandler = ConsoleHandler().apply {
+        level = Level.FINE
+        formatter = SimpleFormatter()
+    }
+    addHandler(consoleHandler)
 }
