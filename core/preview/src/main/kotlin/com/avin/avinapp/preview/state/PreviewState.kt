@@ -5,6 +5,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.collector.ComponentRenderCollector
 import com.avin.avinapp.data.models.device.PreviewDevice
+import com.avin.avinapp.logger.AppLogger
 import com.avin.avinapp.rendering.ComposableRenderer
 import com.avin.avinapp.rendering.rememberComposableRenderer
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +64,7 @@ class PreviewState(
                         val newImage = renderer.renderImage(json, device)
                         currentImage = newImage
                     }
-                    println("Rendering took $renderTime ms for ${device.name}")
+                    AppLogger.debug(LOG_TAG, "Rendering took $renderTime ms for ${device.name}")
                 }
             } catch (_: CancellationException) {
             } catch (_: Exception) {
@@ -77,6 +78,11 @@ class PreviewState(
         lastObject = json
         if (currentDevice == null) return
         invalidate()
+    }
+
+
+    companion object {
+        private const val LOG_TAG = "PreviewState"
     }
 }
 
