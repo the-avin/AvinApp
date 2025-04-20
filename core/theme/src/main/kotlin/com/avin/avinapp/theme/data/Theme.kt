@@ -1,4 +1,4 @@
-package com.avin.avinapp.utils.theme
+package com.avin.avinapp.theme.data
 
 enum class Theme {
     DARK, LIGHT, SYSTEM;

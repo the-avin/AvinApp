@@ -2,7 +2,9 @@ package com.avin.avinapp.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import com.avin.avinapp.utils.theme.Theme
+import androidx.compose.runtime.CompositionLocalProvider
+import com.avin.avinapp.theme.data.LocalCurrentTheme
+import com.avin.avinapp.theme.data.Theme
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.intui.standalone.theme.IntUiTheme
 import org.jetbrains.jewel.intui.standalone.theme.darkThemeDefinition
@@ -23,15 +25,20 @@ fun AppCustomTheme(
 ) {
     val currentTheme = Theme.fromString(currentTheme)
     val isDarkTheme = currentTheme.isDarkTheme()
-    val themeDefinition = if (isDarkTheme) JewelTheme.darkThemeDefinition() else JewelTheme.lightThemeDefinition()
-    IntUiTheme(
-        theme = themeDefinition,
-        styling = ComponentStyling.default().decoratedWindow(
-            titleBarStyle = getTitleBarStyleWithTheme(isDarkTheme),
-            windowStyle = getWindowStyleWithTheme(isDarkTheme)
-        ),
-        content = content,
-    )
+    val themeDefinition =
+        if (isDarkTheme) JewelTheme.darkThemeDefinition() else JewelTheme.lightThemeDefinition()
+    CompositionLocalProvider(
+        LocalCurrentTheme provides currentTheme
+    ) {
+        IntUiTheme(
+            theme = themeDefinition,
+            styling = ComponentStyling.default().decoratedWindow(
+                titleBarStyle = getTitleBarStyleWithTheme(isDarkTheme),
+                windowStyle = getWindowStyleWithTheme(isDarkTheme)
+            ),
+            content = content,
+        )
+    }
 }
 
 
