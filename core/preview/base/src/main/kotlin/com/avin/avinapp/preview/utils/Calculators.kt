@@ -9,3 +9,12 @@ fun calculateScale(fromSize: Size, toSize: Size): Offset {
     val scaleY = toSize.height / fromSize.height
     return Offset(scaleX, scaleY)
 }
+
+fun calculateScaledOffset(fromSize: Size, toSize: Size, offset: Offset): Offset {
+    val (scaleX, scaleY) = calculateScale(fromSize, toSize)
+
+    val scaledOffsetX = offset.x * scaleX
+    val scaledOffsetY = offset.y * scaleY
+
+    return Offset(scaledOffsetX, scaledOffsetY)
+}

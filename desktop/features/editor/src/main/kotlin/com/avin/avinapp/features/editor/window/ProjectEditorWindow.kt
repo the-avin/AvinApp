@@ -1,3 +1,5 @@
+@file:OptIn(InternalComposeUiApi::class)
+
 package com.avin.avinapp.features.editor.window
 
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
+import com.avin.avinapp.preview.state.rememberRealtimeRenderState
 import com.avin.avinapp.preview.state.rememberSnapshotRenderState
+import com.avin.avinapp.preview.widget.RealtimePreview
 import com.avin.avinapp.preview.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
@@ -113,11 +118,23 @@ fun ProjectEditorWindow(
                         }
                     }
 
-                    else -> {}
+                    else -> {
+                        RealtimePreviewSample(rendererState.currentDevice!!)
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+fun RealtimePreviewSample(device: PreviewDevice) {
+    val collector = rememberComponentRenderCollector()
+    val rendererState = rememberRealtimeRenderState(
+        device = device,
+        collector = collector
+    )
+    RealtimePreview(rendererState)
 }
 
 
