@@ -5,23 +5,22 @@ plugins {
 
 repositories {
     mavenCentral()
-    google()
 }
 
 dependencies {
-    // Decompose
-    implementation(libs.decompose)
-
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Coil
+    implementation(libs.coil.compose)
+
+    // Material 3
+    implementation(compose.material3)
+
+    // Modules
     implementation(project(":core:theme"))
     implementation(project(":core:preview:base"))
-    implementation(project(":core:preview:snapshot"))
     implementation(project(":shared:data"))
-    implementation(project(":shared:utils:app"))
     implementation(project(":shared:utils:compose"))
-    implementation(project(":shared:locale"))
-    implementation(project(":shared:resource"))
-    implementation(project(":shared:platform"))
+    implementation(project(":shared:utils:app"))
 }

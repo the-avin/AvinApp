@@ -24,6 +24,8 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/preview" />
+            <option value="$PROJECT_DIR$/core/preview/base" />
+            <option value="$PROJECT_DIR$/core/preview/snapshot" />
             <option value="$PROJECT_DIR$/core/project" />
             <option value="$PROJECT_DIR$/core/theme" />
             <option value="$PROJECT_DIR$/desktop" />

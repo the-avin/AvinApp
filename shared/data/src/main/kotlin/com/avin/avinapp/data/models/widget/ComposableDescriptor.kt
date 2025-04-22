@@ -33,7 +33,8 @@ data class ComposableDescriptor(
         val nullable: Boolean,
         @SerialName("value")
         @Serializable(with = ArgumentValueSerializer::class)
-        val value: ArgumentValue? = null,
+        val arguments: ArgumentValue? = null,
+        val defaultValue : ArgumentValue? = null
     ) {
         @Immutable
         @Serializable

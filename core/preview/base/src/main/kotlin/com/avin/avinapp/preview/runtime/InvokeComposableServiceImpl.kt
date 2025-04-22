@@ -1,0 +1,93 @@
+package com.avin.avinapp.preview.runtime
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composer
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.avin.avinapp.preview.collector.trackRender
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import java.lang.reflect.Method
+
+class InvokeComposableServiceImpl : InvokeComposableService {
+    var listener: InvokeComposableServiceListener? = null
+
+
+    // TODO: it's temporarily has a Composable annotation for test
+    @Composable
+    override fun invoke(id: String, composer: Composer, descriptor: ComposableDescriptor) {
+        val method = findMethod(
+            targetClass = descriptor.targetClass,
+            functionName = descriptor.functionName,
+//            argsSize = descriptor.arguments.size
+            argsSize = 10
+        ) ?: error("Function not found: ${descriptor.functionName}")
+        val onClick: () -> Unit = { println("Button clicked!") }
+
+        val modifier = Modifier.trackRender(id)
+        val enabled = true
+        val shape = RoundedCornerShape(8.dp)
+        val colors = ButtonDefaults.buttonColors()
+        val elevation = ButtonDefaults.buttonElevation()
+        val border: BorderStroke? = null
+        val contentPadding = ButtonDefaults.ContentPadding
+        val interactionSource = MutableInteractionSource()
+
+        val content: @Composable RowScope.() -> Unit = {
+            Text("Button from Reflection")
+        }
+
+        method.invoke(
+            null,
+            *listOf(
+                onClick,
+                modifier,
+                enabled,
+                shape,
+                colors,
+                elevation,
+                border,
+                contentPadding,
+                interactionSource,
+                content,
+            ).getFullArgs(composer).toTypedArray()
+        )
+    }
+
+    @Composable
+    override fun invokeCaching(
+        id: String,
+        composer: Composer,
+        descriptor: ComposableDescriptor
+    ) {
+        runCatching {
+            invoke(id, composer, descriptor)
+        }.onFailure {
+            listener?.onError(it)
+        }
+    }
+
+
+    private fun findMethod(targetClass: String, functionName: String, argsSize: Int): Method? {
+        val clazz = Class.forName(targetClass)
+        return clazz.methods?.find {
+            it.name == functionName
+                    && it.parameterTypes.size == argsSize + 3
+                    && it.parameterTypes[argsSize] == Composer::class.java
+        }
+    }
+
+    private fun List<Any?>.getFullArgs(composer: Composer): List<Any?> {
+        return toList() + composer + CHANGED_FLAG + DEFAULT_FLAG
+    }
+
+    companion object {
+        private const val CHANGED_FLAG = 1
+        private const val DEFAULT_FLAG = 0
+    }
+}

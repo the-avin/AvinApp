@@ -1,6 +1,13 @@
 package com.avin.avinapp.features.editor.window
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import com.avin.avinapp.collector.rememberComponentRenderCollector
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
-import com.avin.avinapp.preview.state.rememberPreviewState
-import com.avin.avinapp.preview.widgets.ComposablePreview
+import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
+import com.avin.avinapp.preview.state.rememberSnapshotRenderState
+import com.avin.avinapp.preview.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
@@ -50,7 +57,7 @@ fun ProjectEditorWindow(
     val devices by component.devices.collectAsState()
     val currentPage by component.currentPage.collectAsState()
     val collector = rememberComponentRenderCollector()
-    val rendererState = rememberPreviewState(
+    val rendererState = rememberSnapshotRenderState(
         devices = devices,
         collector = collector
     )
@@ -88,7 +95,7 @@ fun ProjectEditorWindow(
                 when (currentPage) {
                     is EditorPages.Screens -> {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            ComposablePreview(
+                            SnapshotPreview(
                                 state = rendererState,
                                 collector = collector,
                                 modifier = Modifier.fillMaxHeight(.9f)
