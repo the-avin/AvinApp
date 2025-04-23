@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composer
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.remember
 import androidx.compose.ui.InternalComposeUiApi
@@ -37,13 +38,15 @@ class ComposableRendererImpl(
         val count = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull?.toInt() ?: 1
         return {
             NewLocalComponentRenderCollector(collector) {
-                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-                    repeat(count) {
-                        invokeComposableService.invokeCaching(
-                            it.toString(),
-                            currentComposer,
-                            buttonDescriptor
-                        )
+                MaterialTheme {
+                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                        repeat(count) {
+                            invokeComposableService.invokeCaching(
+                                it.toString(),
+                                currentComposer,
+                                buttonDescriptor
+                            )
+                        }
                     }
                 }
             }
@@ -55,9 +58,7 @@ class ComposableRendererImpl(
         val bitmap: ImageBitmap
         getScene(device).apply {
             setContent {
-                MaterialTheme {
-                    renderComposable(json).invoke()
-                }
+                renderComposable(json).invoke()
             }
             bitmap = render(device)
             close()

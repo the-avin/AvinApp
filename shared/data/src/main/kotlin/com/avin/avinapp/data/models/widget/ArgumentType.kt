@@ -7,5 +7,8 @@ enum class ArgumentType {
     SP,
     COLOR,
     BOOLEAN,
-    CLASS
+    OTHER
 }
+
+val ArgumentType.isPrimitive: Boolean
+    get() = this != ArgumentType.OTHER

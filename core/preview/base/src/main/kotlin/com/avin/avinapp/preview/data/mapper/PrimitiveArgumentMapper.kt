@@ -16,6 +16,7 @@ fun ComposableDescriptor.Argument.ArgumentValue.Primitive.toRuntimeValue(
         ArgumentType.INT -> raw?.toInt()
         ArgumentType.BOOLEAN -> raw?.toBoolean()
         ArgumentType.COLOR -> raw?.let { Color.fromRGBAHexStringOrNull(it) }
-        else -> raw
+        ArgumentType.STRING -> raw
+        else -> null
     }
 }
