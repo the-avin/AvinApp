@@ -8,7 +8,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composer
-import androidx.compose.runtime.currentComposer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
@@ -17,6 +16,7 @@ import com.avin.avinapp.preview.collector.trackRender
 import com.avin.avinapp.preview.data.mapper.toRuntimeValue
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+
 
 class InvokeComposableServiceImpl : InvokeComposableService {
     var listener: InvokeComposableServiceListener? = null
@@ -61,7 +61,6 @@ class InvokeComposableServiceImpl : InvokeComposableService {
 //                interactionSource,
 //                content,
 //            )
-
 //        )
     }
 
@@ -160,6 +159,7 @@ class InvokeComposableServiceImpl : InvokeComposableService {
         }
     }
 
+
     @Throws(IllegalArgumentException::class)
     @Composable
     fun getDefaultValueForMethod(
@@ -169,19 +169,27 @@ class InvokeComposableServiceImpl : InvokeComposableService {
         composer: Composer
     ): Any? {
         val clazz = Class.forName(className)
+
+        println(clazz.methods.filter { it.name == methodName }.map { it.parameters })
+
         val method = clazz.methods.find {
-            it.name == methodName && it.parameterTypes.size == parameterCount + 2
+            it.name == methodName && it.parameters.size == parameterCount + 2
         }
-        method?.isAccessible = true
-        println(
-            "${method?.name} ${method?.parameterTypes?.toList()}"
-        )
-        val args = Array<Any?>(parameterCount + 2) { null }
-        args[parameterCount] = composer
-        args[parameterCount + 1] = CHANGED_FLAG
 
 
-        return method?.invoke(null, *args).also { println(it) }
+        if (method == null) {
+            throw IllegalArgumentException("No suitable method found")
+        }
+
+        println("${method.name} ${method.parameters.map { it.type.canonicalName }}")
+
+        val args = mutableListOf<Any?>()
+        args.add(composer)
+        args.add(0)
+
+        println(args.map { it?.let { it::class.qualifiedName } })
+
+        return method.invoke(null, *args.toTypedArray()).also { println(it) }
     }
 
 

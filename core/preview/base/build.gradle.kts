@@ -17,6 +17,9 @@ dependencies {
     // Material 3
     implementation(compose.material3)
 
+    // Kotlin Reflect
+    implementation(libs.kotlin.reflect)
+
     // Modules
     implementation(project(":core:theme"))
     implementation(project(":shared:data"))

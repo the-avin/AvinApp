@@ -129,10 +129,8 @@ fun ProjectEditorWindow(
 
 @Composable
 fun RealtimePreviewSample(device: PreviewDevice) {
-    val collector = rememberComponentRenderCollector()
     val rendererState = rememberRealtimeRenderState(
         device = device,
-        collector = collector
     )
     RealtimePreview(rendererState)
 }
