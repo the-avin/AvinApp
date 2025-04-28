@@ -44,24 +44,24 @@ class InvokeComposableServiceImpl : InvokeComposableService {
         val content: @Composable RowScope.() -> Unit = {
             Text("Button from Reflection")
         }
-        val arguments = processArguments(descriptor.arguments, composer)
-        println(arguments)
-        method.invokeComposable(composer, arguments)
-//        method.invokeComposable(
-//            composer,
-//            listOf(
-//                onClick,
-//                modifier,
-//                enabled,
-//                shape,
-//                colors,
-//                elevation,
-//                border,
-//                contentPadding,
-//                interactionSource,
-//                content,
-//            )
-//        )
+//        val arguments = processArguments(descriptor.arguments, composer)
+//        println(arguments)
+//        method.invokeComposable(composer, arguments)
+        method.invokeComposable(
+            composer,
+            listOf(
+                onClick,
+                modifier,
+                enabled,
+                shape,
+                colors,
+                elevation,
+                border,
+                contentPadding,
+                interactionSource,
+                content,
+            )
+        )
     }
 
 

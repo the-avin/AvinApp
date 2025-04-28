@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import com.avin.avinapp.data.models.device.PreviewDevice
 
 @Stable
-@InternalComposeUiApi
 class RealtimeRendererState(
     val device: PreviewDevice,
 ) {
@@ -44,7 +43,6 @@ class RealtimeRendererState(
     }
 }
 
-@InternalComposeUiApi
 @Composable
 fun rememberRealtimeRenderState(
     device: PreviewDevice,

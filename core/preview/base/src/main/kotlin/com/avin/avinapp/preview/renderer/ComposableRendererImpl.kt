@@ -1,17 +1,23 @@
 package com.avin.avinapp.preview.renderer
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composer
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.scene.CanvasLayersComposeScene
 import androidx.compose.ui.scene.ComposeScene
@@ -39,15 +45,21 @@ class ComposableRendererImpl(
         return {
             NewLocalComponentRenderCollector(collector) {
                 MaterialTheme {
-                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-                        repeat(count) {
-                            invokeComposableService.invokeCaching(
-                                it.toString(),
-                                currentComposer,
-                                buttonDescriptor
-                            )
+                    Box(Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center){
+                        Button(onClick = {}){
+
+                            Text("This is a test")
                         }
                     }
+//                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+//                        repeat(count) {
+//                            invokeComposableService.invokeCaching(
+//                                it.toString(),
+//                                currentComposer,
+//                                buttonDescriptor
+//                            )
+//                        }
+//                    }
                 }
             }
         }

@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import com.avin.avinapp.data.models.device.size
 import com.avin.avinapp.preview.state.RealtimeRendererState
 import com.avin.avinapp.utils.compose.utils.aspectRatio
@@ -24,25 +26,39 @@ fun RealtimePreview(
     RealtimePreviewImpl(state, modifier)
 }
 
-@OptIn(ExperimentalComposeUiApi::class, InternalComposeUiApi::class)
 @Composable
 private fun RealtimePreviewImpl(
     state: RealtimeRendererState,
     modifier: Modifier = Modifier
 ) {
     val currentDevice = state.device
+    val initialDensity = currentDevice.density
 
     BoxWithConstraints(modifier = modifier) {
-        val width = maxHeight * currentDevice.resolution.size.aspectRatio
+        val frameHeightPx = with(LocalDensity.current) { maxHeight.toPx() }
 
-        Box(
-            modifier = Modifier
-                .width(width)
-                .background(Color.White)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+        val deviceResolution = currentDevice.resolution
+        val deviceAspectRatio = deviceResolution.size.aspectRatio
+
+        val calculatedDensity = deviceResolution.height / frameHeightPx
+
+        val finalDensity = initialDensity * (calculatedDensity / initialDensity)
+
+        val calculatedWidth = frameHeightPx * deviceAspectRatio
+
+        CompositionLocalProvider(
+            LocalDensity provides Density(finalDensity)
         ) {
-            state.currentContent?.invoke()
+            Box(
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { calculatedWidth.toDp() })
+                    .fillMaxHeight()
+                    .background(Color.White)
+                    .then(modifier),
+                contentAlignment = Alignment.Center
+            ) {
+                state.currentContent?.invoke()
+            }
         }
     }
 }
