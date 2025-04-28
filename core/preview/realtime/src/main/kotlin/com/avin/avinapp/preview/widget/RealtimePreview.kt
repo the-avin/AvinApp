@@ -31,7 +31,7 @@ private fun RealtimePreviewImpl(
     state: RealtimeRendererState,
     modifier: Modifier = Modifier
 ) {
-    val currentDevice = state.device
+    val currentDevice = state.currentDevice
     val initialDensity = currentDevice.density
 
     BoxWithConstraints(modifier = modifier) {

@@ -6,21 +6,22 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.avin.avinapp.data.models.device.PreviewDevice
 
 @Stable
 class RealtimeRendererState(
-    val device: PreviewDevice,
+    initialDevice: PreviewDevice,
 ) {
     var currentContent by mutableStateOf<(@Composable () -> Unit)?>(null)
+    var currentDevice by mutableStateOf(initialDevice)
 
     init {
         initialContent()
@@ -49,8 +50,11 @@ fun rememberRealtimeRenderState(
 ): RealtimeRendererState {
     val state = remember {
         RealtimeRendererState(
-            device = device,
+            initialDevice = device,
         )
+    }
+    LaunchedEffect(device) {
+        state.currentDevice = device
     }
     return state
 }

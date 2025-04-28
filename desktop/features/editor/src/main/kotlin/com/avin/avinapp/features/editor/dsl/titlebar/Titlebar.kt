@@ -49,7 +49,7 @@ fun DecoratedWindowScope.ProjectEditorTitleBar(
                 onOpenSettings = onOpenSettings,
             )
         }
-        if (currentPage is EditorPages.Screens) {
+        if (currentPage is EditorPages.Screens || currentPage is EditorPages.Views) {
             DevicesChooserDropdown(
                 currentDevice = currentDevice,
                 devices = devices,
