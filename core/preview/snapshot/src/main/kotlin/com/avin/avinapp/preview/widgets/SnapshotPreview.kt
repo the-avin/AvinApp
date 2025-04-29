@@ -26,7 +26,13 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
@@ -34,6 +40,9 @@ import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
 import com.avin.avinapp.data.models.device.size
 import com.avin.avinapp.preview.state.SnapshotRenderState
 import com.avin.avinapp.preview.utils.calculateScale
+import com.avin.avinapp.preview.utils.drawComponentHighlight
+import com.avin.avinapp.preview.utils.drawComponentHighlightInfo
+import com.avin.avinapp.preview.utils.mapPointerToDevice
 import com.avin.avinapp.utils.compose.modifier.handlePointerEvents
 import com.avin.avinapp.utils.compose.utils.aspectRatio
 import org.jetbrains.jewel.ui.component.CircularProgressIndicator
@@ -60,6 +69,7 @@ fun SnapshotPreviewImpl(
     val currentDevice = state.currentDevice ?: return
     val imageSize = state.componentSize
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
+    val textMeasurer = rememberTextMeasurer()
 
     val mappedHoverPosition = remember(hoverPosition, currentDevice) {
         hoverPosition?.let { mapPointerToDevice(it, imageSize, currentDevice.resolution.size) }
@@ -91,7 +101,8 @@ fun SnapshotPreviewImpl(
                 .drawHighlight(
                     component = hoveredComponent,
                     imageSize = imageSize,
-                    deviceSize = deviceSize
+                    deviceSize = deviceSize,
+                    textMeasurer = textMeasurer
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -119,41 +130,15 @@ private fun RenderImage(bitmap: ImageBitmap?, onSizeChanged: (Size) -> Unit) {
 }
 
 
-private fun Modifier.drawHighlight(
+fun Modifier.drawHighlight(
     component: RenderedComponentInfo?,
     imageSize: Size,
-    deviceSize: Size
+    deviceSize: Size,
+    textMeasurer: TextMeasurer? = null
 ): Modifier = this.drawWithContent {
     drawContent()
-    component?.let {
-        drawComponentHighlight(it, imageSize, deviceSize)
+    component?.let { componentInfo ->
+        drawComponentHighlight(componentInfo, imageSize, deviceSize)
+        textMeasurer?.let { drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it) }
     }
-}
-
-private fun mapPointerToDevice(
-    pointer: Offset,
-    imageSize: Size,
-    deviceSize: Size
-): Offset {
-    val scale = calculateScale(imageSize, deviceSize)
-    return Offset(pointer.x * scale.x, pointer.y * scale.y)
-}
-
-private fun DrawScope.drawComponentHighlight(
-    component: RenderedComponentInfo,
-    imageSize: Size,
-    deviceSize: Size,
-    color: Color = Color.Red
-) {
-    // Inverse scale to convert from device coordinates back to image coordinates
-    val inverseScale = calculateScale(deviceSize, imageSize)
-    val topLeft =
-        Offset(component.position.x * inverseScale.x, component.position.y * inverseScale.y)
-    val size = Size(component.size.width * inverseScale.x, component.size.height * inverseScale.y)
-    drawRect(
-        color,
-        topLeft,
-        size,
-        style = Stroke(2.dp.toPx(), pathEffect = PathEffect.cornerPathEffect(12f))
-    )
 }

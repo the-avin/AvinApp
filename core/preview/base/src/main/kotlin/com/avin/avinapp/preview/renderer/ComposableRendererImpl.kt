@@ -27,6 +27,7 @@ import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.buttonDescriptor
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.collector.NewLocalComponentRenderCollector
+import com.avin.avinapp.preview.collector.trackRender
 import com.avin.avinapp.preview.runtime.InvokeComposableService
 import com.avin.avinapp.preview.runtime.InvokeComposableServiceImpl
 import kotlinx.coroutines.Dispatchers
@@ -45,9 +46,11 @@ class ComposableRendererImpl(
         return {
             NewLocalComponentRenderCollector(collector) {
                 MaterialTheme {
-                    Box(Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center){
-                        Button(onClick = {}){
-
+                    Box(
+                        Modifier.fillMaxSize().background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(onClick = {}, modifier = Modifier.trackRender("1")) {
                             Text("This is a test")
                         }
                     }
