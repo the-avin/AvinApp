@@ -52,24 +52,26 @@ class SnapshotRenderState(
     }
 
     fun invalidate() {
-        val json = lastObject ?: return
-        val device = currentDevice ?: return
-
-        renderJob?.cancel()
-        renderJob = scope.launch(scope.coroutineContext) {
-            isRendering = true
-            try {
-                mutex.withLock {
-                    val renderTime = measureTimeMillis {
-                        val newImage = renderer.renderImage(json, device)
-                        currentImage = newImage
+        scope.launch {
+            mutex.withLock {
+                renderJob?.cancel()
+                renderJob = launch {
+                    isRendering = true
+                    try {
+                        val renderTime = measureTimeMillis {
+                            val newImage = renderer.renderImage(lastObject!!, currentDevice!!)
+                            currentImage = newImage
+                        }
+                        AppLogger.info(
+                            LOG_TAG,
+                            "Rendering took $renderTime ms for ${currentDevice!!.name}"
+                        )
+                    } catch (_: CancellationException) {
+                    } catch (_: Exception) {
+                    } finally {
+                        isRendering = false
                     }
-                    AppLogger.info(LOG_TAG, "Rendering took $renderTime ms for ${device.name}")
                 }
-            } catch (_: CancellationException) {
-            } catch (_: Exception) {
-            } finally {
-                isRendering = false
             }
         }
     }

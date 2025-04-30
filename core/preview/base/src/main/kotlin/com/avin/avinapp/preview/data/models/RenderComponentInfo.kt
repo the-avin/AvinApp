@@ -23,5 +23,5 @@ fun List<RenderedComponentInfo>.findTopMostComponentByPosition(position: Offset)
 val RenderedComponentInfo.formattedText: String
     get() = "{$id} ${size.width.formatSmart()}:${size.height.formatSmart()}"
 
-private fun Float.formatSmart(): String =
-    if (this % 1f == 0f) this.toInt().toString() else this.toString()
+fun Float.formatSmart(): String =
+    if (this % 1f == 0f) this.toInt().toString() else String.format("%.1f", this)

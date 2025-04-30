@@ -47,23 +47,23 @@ class ComposableRendererImpl(
         return {
             NewLocalComponentRenderCollector(collector) {
                 MaterialTheme {
+                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                        repeat(count) {
+                            invokeComposableService.invokeCaching(
+                                it.toString(),
+                                currentComposer,
+                                buttonDescriptor
+                            )
+                        }
+                    }
                     Box(
                         Modifier.fillMaxSize().background(Color.White),
                         contentAlignment = Alignment.Center
                     ) {
-                        Button(onClick = {}, modifier = Modifier.trackRender("1")) {
+                        Button(onClick = {}, modifier = Modifier.trackRender("B1")) {
                             Text("This is a test")
                         }
                     }
-//                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-//                        repeat(count) {
-//                            invokeComposableService.invokeCaching(
-//                                it.toString(),
-//                                currentComposer,
-//                                buttonDescriptor
-//                            )
-//                        }
-//                    }
                 }
             }
         }

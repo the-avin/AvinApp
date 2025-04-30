@@ -30,6 +30,7 @@ import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
 import com.avin.avinapp.data.models.device.size
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
+import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlightInfo
 import com.avin.avinapp.preview.snapshot.utils.mapPointerToDevice
@@ -128,7 +129,10 @@ fun Modifier.drawHighlight(
 ): Modifier = this.drawWithContent {
     drawContent()
     component?.let { componentInfo ->
+        textMeasurer?.let {
+            drawComponentGuidesWithDistances(componentInfo, imageSize, deviceSize, it)
+            drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it)
+        }
         drawComponentHighlight(componentInfo, imageSize, deviceSize)
-        textMeasurer?.let { drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it) }
     }
 }
