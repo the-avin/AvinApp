@@ -18,3 +18,10 @@ val RenderedComponentInfo.rect: Rect
 fun List<RenderedComponentInfo>.findComponentById(id: String) = find { it.id == id }
 fun List<RenderedComponentInfo>.findTopMostComponentByPosition(position: Offset) =
     findLast { it.rect.contains(position) }
+
+
+val RenderedComponentInfo.formattedText: String
+    get() = "{$id} ${size.width.formatSmart()}:${size.height.formatSmart()}"
+
+private fun Float.formatSmart(): String =
+    if (this % 1f == 0f) this.toInt().toString() else this.toString()

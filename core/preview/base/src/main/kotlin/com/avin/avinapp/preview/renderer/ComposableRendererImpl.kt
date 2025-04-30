@@ -24,6 +24,7 @@ import androidx.compose.ui.scene.ComposeScene
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import com.avin.avinapp.data.models.device.PreviewDevice
+import com.avin.avinapp.data.models.device.intSize
 import com.avin.avinapp.data.models.widget.buttonDescriptor
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.collector.NewLocalComponentRenderCollector
@@ -85,17 +86,21 @@ class ComposableRendererImpl(
     override fun getScene(device: PreviewDevice): ComposeScene =
         CanvasLayersComposeScene(
             density = Density(device.density),
-            size = IntSize(device.resolution.width, device.resolution.height),
+            size = device.resolution.intSize,
         )
 
     @OptIn(InternalComposeUiApi::class)
     override suspend fun ComposeScene.render(device: PreviewDevice): ImageBitmap =
         withContext(Dispatchers.Default) {
-            val image = ImageBitmap(device.resolution.width, device.resolution.height)
+            val image = createBitmapForDevice(device)
             val canvas = Canvas(image)
             render(canvas, ComposableRenderer.RENDER_NANO_TIME)
             image
         }
+
+
+    private fun createBitmapForDevice(device: PreviewDevice) =
+        ImageBitmap(device.resolution.width.toInt(), device.resolution.height.toInt())
 }
 
 

@@ -1,4 +1,4 @@
-package com.avin.avinapp.preview.state
+package com.avin.avinapp.preview.snapshot.state
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size

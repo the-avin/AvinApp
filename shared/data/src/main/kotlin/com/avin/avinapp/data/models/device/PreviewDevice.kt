@@ -1,6 +1,7 @@
 package com.avin.avinapp.data.models.device
 
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.unit.IntSize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,8 +13,8 @@ data class PreviewDevice(
 ) {
     @Serializable
     data class Resolution(
-        val width: Int,
-        val height: Int
+        val width: Float,
+        val height: Float
     )
 }
 
@@ -24,4 +25,7 @@ enum class DeviceType {
 
 
 val PreviewDevice.Resolution.size: Size
-    get() = Size(width.toFloat(), height.toFloat())
+    get() = Size(width, height)
+
+val PreviewDevice.Resolution.intSize: IntSize
+    get() = IntSize(width.toInt(), height.toInt())

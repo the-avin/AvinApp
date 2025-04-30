@@ -29,10 +29,10 @@ import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
-import com.avin.avinapp.preview.state.rememberRealtimeRenderState
-import com.avin.avinapp.preview.state.rememberSnapshotRenderState
-import com.avin.avinapp.preview.widget.RealtimePreview
-import com.avin.avinapp.preview.widgets.SnapshotPreview
+import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
+import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
+import com.avin.avinapp.preview.realtime.widget.RealtimePreview
+import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize

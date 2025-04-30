@@ -1,4 +1,4 @@
-package com.avin.avinapp.preview.utils
+package com.avin.avinapp.preview.snapshot.utils
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -8,10 +8,13 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
+import com.avin.avinapp.preview.data.models.formattedText
+import com.avin.avinapp.preview.utils.calculateScale
 
 internal fun DrawScope.drawComponentHighlight(
     component: RenderedComponentInfo,
@@ -40,7 +43,8 @@ internal fun DrawScope.drawComponentHighlightInfo(
     style: TextStyle = TextStyle(fontSize = 12.sp, color = Color.White),
     color: Color = Color.Red,
     horizontalPadding: Float = 8f,
-    verticalPadding: Float = 4f
+    verticalPadding: Float = 4f,
+    strokeWidth: Dp = 2.dp
 ) {
     val inverseScale = calculateScale(deviceSize, imageSize)
 
@@ -49,11 +53,12 @@ internal fun DrawScope.drawComponentHighlightInfo(
         y = component.position.y * inverseScale.y
     )
 
-    val result = textMeasurer.measure(text = component.id, style = style)
+    val result = textMeasurer.measure(text = component.formattedText, style = style)
     val textSize = result.size.toSize()
 
     val textTopLeft = Offset(
-        x = highlightTopLeft.x + (component.size.width * inverseScale.x) - textSize.width - horizontalPadding,
+        x = highlightTopLeft.x + (component.size.width * inverseScale.x) - textSize.width - horizontalPadding
+                + strokeWidth.toPx().div(2),
         y = highlightTopLeft.y - textSize.height - verticalPadding
     )
 

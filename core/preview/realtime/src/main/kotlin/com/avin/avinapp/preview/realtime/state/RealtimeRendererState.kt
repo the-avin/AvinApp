@@ -1,4 +1,4 @@
-package com.avin.avinapp.preview.state
+package com.avin.avinapp.preview.realtime.state
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,10 +37,6 @@ class RealtimeRendererState(
                 }
             }
         }
-    }
-
-    fun invalidate() {
-
     }
 }
 
