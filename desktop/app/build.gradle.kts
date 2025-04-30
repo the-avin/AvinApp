@@ -46,18 +46,28 @@ dependencies {
 }
 
 val nameSpace = "com.avin.avinapp"
+val resourcesFolder = "src/main/resources"
 
 compose.desktop {
     application {
         mainClass = "${nameSpace}.MainKt"
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = ProjectInfo.APP_NAME
             packageVersion = ProjectInfo.VERSION
 
-            macOS { iconFile.set(project.file("icon.png")) }
-            windows { iconFile.set(project.file("icon.png")) }
-            linux { iconFile.set(project.file("icon.png")) }
+            nativeDistributions {
+                macOS {
+                    iconFile.set(project.file("${resourcesFolder}/icon.icns"))
+                }
+                windows {
+                    iconFile.set(project.file("${resourcesFolder}/icon.ico"))
+                }
+                linux {
+                    iconFile.set(project.file("${resourcesFolder}/icon.png"))
+                }
+            }
 
             // For title bar theme
             jvmArgs(
