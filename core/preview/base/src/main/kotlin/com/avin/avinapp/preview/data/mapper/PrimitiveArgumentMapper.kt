@@ -4,10 +4,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avin.avinapp.data.models.widget.ArgumentType
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.widget.ComposableDescriptorReflection
 import org.jetbrains.jewel.ui.util.fromRGBAHexStringOrNull
 
-fun ComposableDescriptor.Argument.ArgumentValue.Primitive.toRuntimeValue(
+fun ComposableDescriptorReflection.Argument.ArgumentValue.Primitive.toRuntimeValue(
     type: ArgumentType
 ): Any? {
     return when (type) {

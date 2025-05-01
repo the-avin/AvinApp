@@ -15,7 +15,11 @@ import kotlinx.serialization.Serializable
  */
 @Immutable
 @Serializable
-data class ComposableDescriptor(
+@Deprecated(
+    message = "ComposableDescriptorReflection is deprecated. Use ComposableDescriptor instead for better type safety, performance.",
+    replaceWith = ReplaceWith("ComposableDescriptor")
+)
+data class ComposableDescriptorReflection(
     val targetClass: String,
     val functionName: String,
     val arguments: List<Argument>,
@@ -56,7 +60,7 @@ data class ComposableDescriptor(
 
             @Serializable
             data class Composable(
-                val descriptor: ComposableDescriptor? = null,
+                val descriptor: ComposableDescriptorReflection? = null,
                 val argumentSize: Int
             ) : ArgumentValue
 
@@ -69,55 +73,55 @@ data class ComposableDescriptor(
     }
 }
 
-fun ComposableDescriptor.Argument.ArgumentValue.asPrimitive() =
-    this as ComposableDescriptor.Argument.ArgumentValue.Primitive
+fun ComposableDescriptorReflection.Argument.ArgumentValue.asPrimitive() =
+    this as ComposableDescriptorReflection.Argument.ArgumentValue.Primitive
 
-val buttonDescriptor = ComposableDescriptor(
+val buttonDescriptor = ComposableDescriptorReflection(
     targetClass = "androidx.compose.material3.ButtonKt",
     functionName = "Button",
     supportsChildren = true,
     arguments = listOf(
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "onClick",
             type = ArgumentType.OTHER,
             isEditable = true,
             nullable = false,
-            arguments = ComposableDescriptor.Argument.ArgumentValue.Lambda()
+            arguments = ComposableDescriptorReflection.Argument.ArgumentValue.Lambda()
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "modifier",
             type = ArgumentType.OTHER,
             isEditable = true,
             nullable = false,
-            arguments = ComposableDescriptor.Argument.ArgumentValue.Modifier,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Modifier
+            arguments = ComposableDescriptorReflection.Argument.ArgumentValue.Modifier,
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Modifier
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "enabled",
             type = ArgumentType.BOOLEAN,
             isEditable = true,
             nullable = false,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Primitive("true")
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Primitive("true")
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "shape",
             type = ArgumentType.OTHER,
             className = "androidx.compose.foundation.shape.Shape",
             isEditable = true,
             nullable = false,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Variable(
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Variable(
                 targetClass = "androidx.compose.material3.ButtonDefaults",
                 variableName = "shape",
             )
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "colors",
             type = ArgumentType.OTHER,
             className = "androidx.compose.material3.ButtonColors",
             isEditable = true,
             nullable = false,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Composable(
-                descriptor = ComposableDescriptor(
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Composable(
+                descriptor = ComposableDescriptorReflection(
                     targetClass = "androidx.compose.material3.ButtonDefaults",
                     functionName = "buttonColors",
                     arguments = emptyList(),
@@ -125,14 +129,14 @@ val buttonDescriptor = ComposableDescriptor(
                 argumentSize = 0
             )
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "elevation",
             type = ArgumentType.OTHER,
             className = "androidx.compose.material3.ButtonElevation",
             isEditable = true,
             nullable = true,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Composable(
-                descriptor = ComposableDescriptor(
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Composable(
+                descriptor = ComposableDescriptorReflection(
                     targetClass = "androidx.compose.material3.ButtonDefaults",
                     functionName = "buttonElevation",
                     arguments = emptyList(),
@@ -140,39 +144,39 @@ val buttonDescriptor = ComposableDescriptor(
                 argumentSize = 3
             )
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "border",
             type = ArgumentType.OTHER,
             className = "androidx.compose.foundation.BorderStroke",
             isEditable = true,
             nullable = true,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Primitive(null)
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Primitive(null)
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "contentPadding",
             type = ArgumentType.OTHER,
             className = "androidx.compose.foundation.layout.PaddingValues",
             isEditable = true,
             nullable = false,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Variable(
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Variable(
                 targetClass = "androidx.compose.material3.ButtonDefaults",
                 variableName = "ContentPadding",
             )
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "interactionSource",
             type = ArgumentType.OTHER,
             className = "androidx.compose.foundation.interaction.MutableInteractionSource",
             isEditable = true,
             nullable = true,
-            defaultValue = ComposableDescriptor.Argument.ArgumentValue.Primitive(null)
+            defaultValue = ComposableDescriptorReflection.Argument.ArgumentValue.Primitive(null)
         ),
-        ComposableDescriptor.Argument(
+        ComposableDescriptorReflection.Argument(
             name = "content",
             type = ArgumentType.OTHER,
             isEditable = true,
             nullable = false,
-            arguments = ComposableDescriptor.Argument.ArgumentValue.Composable(
+            arguments = ComposableDescriptorReflection.Argument.ArgumentValue.Composable(
                 argumentSize = 0
             )
         )

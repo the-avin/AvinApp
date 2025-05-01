@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composer
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.widget.ComposableDescriptorReflection
 import com.avin.avinapp.logger.AppLogger
 import com.avin.avinapp.preview.collector.trackRender
 import com.avin.avinapp.preview.data.mapper.toRuntimeValue
@@ -23,7 +23,7 @@ class InvokeComposableServiceImpl : InvokeComposableService {
 
 
     @Composable
-    override fun invoke(id: String, composer: Composer, descriptor: ComposableDescriptor) {
+    override fun invoke(id: String, composer: Composer, descriptor: ComposableDescriptorReflection) {
         val method = findComposeMethod(
             targetClass = descriptor.targetClass,
             functionName = descriptor.functionName,
@@ -69,7 +69,7 @@ class InvokeComposableServiceImpl : InvokeComposableService {
     override fun invokeCaching(
         id: String,
         composer: Composer,
-        descriptor: ComposableDescriptor,
+        descriptor: ComposableDescriptorReflection,
     ) {
         runCatching {
             invoke(id, composer, descriptor)
@@ -81,7 +81,7 @@ class InvokeComposableServiceImpl : InvokeComposableService {
 
     @Composable
     private fun processArguments(
-        arguments: List<ComposableDescriptor.Argument>,
+        arguments: List<ComposableDescriptorReflection.Argument>,
         composer: Composer
     ): List<Any?> {
         return arguments.map { argument ->
@@ -101,17 +101,17 @@ class InvokeComposableServiceImpl : InvokeComposableService {
 
     @Composable
     private fun processArgumentValue(
-        argument: ComposableDescriptor.Argument,
-        argumentValue: ComposableDescriptor.Argument.ArgumentValue,
+        argument: ComposableDescriptorReflection.Argument,
+        argumentValue: ComposableDescriptorReflection.Argument.ArgumentValue,
         composer: Composer
     ): Any? {
         println(argument.name)
         return when (argumentValue) {
-            is ComposableDescriptor.Argument.ArgumentValue.Primitive -> {
+            is ComposableDescriptorReflection.Argument.ArgumentValue.Primitive -> {
                 argumentValue.toRuntimeValue(argument.type)
             }
 
-            is ComposableDescriptor.Argument.ArgumentValue.Composable -> {
+            is ComposableDescriptorReflection.Argument.ArgumentValue.Composable -> {
                 if (argumentValue.descriptor == null) return {} as (@Composable RowScope.() -> Unit)
                 getDefaultValueForMethod(
                     className = argumentValue.descriptor!!.targetClass,
@@ -121,12 +121,12 @@ class InvokeComposableServiceImpl : InvokeComposableService {
                 )
             }
 
-            is ComposableDescriptor.Argument.ArgumentValue.Modifier -> Modifier
-            is ComposableDescriptor.Argument.ArgumentValue.Lambda -> {
+            is ComposableDescriptorReflection.Argument.ArgumentValue.Modifier -> Modifier
+            is ComposableDescriptorReflection.Argument.ArgumentValue.Lambda -> {
                 {} as () -> Unit
             }
 
-            is ComposableDescriptor.Argument.ArgumentValue.Variable -> {
+            is ComposableDescriptorReflection.Argument.ArgumentValue.Variable -> {
                 findVariable(
                     targetClass = argumentValue.targetClass,
                     variableName = argumentValue.variableName,
