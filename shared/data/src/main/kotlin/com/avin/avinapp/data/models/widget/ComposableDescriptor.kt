@@ -2,6 +2,7 @@ package com.avin.avinapp.data.models.widget
 
 import androidx.compose.runtime.Immutable
 import com.avin.avinapp.data.domain.parameter.ParameterType
+import com.avin.avinapp.data.domain.parameter.ParameterValueSource
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,6 +20,13 @@ data class ComposableDescriptor(
         val name: String,
         val key: String,
         val type: ParameterType,
-        val defaultValue: String? = null
-    )
+        val defaultValue: ParameterValue? = null
+    ) {
+        @Serializable
+        @Immutable
+        data class ParameterValue(
+            val source: ParameterValueSource,
+            val value: String
+        )
+    }
 }

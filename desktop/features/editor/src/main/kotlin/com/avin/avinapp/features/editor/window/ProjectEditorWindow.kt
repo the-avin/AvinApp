@@ -25,10 +25,12 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.device.PreviewDevice
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
+import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
 import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.realtime.widget.RealtimePreview
@@ -36,6 +38,7 @@ import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
@@ -55,7 +58,6 @@ fun ProjectEditorWindow(
     onOpenSettings: () -> Unit,
     onCloseRequest: () -> Unit,
 ) {
-    var count by remember { mutableStateOf(1) }
     val project by component.project.collectAsState()
     val projectName = project?.name.orEmpty()
     val recentProjects by component.recentProjects.collectAsState()
@@ -64,8 +66,14 @@ fun ProjectEditorWindow(
     val collector = rememberComponentRenderCollector()
     val rendererState = rememberSnapshotRenderState(
         devices = devices,
-        collector = collector
+        collector = collector,
     )
+    val holder = remember {
+        val descriptor = ComposableDescriptor("material3.text", emptyList(), false)
+        ComposableStateHolder(descriptor).apply {
+            runBlocking { updateParameter("label", "Test") }
+        }
+    }
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
         title = projectName,
@@ -106,11 +114,8 @@ fun ProjectEditorWindow(
                                 modifier = Modifier.fillMaxHeight(.9f)
                             )
                             DefaultButton(onClick = {
-                                count++
                                 rendererState.renderPreview(
-                                    JsonObject(
-                                        mapOf("type" to JsonPrimitive(count))
-                                    )
+                                    holder
                                 )
                             }) {
                                 Text("Render")

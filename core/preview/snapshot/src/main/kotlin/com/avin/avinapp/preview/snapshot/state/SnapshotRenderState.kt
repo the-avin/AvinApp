@@ -6,6 +6,9 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.logger.AppLogger
+import com.avin.avinapp.preview.holder.ComposableStateHolder
+import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
+import com.avin.avinapp.preview.registry.ComposableRegistry
 import com.avin.avinapp.preview.renderer.ComposableRenderer
 import com.avin.avinapp.preview.renderer.rememberComposableRenderer
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +16,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.json.JsonObject
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.system.measureTimeMillis
 
@@ -31,7 +33,7 @@ class SnapshotRenderState(
         private set
 
     private val mutex = Mutex()
-    private var lastObject: JsonObject? = null
+    private var lastHolder: ComposableStateHolder? = null
 
     var isRendering by mutableStateOf(false)
         private set
@@ -59,7 +61,7 @@ class SnapshotRenderState(
                     isRendering = true
                     try {
                         val renderTime = measureTimeMillis {
-                            val newImage = renderer.renderImage(lastObject!!, currentDevice!!)
+                            val newImage = renderer.renderImage(lastHolder!!, currentDevice!!)
                             currentImage = newImage
                         }
                         AppLogger.info(
@@ -76,8 +78,8 @@ class SnapshotRenderState(
         }
     }
 
-    fun renderPreview(json: JsonObject) {
-        lastObject = json
+    fun renderPreview(holder: ComposableStateHolder) {
+        lastHolder = holder
         if (currentDevice == null) return
         invalidate()
     }
@@ -93,7 +95,8 @@ fun rememberSnapshotRenderState(
     devices: List<PreviewDevice>,
     collector: ComponentRenderCollector,
     initialDevice: PreviewDevice? = devices.firstOrNull(),
-    renderer: ComposableRenderer = rememberComposableRenderer(collector)
+    registry: ComposableRegistry = rememberDefaultComposableRegistry(),
+    renderer: ComposableRenderer = rememberComposableRenderer(collector, registry)
 ): SnapshotRenderState {
     val scope = rememberCoroutineScope()
     val state = remember {

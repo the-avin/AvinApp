@@ -2,9 +2,7 @@ package com.avin.avinapp.preview.renderer
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,19 +17,17 @@ import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.device.intSize
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.collector.NewLocalComponentRenderCollector
-import com.avin.avinapp.preview.collector.trackRender
+import com.avin.avinapp.preview.holder.ComposableStateHolder
+import com.avin.avinapp.preview.registry.ComposableRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonPrimitive
 
 
 class ComposableRendererImpl(
     private val collector: ComponentRenderCollector,
+    private val registry: ComposableRegistry
 ) : ComposableRenderer {
-    override fun renderComposable(json: JsonObject): @Composable () -> Unit {
-        val count = json[ComposableRenderer.TYPE]?.jsonPrimitive?.contentOrNull?.toInt() ?: 1
+    override fun renderComposable(holder: ComposableStateHolder): @Composable (() -> Unit) {
         return {
             NewLocalComponentRenderCollector(collector) {
                 MaterialTheme {
@@ -39,9 +35,10 @@ class ComposableRendererImpl(
                         Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Button(onClick = {}, modifier = Modifier.trackRender("B1")) {
-                            Text("This is a test")
-                        }
+//                        Button(onClick = {}, modifier = Modifier.trackRender("B1")) {
+//                            Text("This is a test")
+//                        }
+                        registry.renderComposable(holder)
                     }
                 }
             }
@@ -49,11 +46,14 @@ class ComposableRendererImpl(
     }
 
     @OptIn(InternalComposeUiApi::class)
-    override suspend fun renderImage(json: JsonObject, device: PreviewDevice): ImageBitmap {
+    override suspend fun renderImage(
+        holder: ComposableStateHolder,
+        device: PreviewDevice
+    ): ImageBitmap {
         val bitmap: ImageBitmap
         getScene(device).apply {
             setContent {
-                renderComposable(json).invoke()
+                renderComposable(holder).invoke()
             }
             bitmap = render(device)
             close()
@@ -84,5 +84,5 @@ class ComposableRendererImpl(
 
 
 @Composable
-fun rememberComposableRenderer(collector: ComponentRenderCollector) =
-    remember { ComposableRendererImpl(collector) }
+fun rememberComposableRenderer(collector: ComponentRenderCollector, registry: ComposableRegistry) =
+    remember { ComposableRendererImpl(collector, registry) }

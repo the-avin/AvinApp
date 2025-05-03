@@ -11,17 +11,13 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // Coil
-    implementation(libs.coil.compose)
-
     // Material 3
     implementation(compose.material3)
 
     // Modules
     implementation(project(":core:theme"))
-    implementation(project(":core:preview:base"))
-    implementation(project(":core:preview:providers"))
     implementation(project(":shared:data"))
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:utils:app"))
+    implementation(project(":core:preview:base"))
 }

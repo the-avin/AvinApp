@@ -11,14 +11,8 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // Coil
-    implementation(libs.coil.compose)
-
     // Material 3
     implementation(compose.material3)
-
-    // Kotlin Reflect
-    implementation(libs.kotlin.reflect)
 
     // Modules
     implementation(project(":core:theme"))
