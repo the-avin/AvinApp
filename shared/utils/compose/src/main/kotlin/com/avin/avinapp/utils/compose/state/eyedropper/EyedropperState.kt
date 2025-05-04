@@ -10,6 +10,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.awt.MouseInfo
 import java.awt.Robot
+import java.awt.event.AWTEventListener
+import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
 
 
@@ -23,23 +25,45 @@ class EyedropperState(
     private val robot = Robot()
 
     private var onColorPicked: (Color) -> Unit = {}
+    private var onColorHovered: (Color) -> Unit = {}
+
+    private val toolkit by lazy {
+        java.awt.Toolkit.getDefaultToolkit()
+    }
+
+    private val awtEventListener by lazy {
+        AWTEventListener { event ->
+            when (event) {
+                is MouseEvent -> {
+                    val location = MouseInfo.getPointerInfo().location
+                    val awtColor = robot.getPixelColor(location.x, location.y)
+                    val color = Color(awtColor.red, awtColor.green, awtColor.blue)
+                    onColorHovered.invoke(color)
+
+                    if (event.id == MouseEvent.MOUSE_PRESSED) {
+                        stop()
+                        onColorPicked.invoke(color)
+                    }
+                }
+
+                is KeyEvent -> {
+                    if (event.keyCode == KeyEvent.VK_ESCAPE) {
+                        stop()
+                    }
+                }
+            }
+        }
+    }
 
     fun start() {
         job?.cancel()
 
         job = scope.launch {
             try {
-                java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(
-                    { event ->
-                        if (event is MouseEvent && event.id == MouseEvent.MOUSE_PRESSED) {
-                            val location = MouseInfo.getPointerInfo().location
-                            val awtColor = robot.getPixelColor(location.x, location.y)
-                            val color = Color(awtColor.red, awtColor.green, awtColor.blue)
-                            stop()
-                            onColorPicked(color)
-                        }
-                    },
-                    java.awt.AWTEvent.MOUSE_EVENT_MASK
+                // Add both mouse and keyboard event masks
+                toolkit.addAWTEventListener(
+                    awtEventListener,
+                    java.awt.AWTEvent.MOUSE_EVENT_MASK or java.awt.AWTEvent.KEY_EVENT_MASK
                 )
             } catch (_: Exception) {
                 stop()
@@ -51,11 +75,17 @@ class EyedropperState(
         onColorPicked = action
     }
 
+    fun onColorHovered(action: (Color) -> Unit) {
+        onColorHovered = action
+    }
+
     fun stop() {
         job?.cancel()
         job = null
+        toolkit.removeAWTEventListener(awtEventListener)
     }
 }
+
 
 @Composable
 fun rememberEyedropperState(): EyedropperState {
