@@ -2,6 +2,7 @@
 
 package com.avin.avinapp.features.editor.window
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,17 +32,19 @@ import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
-import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.realtime.widget.RealtimePreview
+import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
+import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.ToggleableIconButton
+import org.jetbrains.jewel.window.defaultTitleBarStyle
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -151,7 +154,10 @@ fun Sidebar(
     onPageChanged: (EditorPages) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxHeight().padding(8.dp),
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(JewelTheme.defaultTitleBarStyle.colors.background)
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
