@@ -3,30 +3,48 @@ package com.avin.avinapp.preview.holder
 import androidx.compose.runtime.Immutable
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.preview.extensions.typedDefaultValue
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 @Immutable
 class ComposableStateHolder(
     val descriptor: ComposableDescriptor
 ) {
-    private val mutex = Mutex()
-    private val _parameters = mutableMapOf<String, Any?>()
-    val parameters: Map<String, Any?> get() = _parameters.toMap()
+    private val parameterMap = mutableMapOf<String, Any?>()
+    private val childrenMap = mutableMapOf<String, MutableList<ComposableStateHolder>>()
+
+    val parameters: Map<String, Any?>
+        get() = synchronized(parameterMap) { parameterMap.toMap() }
+
+    val children: Map<String, List<ComposableStateHolder>>
+        get() = synchronized(childrenMap) {
+            childrenMap.mapValues { it.value.toList() }
+        }
 
     init {
-        initializeParameters()
+        initializeDefaultParameters()
     }
 
-    private fun initializeParameters() {
-        descriptor.parameters.forEach { parameter ->
-            _parameters[parameter.key] = parameter.typedDefaultValue
+    private fun initializeDefaultParameters() {
+        descriptor.parameters.forEach { param ->
+            parameterMap[param.key] = param.typedDefaultValue
         }
     }
 
-    suspend fun updateParameter(key: String, value: Any?) {
-        mutex.withLock {
-            _parameters[key] = value
+    fun updateParameter(key: String, value: Any?) {
+        synchronized(parameterMap) {
+            parameterMap[key] = value
         }
+    }
+
+    fun addChild(child: ComposableStateHolder, slot: String = PRIMARY_SLOT) {
+        synchronized(childrenMap) {
+            childrenMap.getOrPut(slot) { mutableListOf() }.add(child)
+        }
+    }
+
+    fun getPrimaryChildren(): List<ComposableStateHolder> =
+        synchronized(childrenMap) { childrenMap[PRIMARY_SLOT] ?: emptyList() }
+
+    companion object {
+        const val PRIMARY_SLOT = "content"
     }
 }
