@@ -3,11 +3,14 @@ package com.avin.avinapp.preview.holder
 import androidx.compose.runtime.Immutable
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.preview.extensions.typedDefaultValue
+import com.avin.avinapp.preview.utils.IdGenerator
 
 @Immutable
 class ComposableStateHolder(
-    val descriptor: ComposableDescriptor
+    val descriptor: ComposableDescriptor,
 ) {
+    val composableId = IdGenerator.nextId(descriptor.descriptorKey)
+
     private val parameterMap = mutableMapOf<String, Any?>()
     private val childrenMap = mutableMapOf<String, MutableList<ComposableStateHolder>>()
 
@@ -36,13 +39,15 @@ class ComposableStateHolder(
     }
 
     fun addChild(child: ComposableStateHolder, slot: String = PRIMARY_SLOT) {
+        require(descriptor.hasChildren) {
+            "This component does not support adding children."
+        }
         synchronized(childrenMap) {
             childrenMap.getOrPut(slot) { mutableListOf() }.add(child)
         }
     }
 
-    fun getPrimaryChildren(): List<ComposableStateHolder> =
-        synchronized(childrenMap) { childrenMap[PRIMARY_SLOT] ?: emptyList() }
+    fun getPrimaryChildren() = children[PRIMARY_SLOT] ?: emptyList()
 
     companion object {
         const val PRIMARY_SLOT = "content"

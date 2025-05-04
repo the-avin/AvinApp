@@ -1,5 +1,6 @@
 package com.avin.avinapp.preview.collector
 
+import androidx.compose.runtime.CompositionLocal
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -43,8 +44,8 @@ private class TrackRenderNode(
     LayoutAwareModifierNode,
     CompositionLocalConsumerModifierNode {
     override fun onPlaced(coordinates: LayoutCoordinates) {
-        val collector = currentValueOf(LocalComponentRenderCollector)
-        collector.updateComponent(
+        val collector = LocalComponentRenderCollector.currentOrNull()
+        collector?.updateComponent(
             coordinates.getComponentInfo(id)
         )
     }
@@ -57,6 +58,10 @@ private class TrackRenderNode(
         return layout(placeable.width, placeable.height) {
             placeable.place(0, 0)
         }
+    }
+
+    private fun CompositionLocal<ComponentRenderCollector>.currentOrNull(): ComponentRenderCollector? {
+        return runCatching { currentValueOf(this) }.getOrNull()
     }
 }
 

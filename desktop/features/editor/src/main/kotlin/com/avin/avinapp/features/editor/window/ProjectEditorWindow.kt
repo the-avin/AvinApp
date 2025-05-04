@@ -65,7 +65,7 @@ fun ProjectEditorWindow(
         collector = collector,
     )
     val holder = remember {
-        val buttonDescriptor = ComposableDescriptor("material3.button", emptyList(), false)
+        val buttonDescriptor = ComposableDescriptor("material3.button", emptyList(), true)
         val textDescriptor = ComposableDescriptor("material3.text", emptyList(), false)
         ComposableStateHolder(buttonDescriptor).apply {
             addChild(

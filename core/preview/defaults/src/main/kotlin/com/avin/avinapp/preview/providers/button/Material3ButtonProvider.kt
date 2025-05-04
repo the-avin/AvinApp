@@ -2,6 +2,8 @@ package com.avin.avinapp.preview.providers.button
 
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.avin.avinapp.preview.collector.trackRender
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.provider.ComposableProvider
 import com.avin.avinapp.preview.registry.LocalComposableRegistry
@@ -12,7 +14,10 @@ internal class Material3ButtonProvider : ComposableProvider {
 
     @Composable
     override fun provideContent(holder: ComposableStateHolder) {
-        Button(onClick = {}) {
+        Button(
+            onClick = {},
+            modifier = Modifier.trackRender(holder.composableId)
+        ) {
             renderPrimaryContent(holder)
         }
     }
