@@ -6,15 +6,23 @@ import androidx.compose.runtime.remember
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 
 class ComponentRenderCollector {
-    private val _components = mutableStateListOf<RenderedComponentInfo>()
-    val components: List<RenderedComponentInfo> get() = _components
+    @Volatile
+    private var _components: List<RenderedComponentInfo> = emptyList()
+
+    val components: List<RenderedComponentInfo>
+        get() = _components
 
     fun updateComponent(info: RenderedComponentInfo) {
-        _components.removeAll { it.id == info.id }
-        _components.add(info)
+        synchronized(this) {
+            _components = _components.filterNot { it.id == info.id } + info
+        }
     }
 
-    fun clear() = _components.clear()
+    fun clear() {
+        synchronized(this) {
+            _components = emptyList()
+        }
+    }
 }
 
 
