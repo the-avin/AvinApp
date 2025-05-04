@@ -20,7 +20,7 @@ dependencies {
     // Modules
     implementation(project(":core:theme"))
     implementation(project(":core:preview:base"))
-    implementation(project(":core:preview:providers"))
+    implementation(project(":core:preview:defaults"))
     implementation(project(":shared:data"))
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:utils:app"))

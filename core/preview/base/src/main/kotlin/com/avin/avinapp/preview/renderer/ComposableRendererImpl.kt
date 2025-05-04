@@ -19,6 +19,7 @@ import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.collector.NewLocalComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.registry.ComposableRegistry
+import com.avin.avinapp.preview.registry.ProvideComposableRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -30,15 +31,16 @@ class ComposableRendererImpl(
     override fun renderComposable(holder: ComposableStateHolder): @Composable (() -> Unit) {
         return {
             NewLocalComponentRenderCollector(collector) {
-                MaterialTheme {
-                    Box(
-                        Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-//                        Button(onClick = {}, modifier = Modifier.trackRender("B1")) {
-//                            Text("This is a test")
-//                        }
-                        registry.renderComposable(holder)
+                ProvideComposableRegistry(
+                    registry = registry
+                ) {
+                    MaterialTheme {
+                        Box(
+                            Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            registry.renderComposable(holder)
+                        }
                     }
                 }
             }
