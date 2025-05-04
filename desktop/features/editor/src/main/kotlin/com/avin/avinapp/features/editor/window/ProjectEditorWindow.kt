@@ -11,11 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,14 +37,10 @@ import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.component.ToggleableIconButton
 
 @OptIn(InternalComposeUiApi::class)
@@ -130,7 +125,7 @@ fun ProjectEditorWindow(
                     }
 
                     else -> {
-                        RealtimePreviewSample(rendererState.currentDevice!!)
+                        RealtimePreviewSample(rendererState.currentDevice!!, holder)
                     }
                 }
             }
@@ -139,10 +134,13 @@ fun ProjectEditorWindow(
 }
 
 @Composable
-fun RealtimePreviewSample(device: PreviewDevice) {
+fun RealtimePreviewSample(device: PreviewDevice, holder: ComposableStateHolder) {
     val rendererState = rememberRealtimeRenderState(
         device = device,
     )
+    LaunchedEffect(Unit) {
+        rendererState.render(holder)
+    }
     RealtimePreview(rendererState)
 }
 

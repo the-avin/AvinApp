@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.provider.ComposableProvider
 
-class Material3TextComposableProvider : ComposableProvider {
+internal class Material3TextComposableProvider : ComposableProvider {
     override val descriptorKey: String
         get() = "material3.text"
 

@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
 
 
 class ComposableRendererImpl(
-    private val collector: ComponentRenderCollector,
+    private val collector: ComponentRenderCollector?,
     private val registry: ComposableRegistry
 ) : ComposableRenderer {
     override fun renderComposable(holder: ComposableStateHolder): @Composable (() -> Unit) {
@@ -86,5 +86,5 @@ class ComposableRendererImpl(
 
 
 @Composable
-fun rememberComposableRenderer(collector: ComponentRenderCollector, registry: ComposableRegistry) =
+fun rememberComposableRenderer(collector: ComponentRenderCollector?, registry: ComposableRegistry) =
     remember { ComposableRendererImpl(collector, registry) }

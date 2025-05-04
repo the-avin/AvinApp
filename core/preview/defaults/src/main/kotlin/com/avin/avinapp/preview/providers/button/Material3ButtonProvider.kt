@@ -6,7 +6,7 @@ import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.provider.ComposableProvider
 import com.avin.avinapp.preview.registry.LocalComposableRegistry
 
-class Material3ButtonProvider : ComposableProvider {
+internal class Material3ButtonProvider : ComposableProvider {
     override val descriptorKey: String
         get() = "material3.button"
 

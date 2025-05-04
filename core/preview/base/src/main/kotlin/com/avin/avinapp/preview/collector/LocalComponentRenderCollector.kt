@@ -10,11 +10,15 @@ val LocalComponentRenderCollector =
 
 @Composable
 internal fun NewLocalComponentRenderCollector(
-    collector: ComponentRenderCollector,
+    collector: ComponentRenderCollector?,
     content: @Composable () -> Unit
 ) {
-    CompositionLocalProvider(
-        LocalComponentRenderCollector provides collector,
-        content = content
-    )
+    if (collector == null) {
+        content.invoke()
+    } else {
+        CompositionLocalProvider(
+            LocalComponentRenderCollector provides collector,
+            content = content
+        )
+    }
 }
