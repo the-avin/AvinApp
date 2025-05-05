@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -29,6 +30,7 @@ import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
 import com.avin.avinapp.data.models.device.size
+import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
@@ -59,42 +61,44 @@ fun SnapshotPreviewImpl(
 ) {
     val currentDevice = state.currentDevice ?: return
     val imageSize = state.componentSize
+    val deviceSize = currentDevice.resolution.size
+    val aspectRatio = deviceSize.aspectRatio
+
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
+    val selectedComponent = state.selectedComponent
     val textMeasurer = rememberTextMeasurer()
 
     val mappedHoverPosition = remember(hoverPosition, currentDevice) {
-        hoverPosition?.let { mapPointerToDevice(it, imageSize, currentDevice.resolution.size) }
+        hoverPosition?.let { mapPointerToDevice(it, imageSize, deviceSize) }
     }
 
     val hoveredComponent by remember(mappedHoverPosition, collector.components) {
         derivedStateOf {
-            mappedHoverPosition?.let { pos ->
-                collector.components.findTopMostComponentByPosition(pos)
-            }
+            mappedHoverPosition?.let { collector.components.findTopMostComponentByPosition(it) }
         }
     }
 
     BoxWithConstraints(modifier = modifier) {
-        val width = maxHeight * currentDevice.resolution.size.aspectRatio
-        val deviceSize = currentDevice.resolution.size
+        val width = maxHeight * aspectRatio
 
         Box(
             modifier = Modifier
                 .width(width)
                 .fillMaxHeight()
                 .handlePointerEvents(
-                    onMove = { position -> hoverPosition = position },
-                    onExit = { hoverPosition = null }
+                    onMove = { hoverPosition = it },
+                    onExit = { hoverPosition = null },
+                    onClick = { clickPos ->
+                        val mapped = mapPointerToDevice(clickPos, imageSize, deviceSize)
+                        collector.components.findTopMostComponentByPosition(mapped)
+                            ?.let(state::selectComponent)
+                    }
                 )
-                .thenIf(hoveredComponent != null) {
+                .thenIf(hoveredComponent.isNotNull()) {
                     pointerHoverIcon(PointerIcon.Hand)
                 }
-                .drawHighlight(
-                    component = hoveredComponent,
-                    imageSize = imageSize,
-                    deviceSize = deviceSize,
-                    textMeasurer = textMeasurer
-                ),
+                .drawHighlight(hoveredComponent, imageSize, deviceSize, textMeasurer)
+                .drawHighlight(selectedComponent, imageSize, deviceSize),
             contentAlignment = Alignment.Center
         ) {
             RenderImage(
@@ -125,14 +129,21 @@ fun Modifier.drawHighlight(
     component: RenderedComponentInfo?,
     imageSize: Size,
     deviceSize: Size,
-    textMeasurer: TextMeasurer? = null
+    textMeasurer: TextMeasurer? = null,
+    color: Color = Color.Red
 ): Modifier = this.drawWithContent {
     drawContent()
     component?.let { componentInfo ->
         textMeasurer?.let {
-            drawComponentGuidesWithDistances(componentInfo, imageSize, deviceSize, it)
-            drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it)
+            drawComponentGuidesWithDistances(
+                componentInfo,
+                imageSize,
+                deviceSize,
+                it,
+                color = color
+            )
+            drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it, color = color)
         }
-        drawComponentHighlight(componentInfo, imageSize, deviceSize)
+        drawComponentHighlight(componentInfo, imageSize, deviceSize, color = color)
     }
 }

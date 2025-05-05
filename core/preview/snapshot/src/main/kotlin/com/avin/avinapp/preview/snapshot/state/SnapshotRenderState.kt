@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.logger.AppLogger
+import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
 import com.avin.avinapp.preview.registry.ComposableRegistry
@@ -34,6 +35,9 @@ class SnapshotRenderState(
 
     private val mutex = Mutex()
     private var lastHolder: ComposableStateHolder? = null
+
+    var selectedComponent by mutableStateOf<RenderedComponentInfo?>(null)
+        private set
 
     var isRendering by mutableStateOf(false)
         private set
@@ -84,6 +88,9 @@ class SnapshotRenderState(
         invalidate()
     }
 
+    fun selectComponent(component: RenderedComponentInfo) {
+        selectedComponent = component
+    }
 
     companion object {
         private const val LOG_TAG = "PreviewState"
