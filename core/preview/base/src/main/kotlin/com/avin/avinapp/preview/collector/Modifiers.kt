@@ -19,19 +19,21 @@ import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 
 
 private data class TrackRenderElement(
-    val id: String
+    val id: String,
+    val descriptorKey: String
 ) : ModifierNodeElement<TrackRenderNode>() {
 
-    override fun create(): TrackRenderNode = TrackRenderNode(id)
+    override fun create(): TrackRenderNode = TrackRenderNode(id, descriptorKey)
 
     override fun update(node: TrackRenderNode) {
         node.id = id
+        node.descriptorKey = descriptorKey
     }
 
     override fun hashCode(): Int = id.hashCode()
 
     override fun equals(other: Any?): Boolean =
-        other is TrackRenderElement && other.id == id
+        other is TrackRenderElement && other.id == id && other.descriptorKey == descriptorKey
 
     override fun InspectorInfo.inspectableProperties() {
         name = "TrackRender"
@@ -39,14 +41,15 @@ private data class TrackRenderElement(
 }
 
 private class TrackRenderNode(
-    var id: String
+    var id: String,
+    var descriptorKey: String
 ) : Modifier.Node(), LayoutModifierNode,
     LayoutAwareModifierNode,
     CompositionLocalConsumerModifierNode {
     override fun onPlaced(coordinates: LayoutCoordinates) {
         val collector = LocalComponentRenderCollector.currentOrNull()
         collector?.updateComponent(
-            coordinates.getComponentInfo(id)
+            coordinates.getComponentInfo(id, descriptorKey)
         )
     }
 
@@ -65,13 +68,15 @@ private class TrackRenderNode(
     }
 }
 
-private fun LayoutCoordinates.getComponentInfo(id: String) = RenderedComponentInfo(
-    id = id,
-    size = this.size.toSize(),
-    position = this.localToRoot(Offset.Zero)
-)
+private fun LayoutCoordinates.getComponentInfo(id: String, descriptorKey: String) =
+    RenderedComponentInfo(
+        id = id,
+        descriptorKey = descriptorKey,
+        size = this.size.toSize(),
+        position = this.localToRoot(Offset.Zero)
+    )
 
 
-fun Modifier.trackRender(id: String): Modifier = this.then(
-    TrackRenderElement(id)
+fun Modifier.trackRender(id: String, descriptorKey: String): Modifier = this.then(
+    TrackRenderElement(id, descriptorKey)
 )

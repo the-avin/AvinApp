@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.preview.registry.ComposableRegistry
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.styles.panelTitleTextStyle
@@ -35,7 +36,7 @@ private fun coerceWidth(width: Dp) = width.coerceIn(200.dp, 500.dp)
 
 @Composable
 fun PropertiesBar(
-    renderState: SnapshotRenderState
+    renderState: SnapshotRenderState,
 ) {
     var width by remember { mutableStateOf(300.dp) }
     val scrollState = rememberScrollState()
@@ -74,5 +75,6 @@ private fun PropertiesBarImpl(renderState: SnapshotRenderState) {
             dynamicStringRes(Resource.string.properties),
             style = JewelTheme.panelTitleTextStyle
         )
+        Text(renderState.selectedComponent!!.descriptorKey)
     }
 }

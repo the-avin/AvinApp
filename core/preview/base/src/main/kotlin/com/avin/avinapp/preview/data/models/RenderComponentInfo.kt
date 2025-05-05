@@ -4,10 +4,12 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 
 @Immutable
 data class RenderedComponentInfo(
     val id: String,
+    val descriptorKey: String,
     val position: Offset = Offset.Zero,
     val size: Size = Size.Zero
 )

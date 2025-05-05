@@ -16,7 +16,7 @@ internal class Material3ButtonProvider : ComposableProvider {
     override fun provideContent(holder: ComposableStateHolder) {
         Button(
             onClick = {},
-            modifier = Modifier.trackRender(holder.composableId)
+            modifier = Modifier.trackRender(holder.composableId, descriptorKey)
         ) {
             renderPrimaryContent(holder)
         }

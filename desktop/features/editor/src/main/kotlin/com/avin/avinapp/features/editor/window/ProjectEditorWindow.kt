@@ -22,9 +22,9 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
-import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
+import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
 import com.avin.avinapp.features.editor.widgets.properties.PropertiesBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder

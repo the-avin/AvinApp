@@ -30,19 +30,20 @@ class SnapshotRenderState(
     var currentDevice by mutableStateOf(initialDevice)
         private set
 
-    internal var currentImage by mutableStateOf<ImageBitmap?>(null)
-        private set
-
-    private val mutex = Mutex()
-    private var lastHolder: ComposableStateHolder? = null
-
     var selectedComponent by mutableStateOf<RenderedComponentInfo?>(null)
         private set
 
     var isRendering by mutableStateOf(false)
         private set
 
+    private var lastHolder: ComposableStateHolder? = null
+
+    internal var currentImage by mutableStateOf<ImageBitmap?>(null)
+        private set
+
     internal var componentSize = Size.Zero
+
+    private val mutex = Mutex()
 
     @Volatile
     private var renderJob: Job? = null
@@ -52,12 +53,28 @@ class SnapshotRenderState(
     }
 
     fun selectDevice(device: PreviewDevice) {
-        if (device == currentDevice) return
-        currentDevice = device
-        invalidate()
+        if (device != currentDevice) {
+            currentDevice = device
+            invalidate()
+        }
     }
 
-    fun invalidate() {
+    fun renderPreview(holder: ComposableStateHolder) {
+        lastHolder = holder
+        if (currentDevice != null) {
+            invalidate()
+        }
+    }
+
+    fun selectComponent(component: RenderedComponentInfo) {
+        selectedComponent = component
+    }
+
+    fun clearSelectedComponents() {
+        selectedComponent = null
+    }
+
+    private fun invalidate() {
         scope.launch {
             mutex.withLock {
                 renderJob?.cancel()
@@ -65,8 +82,11 @@ class SnapshotRenderState(
                     isRendering = true
                     try {
                         val renderTime = measureTimeMillis {
-                            val newImage = renderer.renderImage(lastHolder!!, currentDevice!!)
-                            currentImage = newImage
+                            val image = renderer.renderImage(
+                                lastHolder ?: return@measureTimeMillis,
+                                currentDevice ?: return@measureTimeMillis
+                            )
+                            currentImage = image
                         }
                         AppLogger.info(
                             LOG_TAG,
@@ -80,20 +100,6 @@ class SnapshotRenderState(
                 }
             }
         }
-    }
-
-    fun renderPreview(holder: ComposableStateHolder) {
-        lastHolder = holder
-        if (currentDevice == null) return
-        invalidate()
-    }
-
-    fun selectComponent(component: RenderedComponentInfo) {
-        selectedComponent = component
-    }
-
-    fun clearSelectedComponents() {
-        selectedComponent = null
     }
 
     companion object {
