@@ -25,10 +25,11 @@ fun DragHandler(
     orientation: Orientation,
     onDrag: (Dp) -> Unit,
     modifier: Modifier = Modifier,
+    reverseDirection : Boolean = false
 ) {
     val density = LocalDensity.current
     val reverseDirection =
-        LocalLayoutDirection.current == LayoutDirection.Rtl && orientation == Orientation.Horizontal
+        (LocalLayoutDirection.current == LayoutDirection.Rtl && orientation == Orientation.Horizontal) || reverseDirection
     Box(
         modifier = modifier.width(4.dp)
             .draggable(

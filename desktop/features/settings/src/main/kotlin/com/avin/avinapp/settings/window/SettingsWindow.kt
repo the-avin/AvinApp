@@ -59,9 +59,7 @@ fun SettingsWindow(
                 DragHandler(
                     orientation = Orientation.Horizontal,
                     onDrag = {
-                        val previewValue = sidebarWidth
                         sidebarWidth = coerceWidth(sidebarWidth + it)
-                        sidebarWidth - previewValue
                     },
                     modifier = Modifier.verticalPadding()
                 )

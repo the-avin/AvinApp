@@ -92,6 +92,10 @@ class SnapshotRenderState(
         selectedComponent = component
     }
 
+    fun clearSelectedComponents() {
+        selectedComponent = null
+    }
+
     companion object {
         private const val LOG_TAG = "PreviewState"
     }

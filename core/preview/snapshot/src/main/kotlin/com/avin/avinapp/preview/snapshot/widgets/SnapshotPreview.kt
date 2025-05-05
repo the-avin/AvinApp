@@ -1,11 +1,13 @@
 package com.avin.avinapp.preview.snapshot.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,10 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
@@ -26,11 +33,11 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.toSize
+import com.avin.avinapp.data.models.device.size
+import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
-import com.avin.avinapp.data.models.device.size
-import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
@@ -78,6 +85,12 @@ fun SnapshotPreviewImpl(
         }
     }
 
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        runCatching { focusRequester.requestFocus() }
+    }
+
     BoxWithConstraints(modifier = modifier) {
         val width = maxHeight * aspectRatio
 
@@ -85,13 +98,16 @@ fun SnapshotPreviewImpl(
             modifier = Modifier
                 .width(width)
                 .fillMaxHeight()
+                .focusRequester(focusRequester)
+                .focusable()
+                .onEscapeKeyPressed(state::clearSelectedComponents)
                 .handlePointerEvents(
                     onMove = { hoverPosition = it },
                     onExit = { hoverPosition = null },
                     onClick = { clickPos ->
                         val mapped = mapPointerToDevice(clickPos, imageSize, deviceSize)
                         collector.components.findTopMostComponentByPosition(mapped)
-                            ?.let(state::selectComponent)
+                            ?.let(state::selectComponent) ?: state.clearSelectedComponents()
                     }
                 )
                 .thenIf(hoveredComponent.isNotNull()) {
@@ -125,7 +141,7 @@ private fun RenderImage(bitmap: ImageBitmap?, onSizeChanged: (Size) -> Unit) {
 }
 
 
-fun Modifier.drawHighlight(
+private fun Modifier.drawHighlight(
     component: RenderedComponentInfo?,
     imageSize: Size,
     deviceSize: Size,
@@ -146,4 +162,13 @@ fun Modifier.drawHighlight(
         }
         drawComponentHighlight(componentInfo, imageSize, deviceSize, color = color)
     }
+}
+
+
+private fun Modifier.onEscapeKeyPressed(action: () -> Unit) = onPreviewKeyEvent { event ->
+    if (event.key.keyCode == Key.Escape.keyCode) {
+        action.invoke()
+        return@onPreviewKeyEvent true
+    }
+    false
 }

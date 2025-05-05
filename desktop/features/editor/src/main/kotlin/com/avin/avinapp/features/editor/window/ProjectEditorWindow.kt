@@ -2,15 +2,11 @@
 
 package com.avin.avinapp.features.editor.window
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,26 +22,23 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
-import com.avin.avinapp.features.editor.component.ProjectEditorComponent
+import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
+import com.avin.avinapp.features.editor.widgets.properties.PropertiesBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
 import com.avin.avinapp.preview.realtime.widget.RealtimePreview
 import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
-import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
-import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.ToggleableIconButton
-import org.jetbrains.jewel.window.defaultTitleBarStyle
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -110,7 +103,7 @@ fun ProjectEditorWindow(
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
 
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxHeight().weight(1f), contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -134,6 +127,7 @@ fun ProjectEditorWindow(
                     }
                 }
             }
+            PropertiesBar(rendererState)
         }
     }
 }
