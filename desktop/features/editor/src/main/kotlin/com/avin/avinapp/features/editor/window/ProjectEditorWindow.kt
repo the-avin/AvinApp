@@ -38,6 +38,7 @@ import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.icon.ColoredIcon
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
+import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
@@ -102,8 +103,9 @@ fun ProjectEditorWindow(
             onDeviceSelected = rendererState::selectDevice
         )
         Row(modifier = Modifier.fillMaxSize()) {
-            Sidebar(
+            VerticalNavigationBar(
                 currentPage = currentPage,
+                items = remember { EditorPages.navigationPages },
                 onPageChanged = component::changePage
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
@@ -145,30 +147,4 @@ fun RealtimePreviewSample(device: PreviewDevice, holder: ComposableStateHolder) 
         rendererState.render(holder)
     }
     RealtimePreview(rendererState)
-}
-
-
-@Composable
-fun Sidebar(
-    currentPage: EditorPages,
-    onPageChanged: (EditorPages) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(JewelTheme.defaultTitleBarStyle.colors.background)
-            .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        remember { EditorPages.pages }.forEach { page ->
-            ToggleableIconButton(
-                value = currentPage == page,
-                onValueChange = { onPageChanged.invoke(page) },
-                modifier = Modifier.size(28.dp)
-            ) {
-                ColoredIcon(page.icon, modifier = Modifier.size(18.dp))
-            }
-        }
-    }
 }

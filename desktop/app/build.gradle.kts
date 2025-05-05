@@ -47,6 +47,7 @@ dependencies {
 
 val nameSpace = "com.avin.avinapp"
 val resourcesFolder = "src/main/resources"
+val appName = "Avin"
 
 compose.desktop {
     application {
@@ -59,6 +60,7 @@ compose.desktop {
 
             nativeDistributions {
                 macOS {
+                    dockName = appName
                     iconFile.set(project.file("${resourcesFolder}/icon.icns"))
                 }
                 windows {
