@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,10 +36,13 @@ import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
+import com.avin.avinapp.utils.compose.modifier.allPadding
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
+import org.jetbrains.jewel.ui.component.ListItemState
+import org.jetbrains.jewel.ui.component.SimpleListItem
 import org.jetbrains.jewel.ui.component.Text
 
 @OptIn(InternalComposeUiApi::class)
@@ -57,6 +61,7 @@ fun ProjectEditorWindow(
     val recentProjects by component.recentProjects.collectAsState()
     val devices by component.devices.collectAsState()
     val currentPage by component.currentPage.collectAsState()
+    val descriptors by component.descriptors.collectAsState()
     val collector = rememberComponentRenderCollector()
     val rendererState = rememberSnapshotRenderState(
         devices = devices,
@@ -112,7 +117,14 @@ fun ProjectEditorWindow(
                 onPageChanged = component::changePage
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
-
+            Column(modifier = Modifier.allPadding().width(100.dp)) {
+                descriptors.forEach {
+                    SimpleListItem(
+                        it.name,
+                        ListItemState(false, isHovered = true, previewSelection = true)
+                    )
+                }
+            }
             Box(Modifier.fillMaxHeight().weight(1f), contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {

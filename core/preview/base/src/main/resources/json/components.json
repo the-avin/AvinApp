@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Text",
+    "descriptor_key": "material3.text",
+    "parameters": [
+      {
+        "name": "Label",
+        "key": "label",
+        "type": {
+          "type": "StringType"
+        },
+        "default_value": {
+          "source": "STATIC",
+          "value": "Hello, world!"
+        }
+      }
+    ],
+    "hasChildren": false
+  }
+]

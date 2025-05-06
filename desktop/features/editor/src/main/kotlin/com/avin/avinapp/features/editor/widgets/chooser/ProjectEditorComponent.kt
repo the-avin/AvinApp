@@ -4,8 +4,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.project.Project
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.data.repository.device.DevicesRepository
 import com.avin.avinapp.data.repository.project.ProjectRepository
+import com.avin.avinapp.data.repository.widget.ComposableRepository
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.pages.AppPages
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +22,8 @@ class ProjectEditorComponent(
     context: ComponentContext,
     private val info: AppPages.Editor,
     private val repository: ProjectRepository,
-    private val devicesRepository: DevicesRepository
+    private val devicesRepository: DevicesRepository,
+    private val composableRepository: ComposableRepository
 ) : BaseComponent(context) {
     private val _project = MutableStateFlow<Project?>(null)
     val project = _project.asStateFlow()
@@ -34,10 +37,20 @@ class ProjectEditorComponent(
     private val _devices = MutableStateFlow<List<PreviewDevice>>(emptyList())
     val devices = _devices.asStateFlow()
 
+    private val _descriptors = MutableStateFlow<List<ComposableDescriptor>>(emptyList())
+    val descriptors = _descriptors.asStateFlow()
+
 
     init {
         loadData()
         loadRecentProjects()
+        loadDescriptors()
+    }
+
+    private fun loadDescriptors() = scope.launch(Dispatchers.IO) {
+        val newDescriptors = composableRepository.getAllComposableDescriptors()
+        println(newDescriptors)
+        _descriptors.update { newDescriptors }
     }
 
     private fun loadData() = scope.launch(Dispatchers.IO) {

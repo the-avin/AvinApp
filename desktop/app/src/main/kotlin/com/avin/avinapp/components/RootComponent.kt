@@ -95,7 +95,8 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
                 context = ctx,
                 info = config,
                 repository = projectRepository,
-                devicesRepository = get()
+                devicesRepository = get(),
+                composableRepository = get()
             )
         }
     )
@@ -144,7 +145,10 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
     }
 
     private fun loadAppName() {
-        System.setProperty("apple.awt.application.name", languageManager.getText(Resource.string.appName))
+        System.setProperty(
+            "apple.awt.application.name",
+            languageManager.getText(Resource.string.appName)
+        )
     }
 
 

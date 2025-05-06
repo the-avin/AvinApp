@@ -21,6 +21,7 @@ data class ComposableDescriptor(
         val name: String,
         val key: String,
         val type: ParameterType,
+        @SerialName("default_value")
         val defaultValue: ParameterValue? = null
     ) {
         @Serializable

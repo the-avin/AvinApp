@@ -9,11 +9,12 @@ package com.avin.avinapp.data.domain.parameter
 enum class ParameterValueSource {
 
     /**
-     * A constant or literal value that is hardcoded and does not depend on any external context.
+     * A fixed, literal value explicitly defined in the source code.
      *
-     * Examples: a fixed string like "Hello", a number like 42, or a specific color code.
+     * Examples: a hardcoded string like "Hello", a number like 42, or a hexadecimal color like "#FF0000".
+     * This value remains the same regardless of theme, environment, or runtime conditions.
      */
-    CONSTANT,
+    STATIC,
 
     /**
      * A value that is derived from or resolved based on the current context.
