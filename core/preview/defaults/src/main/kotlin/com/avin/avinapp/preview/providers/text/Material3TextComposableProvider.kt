@@ -15,7 +15,8 @@ internal class Material3TextComposableProvider : ComposableProvider {
     override fun provideContent(holder: ComposableStateHolder) {
         Text(
             text = holder.parameters["label"]?.toString().orEmpty(),
-            modifier = Modifier.trackRender(id = holder.composableId, descriptorKey)
+            modifier = Modifier.trackRender(id = holder.composableId, descriptorKey),
+            maxLines = (holder.parameters["maxLines"] as? Int) ?: Int.MAX_VALUE
         )
     }
 }

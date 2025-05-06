@@ -13,6 +13,17 @@
           "source": "STATIC",
           "value": "Hello, world!"
         }
+      },
+      {
+        "name": "Max Lines",
+        "key": "maxLines",
+        "type": {
+          "type": "IntType"
+        },
+        "default_value": {
+          "source": "STATIC",
+          "value": "MAX"
+        }
       }
     ],
     "hasChildren": false

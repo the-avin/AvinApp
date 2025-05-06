@@ -13,6 +13,7 @@ kaml = "0.74.0"
 jewel = "1.0.0-SNAPSHOT"
 kotlinx-serialization = "1.8.1"
 coil = "3.1.0"
+exp4j = "0.4.8"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -28,6 +29,8 @@ jewel-decorated-window = { module = "org.jetbrains.jewel:jewel-int-ui-decorated-
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 jewel-foundation = { module = "org.jetbrains.jewel:jewel-foundation-243", version.ref = "jewel" }
 
+# Expression
+exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
 
 # SQLDelight
 sqldelight-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
