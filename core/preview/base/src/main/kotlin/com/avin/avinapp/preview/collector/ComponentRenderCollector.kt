@@ -1,30 +1,27 @@
 package com.avin.avinapp.preview.collector
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 
+@Stable
 class ComponentRenderCollector {
-    @Volatile
-    private var _components: List<RenderedComponentInfo> = emptyList()
+    private val _componentsState = mutableStateOf(emptyList<RenderedComponentInfo>())
 
     val components: List<RenderedComponentInfo>
-        get() = _components
+        get() = _componentsState.value
 
     fun updateComponent(info: RenderedComponentInfo) {
-        synchronized(this) {
-            _components = _components.filterNot { it.id == info.id } + info
-        }
+        _componentsState.value = _componentsState.value
+            .filterNot { it.id == info.id } + info
     }
 
     fun clear() {
-        synchronized(this) {
-            _components = emptyList()
-        }
+        _componentsState.value = emptyList()
     }
 }
-
 
 @Composable
 fun rememberComponentRenderCollector(): ComponentRenderCollector {

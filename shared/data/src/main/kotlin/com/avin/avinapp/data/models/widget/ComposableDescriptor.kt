@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class ComposableDescriptor(
+    val name: String,
     @SerialName("descriptor_key")
     val descriptorKey: String,
     val parameters: List<Parameter>,

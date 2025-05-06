@@ -37,6 +37,7 @@ import com.avin.avinapp.data.models.device.size
 import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
+import com.avin.avinapp.preview.data.models.findComponentById
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
@@ -72,7 +73,7 @@ fun SnapshotPreviewImpl(
     val aspectRatio = deviceSize.aspectRatio
 
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
-    val selectedComponent = state.selectedComponent
+    val selectedComponentId = state.selectedComponentId
     val textMeasurer = rememberTextMeasurer()
 
     val mappedHoverPosition = remember(hoverPosition, currentDevice) {
@@ -84,6 +85,14 @@ fun SnapshotPreviewImpl(
             mappedHoverPosition?.let { collector.components.findTopMostComponentByPosition(it) }
         }
     }
+
+    val components = collector.components
+
+    val selectedComponent = remember(selectedComponentId, components) {
+        val id = selectedComponentId
+        id?.let { components.findComponentById(it) }
+    }
+
 
     val focusRequester = remember { FocusRequester() }
 

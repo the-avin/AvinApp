@@ -30,13 +30,13 @@ class SnapshotRenderState(
     var currentDevice by mutableStateOf(initialDevice)
         private set
 
-    var selectedComponent by mutableStateOf<RenderedComponentInfo?>(null)
+    var selectedComponentId by mutableStateOf<String?>(null)
         private set
 
     var isRendering by mutableStateOf(false)
         private set
 
-    private var lastHolder: ComposableStateHolder? = null
+    var lastHolder: ComposableStateHolder? by mutableStateOf(null)
 
     internal var currentImage by mutableStateOf<ImageBitmap?>(null)
         private set
@@ -59,7 +59,7 @@ class SnapshotRenderState(
         }
     }
 
-    fun renderPreview(holder: ComposableStateHolder) {
+    fun renderPreview(holder: ComposableStateHolder? = lastHolder) {
         lastHolder = holder
         if (currentDevice != null) {
             invalidate()
@@ -67,11 +67,11 @@ class SnapshotRenderState(
     }
 
     fun selectComponent(component: RenderedComponentInfo) {
-        selectedComponent = component
+        selectedComponentId = component.id
     }
 
     fun clearSelectedComponents() {
-        selectedComponent = null
+        selectedComponentId = null
     }
 
     private fun invalidate() {

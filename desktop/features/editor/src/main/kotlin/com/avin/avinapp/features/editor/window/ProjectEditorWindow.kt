@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.data.domain.parameter.ParameterType
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.features.editor.data.pages.EditorPages
@@ -62,8 +63,17 @@ fun ProjectEditorWindow(
         collector = collector,
     )
     val holder = remember {
-        val buttonDescriptor = ComposableDescriptor("material3.button", emptyList(), true)
-        val textDescriptor = ComposableDescriptor("material3.text", emptyList(), false)
+        val buttonDescriptor = ComposableDescriptor("Button", "material3.button", emptyList(), true)
+        val textDescriptor = ComposableDescriptor(
+            "Text",
+            "material3.text", listOf(
+                ComposableDescriptor.Parameter(
+                    "Test",
+                    "label",
+                    ParameterType.StringType,
+                )
+            ), false
+        )
         ComposableStateHolder(buttonDescriptor).apply {
             addChild(
                 ComposableStateHolder(textDescriptor).apply {

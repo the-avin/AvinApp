@@ -49,6 +49,30 @@ class ComposableStateHolder(
 
     fun getPrimaryChildren() = children[PRIMARY_SLOT] ?: emptyList()
 
+    fun findHolderById(id: String): ComposableStateHolder? {
+        if (!descriptor.hasChildren) return null
+
+        val queue = ArrayDeque<ComposableStateHolder>()
+        queue.add(this)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+            if (current.composableId == id) return current
+
+            current.children.values.flatten().forEach { queue.add(it) }
+        }
+
+        return null
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is ComposableStateHolder && other.composableId == composableId
+    }
+
+    override fun hashCode(): Int {
+        return composableId.hashCode()
+    }
+
     companion object {
         const val PRIMARY_SLOT = "content"
     }
