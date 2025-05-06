@@ -15,8 +15,7 @@ import net.objecthunter.exp4j.ExpressionBuilder
 import org.jetbrains.jewel.ui.component.TextField
 
 private fun calculate(text: String): Double? {
-    val expression = ExpressionBuilder(text).build()
-    return runCatching { expression.evaluate() }.getOrNull()
+    return runCatching { ExpressionBuilder(text).build().evaluate() }.getOrNull() ?: 0.0
 }
 
 @Composable
