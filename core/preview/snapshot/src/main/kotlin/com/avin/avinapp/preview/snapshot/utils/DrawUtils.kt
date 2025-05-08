@@ -1,6 +1,7 @@
 package com.avin.avinapp.preview.snapshot.utils
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -73,10 +74,11 @@ private fun DrawScope.drawTextWithBackground(
     center: Offset,
     color: Color,
     horizontalPadding: Float,
-    verticalPadding: Float
+    verticalPadding: Float,
+    avoidRect: Rect
 ) {
     val textSize = textLayoutResult.size.toSize()
-    val topLeft = Offset(
+    var topLeft = Offset(
         x = center.x - textSize.width / 2 - horizontalPadding,
         y = center.y - textSize.height / 2 - verticalPadding
     )
@@ -84,9 +86,35 @@ private fun DrawScope.drawTextWithBackground(
         width = textSize.width + horizontalPadding * 2,
         height = textSize.height + verticalPadding * 2
     )
+    var backgroundRect = Rect(topLeft, backgroundSize)
+
+    if (backgroundRect.overlaps(avoidRect)) {
+        val centerX = center.x
+        val centerY = center.y
+
+        val avoidCenter = avoidRect.center
+
+        if (centerY in avoidRect.top..avoidRect.bottom) {
+            topLeft = if (centerX < avoidCenter.x) {
+                Offset(x = avoidRect.left - backgroundSize.width - 8f, y = topLeft.y)
+            } else {
+                Offset(x = avoidRect.right + 8f, y = topLeft.y)
+            }
+        } else if (centerX in avoidRect.left..avoidRect.right) {
+            topLeft = if (centerY < avoidCenter.y) {
+                Offset(x = topLeft.x, y = avoidRect.top - backgroundSize.height - 8f)
+            } else {
+                Offset(x = topLeft.x, y = avoidRect.bottom + 8f)
+            }
+        }
+
+        backgroundRect = Rect(topLeft, backgroundSize)
+    }
+
     drawRect(color = color, topLeft = topLeft, size = backgroundSize)
     drawText(textLayoutResult, topLeft = topLeft + Offset(horizontalPadding, verticalPadding))
 }
+
 
 internal fun DrawScope.drawComponentHighlightInfo(
     component: RenderedComponentInfo,
@@ -146,6 +174,8 @@ internal fun DrawScope.drawComponentGuidesWithDistances(
     val leftEnd = Offset(0f, centerY)
     val rightEnd = Offset(this.size.width, centerY)
 
+    val componentRect = Rect(topLeft, size)
+
     drawLine(
         color,
         Offset(centerX, topLeft.y),
@@ -187,21 +217,21 @@ internal fun DrawScope.drawComponentGuidesWithDistances(
     drawTextWithBackground(
         textMeasurer.measure("${topDistance.formatSmart()} px", style),
         center = Offset(centerX, topLeft.y / 2),
-        color, horizontalPadding, verticalPadding
+        color, horizontalPadding, verticalPadding, componentRect
     )
     drawTextWithBackground(
         textMeasurer.measure("${bottomDistance.formatSmart()} px", style),
         center = Offset(centerX, bottomRight.y + (bottomEnd.y - bottomRight.y) / 2),
-        color, horizontalPadding, verticalPadding
+        color, horizontalPadding, verticalPadding, componentRect
     )
     drawTextWithBackground(
         textMeasurer.measure("${leftDistance.formatSmart()} px", style),
         center = Offset(topLeft.x / 2, centerY),
-        color, horizontalPadding, verticalPadding
+        color, horizontalPadding, verticalPadding, componentRect
     )
     drawTextWithBackground(
         textMeasurer.measure("${rightDistance.formatSmart()} px", style),
         center = Offset(bottomRight.x + (rightEnd.x - bottomRight.x) / 2, centerY),
-        color, horizontalPadding, verticalPadding
+        color, horizontalPadding, verticalPadding, componentRect
     )
 }

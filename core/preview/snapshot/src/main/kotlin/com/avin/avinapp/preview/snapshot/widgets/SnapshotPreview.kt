@@ -202,6 +202,7 @@ private fun Modifier.drawHighlight(
 ): Modifier = this.drawWithContent {
     drawContent()
     component?.let { componentInfo ->
+        drawComponentHighlightBordered(componentInfo, imageSize, deviceSize, color = color)
         textMeasurer?.let {
             drawComponentGuidesWithDistances(
                 componentInfo,
@@ -212,7 +213,6 @@ private fun Modifier.drawHighlight(
             )
             drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it, color = color)
         }
-        drawComponentHighlightBordered(componentInfo, imageSize, deviceSize, color = color)
     }
 }
 
