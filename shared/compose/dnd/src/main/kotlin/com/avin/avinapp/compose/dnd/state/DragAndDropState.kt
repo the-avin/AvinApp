@@ -18,7 +18,7 @@ class DragAndDropState {
         this.onDropped = action
     }
 
-    inline fun <reified T : Any?> onDroppedWithType(crossinline action: (offset: Offset, data: Any?) -> Unit) {
+    inline fun <reified T : Any?> onDroppedWithType(crossinline action: (offset: Offset, data: T) -> Unit) {
         onDropped { offset, data ->
             if (data is T) {
                 action.invoke(offset, data)
@@ -33,7 +33,7 @@ class DragAndDropState {
         this.onDragEntered = action
     }
 
-    inline fun <reified T : Any?> onDragEnteredWithType(crossinline action: (offset: Offset, data: Any?) -> Unit) {
+    inline fun <reified T : Any?> onDragEnteredWithType(crossinline action: (offset: Offset, data: T) -> Unit) {
         onDragEntered { offset, data ->
             if (data is T) {
                 action.invoke(offset, data)

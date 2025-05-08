@@ -8,6 +8,7 @@ import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.logger.AppLogger
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.holder.ComposableStateHolder
+import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
 import com.avin.avinapp.preview.registry.ComposableRegistry
 import com.avin.avinapp.preview.renderer.ComposableRenderer
@@ -100,6 +101,12 @@ class SnapshotRenderState(
                 }
             }
         }
+    }
+
+    fun addChild(componentId: String, holder: ComposableStateHolder) {
+        lastHolder
+            ?.findHolderById(componentId)
+            ?.addChild(holder)
     }
 
     companion object {

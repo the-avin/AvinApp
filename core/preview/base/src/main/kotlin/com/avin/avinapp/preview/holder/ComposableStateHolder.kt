@@ -77,3 +77,5 @@ class ComposableStateHolder(
         const val PRIMARY_SLOT = "content"
     }
 }
+
+fun ComposableDescriptor.toHolder() = ComposableStateHolder(this)

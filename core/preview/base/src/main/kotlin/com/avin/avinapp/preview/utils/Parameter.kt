@@ -68,7 +68,7 @@ fun convertParameterToType(
                 }
 
                 is ParameterType.ColorType -> value.toComposeColor()
-                else -> value
+                is ParameterType.StringType -> value
             }
         }
 

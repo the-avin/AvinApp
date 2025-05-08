@@ -43,6 +43,7 @@ import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findComponentById
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
 import com.avin.avinapp.preview.data.models.findTopmostParentComponentByPosition
+import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
@@ -112,13 +113,24 @@ fun SnapshotPreviewImpl(
 
     LaunchedEffect(Unit) {
         runCatching { focusRequester.requestFocus() }
+
         dragAndDropState.apply {
-            onDragEnteredWithType<ComposableDescriptor> { offset, data ->
-                val mappedPosition = mapPointerToDevice(offset, imageSize, deviceSize)
-                draggedComponent = collector.components
-                    .findTopmostParentComponentByPosition(mappedPosition)
+            onDragEnteredWithType<ComposableDescriptor> { offset, _ ->
+                val mapped = mapPointerToDevice(offset, imageSize, deviceSize)
+                draggedComponent = collector.components.findTopmostParentComponentByPosition(mapped)
             }
-            onExit { draggedComponent = null }
+
+            onDroppedWithType<ComposableDescriptor> { offset, descriptor ->
+                val mapped = mapPointerToDevice(offset, imageSize, deviceSize)
+                collector.components.findTopmostParentComponentByPosition(mapped)?.let { info ->
+                    state.addChild(info.id, descriptor.toHolder())
+                    state.renderPreview()
+                }
+            }
+
+            onExit {
+                draggedComponent = null
+            }
         }
     }
 

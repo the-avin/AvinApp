@@ -72,15 +72,7 @@ fun ProjectEditorWindow(
     )
     val holder = remember(descriptors) {
         val buttonDescriptor = ComposableDescriptor("Button", "material3.button", emptyList(), true)
-        val textDescriptor = descriptors.firstOrNull()
-        ComposableStateHolder(buttonDescriptor).apply {
-            textDescriptor?.let {
-                addChild(
-                    ComposableStateHolder(textDescriptor).apply {
-                        updateParameter("label", "Test 2")
-                    })
-            }
-        }
+        ComposableStateHolder(buttonDescriptor)
     }
     val dragAndDropState = rememberDragAndDropState()
     AppCustomWindow(
