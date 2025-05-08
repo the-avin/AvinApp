@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import com.avin.avinapp.data.domain.parameter.ParameterType
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.features.editor.data.pages.EditorPages
