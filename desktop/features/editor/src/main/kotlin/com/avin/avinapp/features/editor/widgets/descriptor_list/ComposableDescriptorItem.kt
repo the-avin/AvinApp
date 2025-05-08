@@ -3,6 +3,7 @@ package com.avin.avinapp.features.editor.widgets.descriptor_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Row
@@ -40,8 +41,9 @@ fun ComposableDescriptorItem(
     val ins = remember { MutableInteractionSource() }
     val isHovered by ins.collectIsHoveredAsState()
     val isFocused by ins.collectIsFocusedAsState()
+    val isDragging by ins.collectIsDraggedAsState()
     val color = when {
-        isFocused -> style.colors.backgroundSelectedFocused
+        isFocused && !isDragging -> style.colors.backgroundSelectedFocused
         isHovered -> JewelTheme.contentColor.copy(.1f)
         else -> Color.Transparent
     }
@@ -49,7 +51,7 @@ fun ComposableDescriptorItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .focusWhenPressed(interactionSource = ins)
-            .dragSource(dragAndDropState, descriptor)
+            .dragSource(dragAndDropState, descriptor, interactionSource = ins)
             .fillMaxWidth()
             .height(JewelTheme.globalMetrics.rowHeight)
             .hoverable(ins)

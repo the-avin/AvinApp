@@ -1,5 +1,7 @@
 package com.avin.avinapp.compose.dnd.modifiers
 
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -27,7 +29,8 @@ import com.avin.avinapp.compose.dnd.state.DragAndDropState
 
 private class DragSourceModifierNode(
     var state: DragAndDropState,
-    var data: Any?
+    var data: Any?,
+    var interactionSource: MutableInteractionSource? = null
 ) : Modifier.Node(),
     LayoutModifierNode,
     LayoutAwareModifierNode,
@@ -37,6 +40,8 @@ private class DragSourceModifierNode(
     private var offset = Offset.Zero
     private var initialPressPosition = Offset.Zero
     private var componentRect = Rect.Zero
+
+    private var lastInteraction: DragInteraction.Start? = null
 
     private val zIndex: Float
         get() = if (isDragging) 100f else 0f
@@ -59,6 +64,9 @@ private class DragSourceModifierNode(
 
     override fun onCancelPointerInput() {
         cancelDrag()
+        lastInteraction?.let {
+            interactionSource?.tryEmit(DragInteraction.Cancel(it))
+        }
     }
 
     override fun onPointerEvent(
@@ -73,9 +81,14 @@ private class DragSourceModifierNode(
                 change.changedToDown() -> {
                     initialPressPosition = change.position
                     isDragging = true
+                    lastInteraction = DragInteraction.Start()
+                    interactionSource?.tryEmit(lastInteraction!!)
                 }
 
                 change.changedToUp() -> {
+                    lastInteraction?.let {
+                        interactionSource?.tryEmit(DragInteraction.Stop(it))
+                    }
                     isDragging = false
                     handleDragUpdate()
                     cancelDrag()
@@ -117,14 +130,15 @@ private class DragSourceModifierNode(
 
 private class DragSourceModifierElement(
     private val state: DragAndDropState,
-    private val data: Any?
+    private val data: Any?,
+    private val interactionSource: MutableInteractionSource? = null
 ) : ModifierNodeElement<DragSourceModifierNode>() {
     override fun create(): DragSourceModifierNode {
-        return DragSourceModifierNode(state, data)
+        return DragSourceModifierNode(state, data, interactionSource)
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is DragSourceModifierElement && other.state == state && other.data == data
+        return other is DragSourceModifierElement && other.state == state && other.data == data && other.interactionSource == interactionSource
     }
 
     override fun hashCode(): Int {
@@ -134,6 +148,7 @@ private class DragSourceModifierElement(
     override fun update(node: DragSourceModifierNode) {
         node.state = state
         node.data = data
+        node.interactionSource = interactionSource
     }
 
     override fun InspectorInfo.inspectableProperties() {
@@ -143,5 +158,6 @@ private class DragSourceModifierElement(
 
 fun Modifier.dragSource(
     state: DragAndDropState,
-    data: Any?
-) = this then DragSourceModifierElement(state, data)
+    data: Any?,
+    interactionSource: MutableInteractionSource? = null
+) = this then DragSourceModifierElement(state, data, interactionSource)
