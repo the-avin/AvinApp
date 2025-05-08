@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:theme"))
     implementation(project(":core:preview:base"))
     implementation(project(":core:preview:defaults"))
+    implementation(project(":shared:compose:dnd"))
     implementation(project(":shared:data"))
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:utils:app"))

@@ -83,10 +83,6 @@ fun ProjectEditorWindow(
         }
     }
     val dragAndDropState = rememberDragAndDropState()
-    LaunchedEffect(Unit){
-        dragAndDropState.onDropped { o, d -> println("$o $d") }
-        dragAndDropState.onDragEntered { o, d -> println("enter $o $d") }
-    }
     AppCustomWindow(
         onCloseRequest = onCloseRequest, title = projectName, state = rememberWindowState(
             placement = WindowPlacement.Fullscreen,
@@ -120,7 +116,7 @@ fun ProjectEditorWindow(
                     SimpleListItem(
                         it.name,
                         ListItemState(false, isHovered = true, previewSelection = true),
-                        modifier = Modifier.dragSource(dragAndDropState, "Test")
+                        modifier = Modifier.dragSource(dragAndDropState, it)
                     )
                 }
             }
@@ -131,6 +127,7 @@ fun ProjectEditorWindow(
                             SnapshotPreview(
                                 state = rendererState,
                                 collector = collector,
+                                dragAndDropState = dragAndDropState,
                                 modifier = Modifier.fillMaxHeight(.9f).dragTarget(dragAndDropState)
                             )
                             DefaultButton(onClick = {

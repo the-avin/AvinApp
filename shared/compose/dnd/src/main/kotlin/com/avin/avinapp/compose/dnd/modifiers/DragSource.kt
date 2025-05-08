@@ -57,6 +57,7 @@ private class DragSourceModifierNode(
 
     private fun cancelPointerEvent() {
         isDragging = false
+        state.onExit?.invoke()
         if (offset != Offset.Zero) {
             offset = Offset.Zero
             invalidatePlacement()
@@ -100,13 +101,13 @@ private class DragSourceModifierNode(
     private fun handleDragUpdate() {
         val dragOffset = componentRect.topLeft + offset + initialPressPosition
         val isInsideTargetArea = state.targetRect.contains(dragOffset)
-        println("$dragOffset ${state.targetRect}")
-
         if (isInsideTargetArea) {
+            val deltaOffset = dragOffset - state.targetRect.topLeft
+
             if (isDragging) {
-                state.onDragEntered?.invoke(dragOffset, data)
+                state.onDragEntered?.invoke(deltaOffset, data)
             } else {
-                state.onDropped?.invoke(dragOffset, data)
+                state.onDropped?.invoke(deltaOffset, data)
             }
         }
     }

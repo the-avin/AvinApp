@@ -15,25 +15,27 @@ import androidx.compose.ui.node.currentValueOf
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.toSize
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
+import javax.management.Descriptor
 
 
 private data class TrackRenderElement(
     val id: String,
-    val descriptorKey: String
+    val descriptor: ComposableDescriptor
 ) : ModifierNodeElement<TrackRenderNode>() {
 
-    override fun create(): TrackRenderNode = TrackRenderNode(id, descriptorKey)
+    override fun create(): TrackRenderNode = TrackRenderNode(id, descriptor)
 
     override fun update(node: TrackRenderNode) {
         node.id = id
-        node.descriptorKey = descriptorKey
+        node.descriptor = descriptor
     }
 
     override fun hashCode(): Int = id.hashCode()
 
     override fun equals(other: Any?): Boolean =
-        other is TrackRenderElement && other.id == id && other.descriptorKey == descriptorKey
+        other is TrackRenderElement && other.id == id && other.descriptor == descriptor
 
     override fun InspectorInfo.inspectableProperties() {
         name = "TrackRender"
@@ -42,14 +44,14 @@ private data class TrackRenderElement(
 
 private class TrackRenderNode(
     var id: String,
-    var descriptorKey: String
+    var descriptor: ComposableDescriptor
 ) : Modifier.Node(),
     LayoutAwareModifierNode,
     CompositionLocalConsumerModifierNode {
     override fun onPlaced(coordinates: LayoutCoordinates) {
         val collector = LocalComponentRenderCollector.currentOrNull()
         collector?.updateComponent(
-            coordinates.getComponentInfo(id, descriptorKey)
+            coordinates.getComponentInfo(id, descriptor)
         )
     }
 
@@ -58,15 +60,16 @@ private class TrackRenderNode(
     }
 }
 
-private fun LayoutCoordinates.getComponentInfo(id: String, descriptorKey: String) =
+private fun LayoutCoordinates.getComponentInfo(id: String, descriptor: ComposableDescriptor) =
     RenderedComponentInfo(
         id = id,
-        descriptorKey = descriptorKey,
+        descriptorKey = descriptor.name,
+        hasChildren = descriptor.hasChildren,
         size = this.size.toSize(),
         position = this.localToRoot(Offset.Zero)
     )
 
 
-fun Modifier.trackRender(id: String, descriptorKey: String): Modifier = this.then(
-    TrackRenderElement(id, descriptorKey)
+fun Modifier.trackRender(id: String, descriptor: ComposableDescriptor): Modifier = this.then(
+    TrackRenderElement(id, descriptor)
 )

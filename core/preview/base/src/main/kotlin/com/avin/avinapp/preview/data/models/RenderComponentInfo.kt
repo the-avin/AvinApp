@@ -10,6 +10,7 @@ import com.avin.avinapp.data.models.widget.ComposableDescriptor
 data class RenderedComponentInfo(
     val id: String,
     val descriptorKey: String,
+    val hasChildren: Boolean,
     val position: Offset = Offset.Zero,
     val size: Size = Size.Zero
 )

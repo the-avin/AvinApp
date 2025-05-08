@@ -12,6 +12,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,7 +34,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.toSize
+import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.data.models.device.size
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
@@ -53,10 +56,16 @@ import org.jetbrains.jewel.ui.util.thenIf
 fun SnapshotPreview(
     state: SnapshotRenderState,
     collector: ComponentRenderCollector,
+    dragAndDropState: DragAndDropState,
     modifier: Modifier = Modifier
 ) {
     if (state.currentImage != null) {
-        SnapshotPreviewImpl(state = state, collector = collector, modifier = modifier)
+        SnapshotPreviewImpl(
+            state = state,
+            collector = collector,
+            dragAndDropState = dragAndDropState,
+            modifier = modifier
+        )
     }
 }
 
@@ -65,11 +74,12 @@ fun SnapshotPreview(
 fun SnapshotPreviewImpl(
     state: SnapshotRenderState,
     collector: ComponentRenderCollector,
+    dragAndDropState: DragAndDropState,
     modifier: Modifier = Modifier
 ) {
     val currentDevice = state.currentDevice ?: return
-    val imageSize = state.componentSize
-    val deviceSize = currentDevice.resolution.size
+    val imageSize by rememberUpdatedState(state.componentSize)
+    val deviceSize by rememberUpdatedState(currentDevice.resolution.size)
     val aspectRatio = deviceSize.aspectRatio
 
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
@@ -93,11 +103,23 @@ fun SnapshotPreviewImpl(
         id?.let { components.findComponentById(it) }
     }
 
+    var draggedComponent by remember {
+        mutableStateOf<RenderedComponentInfo?>(null)
+    }
 
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         runCatching { focusRequester.requestFocus() }
+        dragAndDropState.apply {
+            onDragEnteredWithType<ComposableDescriptor> { offset, data ->
+                val mappedPosition = mapPointerToDevice(offset, imageSize, deviceSize)
+                draggedComponent = collector.components
+                    .findTopMostComponentByPosition(mappedPosition)
+                    ?.takeIf { it.hasChildren }
+            }
+            onExit { draggedComponent = null }
+        }
     }
 
     BoxWithConstraints(modifier = modifier) {
@@ -123,7 +145,8 @@ fun SnapshotPreviewImpl(
                     pointerHoverIcon(PointerIcon.Hand)
                 }
                 .drawHighlight(hoveredComponent, imageSize, deviceSize, textMeasurer)
-                .drawHighlight(selectedComponent, imageSize, deviceSize),
+                .drawHighlight(selectedComponent, imageSize, deviceSize)
+                .drawHighlight(draggedComponent, imageSize, deviceSize),
             contentAlignment = Alignment.Center
         ) {
             RenderImage(
