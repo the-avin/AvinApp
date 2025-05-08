@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import androidx.compose.ui.zIndex
-import com.avin.avinapp.compose.dnd.modifiers.dragSource
 import com.avin.avinapp.compose.dnd.modifiers.dragTarget
 import com.avin.avinapp.compose.dnd.state.rememberDragAndDropState
 import com.avin.avinapp.data.models.device.PreviewDevice
@@ -30,6 +27,7 @@ import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
+import com.avin.avinapp.features.editor.widgets.descriptor_list.ComposableDescriptorList
 import com.avin.avinapp.features.editor.widgets.properties.PropertiesBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
@@ -39,13 +37,10 @@ import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
-import com.avin.avinapp.utils.compose.modifier.allPadding
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.component.ListItemState
-import org.jetbrains.jewel.ui.component.SimpleListItem
 import org.jetbrains.jewel.ui.component.Text
 
 @OptIn(InternalComposeUiApi::class)
@@ -71,7 +66,8 @@ fun ProjectEditorWindow(
         collector = collector,
     )
     val holder = remember(descriptors) {
-        val buttonDescriptor = ComposableDescriptor("Button", "material3.button", emptyList(), true)
+        val buttonDescriptor =
+            ComposableDescriptor("Button", "material3.button", group = "Text", emptyList(), true)
         ComposableStateHolder(buttonDescriptor)
     }
     val dragAndDropState = rememberDragAndDropState()
@@ -103,15 +99,7 @@ fun ProjectEditorWindow(
                 onPageChanged = component::changePage
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
-            Column(modifier = Modifier.allPadding().width(100.dp).zIndex(10f)) {
-                descriptors.forEach {
-                    SimpleListItem(
-                        it.name,
-                        ListItemState(false, isHovered = true, previewSelection = true),
-                        modifier = Modifier.dragSource(dragAndDropState, it)
-                    )
-                }
-            }
+            ComposableDescriptorList(descriptors, dragAndDropState)
             Box(Modifier.fillMaxHeight().weight(1f), contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {

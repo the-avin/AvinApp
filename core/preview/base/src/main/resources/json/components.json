@@ -2,6 +2,7 @@
   {
     "name": "Text",
     "descriptor_key": "material3.text",
+    "group": "Text",
     "parameters": [
       {
         "name": "Label",
@@ -27,5 +28,12 @@
       }
     ],
     "hasChildren": false
+  },
+  {
+    "name": "Button",
+    "descriptor_key": "material3.button",
+    "group": "Text",
+    "parameters": [],
+    "hasChildren": true
   }
 ]

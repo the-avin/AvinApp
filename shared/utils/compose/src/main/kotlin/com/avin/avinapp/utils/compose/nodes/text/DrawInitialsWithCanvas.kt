@@ -15,7 +15,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DrawInitialsWithCanvas(text: String, fontScale: Float = 1f, cornerRadius: Dp = 2.dp, boxSize: Dp = 24.dp) {
+fun DrawInitialsWithCanvas(
+    text: String,
+    fontScale: Float = 1f,
+    cornerRadius: Dp = 2.dp,
+    boxSize: Dp = 24.dp
+) {
     val textMeasurer = rememberTextMeasurer()
     val initials = text.split(" ")
         .take(2)

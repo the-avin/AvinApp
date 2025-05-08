@@ -58,7 +58,6 @@ fun PropertiesBar(
             onDrag = {
                 width = coerceWidth(width + it)
             },
-            modifier = Modifier.verticalPadding(),
             reverseDirection = true
         )
         if (renderState.selectedComponentId.isNotNull() && renderState.lastHolder.isNotNull()) {

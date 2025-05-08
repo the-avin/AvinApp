@@ -12,6 +12,7 @@ data class ComposableDescriptor(
     val name: String,
     @SerialName("descriptor_key")
     val descriptorKey: String,
+    val group: String,
     val parameters: List<Parameter>,
     val hasChildren: Boolean
 ) {

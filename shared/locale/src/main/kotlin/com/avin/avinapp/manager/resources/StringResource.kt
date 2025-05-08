@@ -37,4 +37,6 @@ object StringResource {
     val addingToGit = StringRes("adding_to_git")
     val creatingFiles = StringRes("creating_files")
     val properties = StringRes("properties")
+    val components = StringRes("components")
+    val all = StringRes("all")
 }
