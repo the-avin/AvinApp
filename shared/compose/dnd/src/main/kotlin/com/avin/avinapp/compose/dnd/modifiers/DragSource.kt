@@ -28,16 +28,18 @@ import com.avin.avinapp.compose.dnd.state.DragAndDropState
 private class DragSourceModifierNode(
     var state: DragAndDropState,
     var data: Any?
-) : Modifier.Node(), LayoutModifierNode, LayoutAwareModifierNode, PointerInputModifierNode {
+) : Modifier.Node(),
+    LayoutModifierNode,
+    LayoutAwareModifierNode,
+    PointerInputModifierNode {
+
     private var isDragging = false
-    private val zIndex: Float
-        get() = if (isDragging) 100f else 0f
-
-    private var componentRect = Rect.Zero
-
-
     private var offset = Offset.Zero
     private var initialPressPosition = Offset.Zero
+    private var componentRect = Rect.Zero
+
+    private val zIndex: Float
+        get() = if (isDragging) 100f else 0f
 
     override fun MeasureScope.measure(
         measurable: Measurable,
@@ -55,17 +57,8 @@ private class DragSourceModifierNode(
         }
     }
 
-    private fun cancelPointerEvent() {
-        isDragging = false
-        state.onExit?.invoke()
-        if (offset != Offset.Zero) {
-            offset = Offset.Zero
-            invalidatePlacement()
-        }
-    }
-
     override fun onCancelPointerInput() {
-        cancelPointerEvent()
+        cancelDrag()
     }
 
     override fun onPointerEvent(
@@ -85,7 +78,7 @@ private class DragSourceModifierNode(
                 change.changedToUp() -> {
                     isDragging = false
                     handleDragUpdate()
-                    cancelPointerEvent()
+                    cancelDrag()
                 }
 
                 change.pressed && change.positionChanged() -> {
@@ -98,12 +91,20 @@ private class DragSourceModifierNode(
         }
     }
 
+    private fun cancelDrag() {
+        isDragging = false
+        state.onExit?.invoke()
+
+        if (offset != Offset.Zero) {
+            offset = Offset.Zero
+            invalidatePlacement()
+        }
+    }
+
     private fun handleDragUpdate() {
         val dragOffset = componentRect.topLeft + offset + initialPressPosition
-        val isInsideTargetArea = state.targetRect.contains(dragOffset)
-        if (isInsideTargetArea) {
+        if (state.targetRect.contains(dragOffset)) {
             val deltaOffset = dragOffset - state.targetRect.topLeft
-
             if (isDragging) {
                 state.onDragEntered?.invoke(deltaOffset, data)
             } else {

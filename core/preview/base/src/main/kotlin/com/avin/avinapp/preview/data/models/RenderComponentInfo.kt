@@ -22,6 +22,9 @@ fun List<RenderedComponentInfo>.findComponentById(id: String) = find { it.id == 
 fun List<RenderedComponentInfo>.findTopMostComponentByPosition(position: Offset) =
     findLast { it.rect.contains(position) }
 
+fun List<RenderedComponentInfo>.findTopmostParentComponentByPosition(position: Offset) =
+    findLast { it.rect.contains(position) && it.hasChildren }
+
 
 val RenderedComponentInfo.formattedText: String
     get() = "${size.width.formatSmart()}px:${size.height.formatSmart()}px"

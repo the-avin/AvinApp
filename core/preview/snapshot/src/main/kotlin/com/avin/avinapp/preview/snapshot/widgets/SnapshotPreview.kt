@@ -42,6 +42,7 @@ import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findComponentById
 import com.avin.avinapp.preview.data.models.findTopMostComponentByPosition
+import com.avin.avinapp.preview.data.models.findTopmostParentComponentByPosition
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
@@ -115,8 +116,7 @@ fun SnapshotPreviewImpl(
             onDragEnteredWithType<ComposableDescriptor> { offset, data ->
                 val mappedPosition = mapPointerToDevice(offset, imageSize, deviceSize)
                 draggedComponent = collector.components
-                    .findTopMostComponentByPosition(mappedPosition)
-                    ?.takeIf { it.hasChildren }
+                    .findTopmostParentComponentByPosition(mappedPosition)
             }
             onExit { draggedComponent = null }
         }
