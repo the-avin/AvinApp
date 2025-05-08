@@ -49,7 +49,6 @@ class ProjectEditorComponent(
 
     private fun loadDescriptors() = scope.launch(Dispatchers.IO) {
         val newDescriptors = composableRepository.getAllComposableDescriptors()
-        println(newDescriptors)
         _descriptors.update { newDescriptors }
     }
 

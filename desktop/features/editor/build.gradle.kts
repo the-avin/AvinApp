@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":core:preview:realtime"))
     implementation(project(":core:preview:snapshot"))
     implementation(project(":shared:data"))
+    implementation(project(":shared:compose:dnd"))
     implementation(project(":shared:utils:app"))
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:locale"))

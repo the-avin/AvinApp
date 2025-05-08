@@ -43,7 +43,7 @@ private data class TrackRenderElement(
 private class TrackRenderNode(
     var id: String,
     var descriptorKey: String
-) : Modifier.Node(), LayoutModifierNode,
+) : Modifier.Node(),
     LayoutAwareModifierNode,
     CompositionLocalConsumerModifierNode {
     override fun onPlaced(coordinates: LayoutCoordinates) {
@@ -51,16 +51,6 @@ private class TrackRenderNode(
         collector?.updateComponent(
             coordinates.getComponentInfo(id, descriptorKey)
         )
-    }
-
-    override fun MeasureScope.measure(
-        measurable: Measurable,
-        constraints: Constraints
-    ): MeasureResult {
-        val placeable = measurable.measure(constraints)
-        return layout(placeable.width, placeable.height) {
-            placeable.place(0, 0)
-        }
     }
 
     private fun CompositionLocal<ComponentRenderCollector>.currentOrNull(): ComponentRenderCollector? {

@@ -21,6 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.zIndex
+import com.avin.avinapp.compose.dnd.modifiers.dragSource
+import com.avin.avinapp.compose.dnd.modifiers.dragTarget
+import com.avin.avinapp.compose.dnd.state.rememberDragAndDropState
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.features.editor.data.pages.EditorPages
@@ -74,15 +78,17 @@ fun ProjectEditorWindow(
                 addChild(
                     ComposableStateHolder(textDescriptor).apply {
                         updateParameter("label", "Test 2")
-                    }
-                )
+                    })
             }
         }
     }
+    val dragAndDropState = rememberDragAndDropState()
+    LaunchedEffect(Unit){
+        dragAndDropState.onDropped { o, d -> println("$o $d") }
+        dragAndDropState.onDragEntered { o, d -> println("enter $o $d") }
+    }
     AppCustomWindow(
-        onCloseRequest = onCloseRequest,
-        title = projectName,
-        state = rememberWindowState(
+        onCloseRequest = onCloseRequest, title = projectName, state = rememberWindowState(
             placement = WindowPlacement.Fullscreen,
             position = WindowPosition.Aligned(Alignment.Center),
             size = DpSize(1000.dp, 700.dp)
@@ -109,11 +115,12 @@ fun ProjectEditorWindow(
                 onPageChanged = component::changePage
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
-            Column(modifier = Modifier.allPadding().width(100.dp)) {
+            Column(modifier = Modifier.allPadding().width(100.dp).zIndex(10f)) {
                 descriptors.forEach {
                     SimpleListItem(
                         it.name,
-                        ListItemState(false, isHovered = true, previewSelection = true)
+                        ListItemState(false, isHovered = true, previewSelection = true),
+                        modifier = Modifier.dragSource(dragAndDropState, "Test")
                     )
                 }
             }
@@ -124,7 +131,7 @@ fun ProjectEditorWindow(
                             SnapshotPreview(
                                 state = rendererState,
                                 collector = collector,
-                                modifier = Modifier.fillMaxHeight(.9f)
+                                modifier = Modifier.fillMaxHeight(.9f).dragTarget(dragAndDropState)
                             )
                             DefaultButton(onClick = {
                                 rendererState.renderPreview(
