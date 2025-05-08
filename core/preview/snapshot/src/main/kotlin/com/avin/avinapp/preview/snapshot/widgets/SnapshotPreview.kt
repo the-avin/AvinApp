@@ -47,11 +47,14 @@ import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
 import com.avin.avinapp.preview.snapshot.utils.drawComponentGuidesWithDistances
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlight
+import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlightBordered
 import com.avin.avinapp.preview.snapshot.utils.drawComponentHighlightInfo
 import com.avin.avinapp.preview.snapshot.utils.mapPointerToDevice
 import com.avin.avinapp.utils.compose.modifier.handlePointerEvents
 import com.avin.avinapp.utils.compose.utils.aspectRatio
+import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.CircularProgressIndicator
+import org.jetbrains.jewel.ui.theme.colorPalette
 import org.jetbrains.jewel.ui.util.thenIf
 
 @Composable
@@ -158,7 +161,12 @@ fun SnapshotPreviewImpl(
                 }
                 .drawHighlight(hoveredComponent, imageSize, deviceSize, textMeasurer)
                 .drawHighlight(selectedComponent, imageSize, deviceSize)
-                .drawHighlight(draggedComponent, imageSize, deviceSize),
+                .drawHighlightRect(
+                    draggedComponent,
+                    imageSize,
+                    deviceSize,
+                    color = JewelTheme.colorPalette.blue[4].copy(.4f)
+                ),
             contentAlignment = Alignment.Center
         ) {
             RenderImage(
@@ -204,6 +212,19 @@ private fun Modifier.drawHighlight(
             )
             drawComponentHighlightInfo(componentInfo, imageSize, deviceSize, it, color = color)
         }
+        drawComponentHighlightBordered(componentInfo, imageSize, deviceSize, color = color)
+    }
+}
+
+
+private fun Modifier.drawHighlightRect(
+    component: RenderedComponentInfo?,
+    imageSize: Size,
+    deviceSize: Size,
+    color: Color = Color.Red
+): Modifier = this.drawWithContent {
+    drawContent()
+    component?.let { componentInfo ->
         drawComponentHighlight(componentInfo, imageSize, deviceSize, color = color)
     }
 }

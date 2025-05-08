@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/di" />
             <option value="$PROJECT_DIR$/core/preview" />
             <option value="$PROJECT_DIR$/core/preview/base" />
             <option value="$PROJECT_DIR$/core/preview/defaults" />
@@ -37,6 +38,9 @@
             <option value="$PROJECT_DIR$/desktop/features/projects" />
             <option value="$PROJECT_DIR$/desktop/features/settings" />
             <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/compose" />
+            <option value="$PROJECT_DIR$/shared/compose/dnd" />
+            <option value="$PROJECT_DIR$/shared/compose/eyedropper" />
             <option value="$PROJECT_DIR$/shared/data" />
             <option value="$PROJECT_DIR$/shared/database" />
             <option value="$PROJECT_DIR$/shared/git" />

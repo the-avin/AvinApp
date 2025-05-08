@@ -24,6 +24,24 @@ internal fun DrawScope.drawComponentHighlight(
     component: RenderedComponentInfo,
     imageSize: Size,
     deviceSize: Size,
+    color: Color = Color.Blue.copy(.2f)
+) {
+    // Inverse scale to convert from device coordinates back to image coordinates
+    val inverseScale = calculateScale(deviceSize, imageSize)
+    val topLeft =
+        Offset(component.position.x * inverseScale.x, component.position.y * inverseScale.y)
+    val size = Size(component.size.width * inverseScale.x, component.size.height * inverseScale.y)
+    drawRect(
+        color,
+        topLeft,
+        size,
+    )
+}
+
+internal fun DrawScope.drawComponentHighlightBordered(
+    component: RenderedComponentInfo,
+    imageSize: Size,
+    deviceSize: Size,
     color: Color = Color.Red
 ) {
     // Inverse scale to convert from device coordinates back to image coordinates
