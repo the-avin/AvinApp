@@ -15,6 +15,7 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(project(":desktop:utils"))
     implementation(project(":core:theme"))
     implementation(project(":core:preview:base"))
     implementation(project(":core:preview:realtime"))

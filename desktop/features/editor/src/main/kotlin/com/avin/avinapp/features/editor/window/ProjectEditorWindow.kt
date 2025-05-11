@@ -15,6 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
@@ -36,11 +41,29 @@ import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
 import com.avin.avinapp.preview.realtime.widget.RealtimePreview
 import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
 import com.avin.avinapp.preview.snapshot.widgets.SnapshotPreview
+import com.avin.avinapp.shortcut.KeyboardKeys
+import com.avin.avinapp.shortcut.desktop.DesktopShortcutManager
+import com.avin.avinapp.shortcut.handleShortcutManager
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
+
+
+private fun Modifier.handleDefaultKeyActions(
+    onDelete: () -> Unit,
+    onEscape: () -> Unit,
+) = onPreviewKeyEvent { event ->
+    if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+    when (event.key) {
+        Key.Escape -> onEscape.invoke()
+        Key.Delete, Key.Backspace -> onDelete.invoke()
+        else -> return@onPreviewKeyEvent false
+    }
+    return@onPreviewKeyEvent true
+}
+
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -72,6 +95,18 @@ fun ProjectEditorWindow(
             rendererState.renderPreview(it.toHolder())
         }
     }
+    val shortcutManager = remember {
+        DesktopShortcutManager().apply {
+            getDeleteKey() to {
+                rendererState.selectedComponentId?.let {
+                    rendererState.removeChild(it)
+                    rendererState.renderPreview()
+                }
+            }
+            KeyboardKeys.ESCAPE to { rendererState.clearSelectedComponents() }
+        }
+    }
+
     AppCustomWindow(
         onCloseRequest = onCloseRequest, title = projectName, state = rememberWindowState(
             placement = WindowPlacement.Fullscreen,
@@ -93,7 +128,10 @@ fun ProjectEditorWindow(
             onOpenSettings = onOpenSettings,
             onDeviceSelected = rendererState::selectDevice
         )
-        Row(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier.fillMaxSize()
+                .handleShortcutManager(shortcutManager)
+        ) {
             VerticalNavigationBar(
                 currentPage = currentPage,
                 items = remember { EditorPages.navigationPages },

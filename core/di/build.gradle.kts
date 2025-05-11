@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Local modules
+    implementation(project(":desktop:utils"))
     implementation(project(":shared:data"))
     implementation(project(":shared:git"))
     implementation(project(":shared:locale"))

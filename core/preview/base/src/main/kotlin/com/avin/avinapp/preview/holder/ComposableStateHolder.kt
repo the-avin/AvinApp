@@ -65,6 +65,30 @@ class ComposableStateHolder(
         return null
     }
 
+    fun removeChildById(id: String): ComposableStateHolder? {
+        if (!descriptor.hasChildren) return null
+
+        val queue = ArrayDeque<ComposableStateHolder>()
+        queue.add(this)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+
+            current.children.forEach { (key, list) ->
+                val index = list.indexOfFirst { it.composableId == id }
+                if (index != -1) {
+                    current.childrenMap[key]?.removeAt(index)?.let {
+                        return it
+                    }
+                }
+            }
+
+            current.children.values.forEach { queue.addAll(it) }
+        }
+
+        return null
+    }
+
     override fun equals(other: Any?): Boolean {
         return other is ComposableStateHolder && other.composableId == composableId
     }

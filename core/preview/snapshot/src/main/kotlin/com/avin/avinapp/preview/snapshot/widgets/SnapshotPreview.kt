@@ -21,13 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
@@ -142,7 +145,6 @@ fun SnapshotPreviewImpl(
                 .fillMaxHeight()
                 .focusRequester(focusRequester)
                 .focusable()
-                .onEscapeKeyPressed(state::clearSelectedComponents)
                 .handlePointerEvents(
                     onMove = { hoverPosition = it },
                     onExit = { hoverPosition = null },
@@ -165,7 +167,8 @@ fun SnapshotPreviewImpl(
                     hoveredComponent,
                     imageSize,
                     deviceSize,
-                    textMeasurer.takeIf { settings.inspectOnHover }
+                    textMeasurer.takeIf { settings.inspectOnHover },
+                    color = Color.Red.copy(.5f)
                 )
                 .drawHighlight(selectedComponent, imageSize, deviceSize),
             contentAlignment = Alignment.Center
@@ -228,13 +231,4 @@ private fun Modifier.drawHighlightRect(
     component?.let { componentInfo ->
         drawComponentHighlight(componentInfo, imageSize, deviceSize, color = color)
     }
-}
-
-
-private fun Modifier.onEscapeKeyPressed(action: () -> Unit) = onPreviewKeyEvent { event ->
-    if (event.key.keyCode == Key.Escape.keyCode) {
-        action.invoke()
-        return@onPreviewKeyEvent true
-    }
-    false
 }

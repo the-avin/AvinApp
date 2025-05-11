@@ -17,6 +17,7 @@ rootProject.name = "AvinApp"
 
 
 include("desktop:app")
+include("desktop:utils")
 include("desktop:features:projects")
 include("desktop:features:editor")
 include("desktop:features:settings")

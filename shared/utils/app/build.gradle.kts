@@ -7,5 +7,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
 
+    api(AppDependencies.PLATFORM)
+
     implementation(project(":shared:locale"))
 }

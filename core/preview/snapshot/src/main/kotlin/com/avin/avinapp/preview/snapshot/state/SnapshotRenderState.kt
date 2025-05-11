@@ -128,6 +128,12 @@ class SnapshotRenderState(
             ?.addChild(holder)
     }
 
+    fun removeChild(componentId: String) {
+        if (selectedComponentId == componentId) clearSelectedComponents()
+        lastHolder
+            ?.removeChildById(componentId)
+    }
+
     companion object {
         private const val LOG_TAG = "PreviewState"
     }

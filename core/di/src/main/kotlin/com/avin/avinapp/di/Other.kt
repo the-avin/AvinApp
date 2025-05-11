@@ -9,6 +9,8 @@ import com.avin.avinapp.git.helper.GitHelper
 import com.avin.avinapp.git.helper.GitHelperImpl
 import com.avin.avinapp.git.manager.GitManager
 import com.avin.avinapp.git.manager.GitManagerImpl
+import com.avin.avinapp.shortcut.desktop.DesktopShortcutManager
+import com.avin.avinapp.shortcut.platform.ShortcutManager
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
@@ -27,4 +29,7 @@ val otherModules = module {
     factory { Json { ignoreUnknownKeys = true; prettyPrint = true; encodeDefaults = true } }
 
     factory(named(JsonConfig.TYPED_JSON)) { JsonConfig.typeJson }
+
+    // Utils
+    factory { DesktopShortcutManager() }.bind<ShortcutManager>()
 }

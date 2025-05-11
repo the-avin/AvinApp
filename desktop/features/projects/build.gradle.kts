@@ -11,6 +11,7 @@ dependencies {
     // Decompose
     implementation(libs.decompose)
 
+    implementation(project(":desktop:utils"))
     implementation(project(":core:theme"))
     implementation(project(":shared:data"))
     implementation(project(":shared:git"))
