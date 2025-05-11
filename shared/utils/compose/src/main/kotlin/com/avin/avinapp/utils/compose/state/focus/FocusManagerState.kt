@@ -1,6 +1,7 @@
 package com.avin.avinapp.utils.compose.state.focus
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusRequester
@@ -8,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@Immutable
 data class FocusItemState(
     val id: String,
     val focusRequester: FocusRequester = FocusRequester(),

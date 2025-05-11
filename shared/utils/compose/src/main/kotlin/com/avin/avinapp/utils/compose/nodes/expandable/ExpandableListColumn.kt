@@ -6,19 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import com.avin.avinapp.utils.compose.hooks.NewFocusRequester
 import com.avin.avinapp.utils.compose.modifier.focus.onVerticalFocusKeyEvent
 import com.avin.avinapp.utils.compose.modifier.startPadding
 import com.avin.avinapp.utils.compose.state.focus.rememberFocusManagerState
-import kotlinx.coroutines.delay
 
 private fun getId(index: Int, subIndex: Int) = "item_${index}_$subIndex"
 
@@ -33,11 +29,15 @@ fun <T> ExpandableListColumn(
     val focusManagerState = rememberFocusManagerState()
     val expandedStates = remember(items) {
         items.keys.mapIndexed { index, key ->
-            key to mutableStateOf(index == initialExpandedIndex)
+            key to mutableStateOf(false)
         }.toMap()
     }
 
     LaunchedEffect(items) {
+        val initialItemKey = items.keys.toList().getOrNull(initialExpandedIndex)
+        initialItemKey?.let {
+            expandedStates[it]?.value = true
+        }
         focusManagerState.clear()
         items.toList().forEachIndexed { index, (key, list) ->
             list.forEachIndexed { subIndex, _ ->
