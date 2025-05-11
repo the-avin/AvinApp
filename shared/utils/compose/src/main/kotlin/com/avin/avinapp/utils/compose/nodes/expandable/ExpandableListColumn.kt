@@ -1,15 +1,26 @@
 package com.avin.avinapp.utils.compose.nodes.expandable
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import com.avin.avinapp.utils.compose.hooks.NewFocusRequester
+import com.avin.avinapp.utils.compose.modifier.focus.onVerticalFocusKeyEvent
 import com.avin.avinapp.utils.compose.modifier.startPadding
+import com.avin.avinapp.utils.compose.state.focus.rememberFocusManagerState
+import kotlinx.coroutines.delay
+
+private fun getId(index: Int, subIndex: Int) = "item_${index}_$subIndex"
 
 @Composable
 fun <T> ExpandableListColumn(
@@ -19,19 +30,53 @@ fun <T> ExpandableListColumn(
     topContent: (@Composable ColumnScope.() -> Unit)? = null,
     content: @Composable (T) -> Unit
 ) {
-    Column(modifier) {
+    val focusManagerState = rememberFocusManagerState()
+    val expandedStates = remember(items) {
+        items.keys.mapIndexed { index, key ->
+            key to mutableStateOf(index == initialExpandedIndex)
+        }.toMap()
+    }
+
+    LaunchedEffect(items) {
+        focusManagerState.clear()
+        items.toList().forEachIndexed { index, (key, list) ->
+            list.forEachIndexed { subIndex, _ ->
+                focusManagerState.addFocusState(getId(index, subIndex)) {
+                    if (expandedStates[key]?.value != true) {
+                        expandedStates[key]?.value = true
+                        withFrameNanos { }
+                    }
+                }
+            }
+        }
+    }
+
+    Column(modifier.onVerticalFocusKeyEvent(focusManagerState::moveFocus)) {
         topContent?.invoke(this)
         items.toList().forEachIndexed { index, (title, list) ->
-            var isExpanded by remember { mutableStateOf(index == initialExpandedIndex) }
+            val key = items.keys.elementAt(index)
+            val isExpandedState = expandedStates[key] ?: remember { mutableStateOf(false) }
             ExpandableTitle(
                 title,
-                isExpanded = isExpanded,
-                onExpandChanged = { isExpanded = it }
+                isExpanded = isExpandedState.value,
+                onExpandChanged = { isExpandedState.value = it }
             )
-            AnimatedVisibility(isExpanded) {
+            AnimatedVisibility(isExpandedState.value) {
                 Column(modifier = Modifier.startPadding()) {
-                    list.forEach {
-                        content.invoke(it)
+                    list.forEachIndexed { subIndex, item ->
+                        val itemId = getId(index, subIndex)
+                        val focusState = focusManagerState.getFocusState(itemId)
+                        focusState?.let { state ->
+                            Box(
+                                Modifier.onFocusChanged {
+                                    if (it.hasFocus) focusManagerState.moveFocus(state.id)
+                                }
+                            ) {
+                                NewFocusRequester(state.focusRequester) {
+                                    content(item)
+                                }
+                            }
+                        }
                     }
                 }
             }

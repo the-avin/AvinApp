@@ -60,7 +60,7 @@ fun ComposableDescriptorList(
         ) { descriptor ->
             ComposableDescriptorItem(
                 descriptor,
-                dragAndDropState
+                dragAndDropState,
             )
         }
     }
