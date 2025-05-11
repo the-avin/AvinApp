@@ -16,9 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
@@ -27,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.data.models.project.valid
 import com.avin.avinapp.manager.compose.dynamicStringRes
-import com.avin.avinapp.platform.file.FileHandler
+import com.avin.avinapp.utils.compose.foundation.file.FileHandler
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.utils.compose.modifier.grayscale
 import com.avin.avinapp.utils.compose.nodes.menu.IconMenu

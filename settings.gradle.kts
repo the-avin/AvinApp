@@ -37,4 +37,7 @@ include("shared:preferences")
 include("shared:database")
 include("shared:git")
 include("core:project")
-include("shared:platform")
+
+includeBuild("./composite/shared") {
+    name = "shred-modules"
+}

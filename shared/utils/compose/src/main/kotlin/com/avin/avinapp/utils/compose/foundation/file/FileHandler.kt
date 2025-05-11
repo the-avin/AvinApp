@@ -1,4 +1,4 @@
-package com.avin.avinapp.platform.file
+package com.avin.avinapp.utils.compose.foundation.file
 
 import java.awt.Desktop
 import java.io.File

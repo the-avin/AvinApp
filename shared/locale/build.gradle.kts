@@ -2,6 +2,6 @@ plugins {
     id(AppPlugins.COMPOSE)
 }
 dependencies {
+    api(AppDependencies.PLATFORM)
     implementation(project(":shared:resource"))
-    implementation(project(":shared:platform"))
 }

@@ -25,5 +25,4 @@ dependencies {
     implementation(project(":shared:utils:compose"))
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
-    implementation(project(":shared:platform"))
 }
