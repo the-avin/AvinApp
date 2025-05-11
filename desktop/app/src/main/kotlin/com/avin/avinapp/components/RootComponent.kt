@@ -7,7 +7,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.avin.avinapp.core.loader.ProjectLoader
 import com.avin.avinapp.data.repository.project.ProjectRepository
 import com.avin.avinapp.features.clone.component.CloneRepositoryComponent
-import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
+import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.new_project.component.NewProjectComponent
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.language.LanguageManager
@@ -96,7 +96,8 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
                 info = config,
                 repository = projectRepository,
                 devicesRepository = get(),
-                composableRepository = get()
+                composableRepository = get(),
+                editorSettingsRepository = get()
             )
         }
     )

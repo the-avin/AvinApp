@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.project.Project
-import com.avin.avinapp.features.editor.component.DevicesChooserDropdown
+import com.avin.avinapp.features.editor.widgets.chooser.DevicesChooserDropdown
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.utils.compose.utils.getColorForLetter
 import org.jetbrains.jewel.window.DecoratedWindowScope

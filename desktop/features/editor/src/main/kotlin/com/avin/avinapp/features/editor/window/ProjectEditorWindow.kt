@@ -23,14 +23,15 @@ import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.compose.dnd.modifiers.dragTarget
 import com.avin.avinapp.compose.dnd.state.rememberDragAndDropState
 import com.avin.avinapp.data.models.device.PreviewDevice
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.widget.findByDescriptorKey
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
-import com.avin.avinapp.features.editor.widgets.chooser.ProjectEditorComponent
+import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.widgets.descriptor_list.ComposableDescriptorList
 import com.avin.avinapp.features.editor.widgets.properties.PropertiesBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
+import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.realtime.state.rememberRealtimeRenderState
 import com.avin.avinapp.preview.realtime.widget.RealtimePreview
 import com.avin.avinapp.preview.snapshot.state.rememberSnapshotRenderState
@@ -39,9 +40,7 @@ import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Divider
-import org.jetbrains.jewel.ui.component.Text
 
 @OptIn(InternalComposeUiApi::class)
 @Composable
@@ -60,17 +59,18 @@ fun ProjectEditorWindow(
     val devices by component.devices.collectAsState()
     val currentPage by component.currentPage.collectAsState()
     val descriptors by component.descriptors.collectAsState()
+    val editorSettings by component.editorSettings.collectAsState()
     val collector = rememberComponentRenderCollector()
     val rendererState = rememberSnapshotRenderState(
         devices = devices,
         collector = collector,
     )
-    val holder = remember(descriptors) {
-        val buttonDescriptor =
-            ComposableDescriptor("Button", "material3.button", group = "Text", emptyList(), true)
-        ComposableStateHolder(buttonDescriptor)
-    }
     val dragAndDropState = rememberDragAndDropState()
+    LaunchedEffect(descriptors) {
+        descriptors.findByDescriptorKey("foundation.column")?.let {
+            rendererState.renderPreview(it.toHolder())
+        }
+    }
     AppCustomWindow(
         onCloseRequest = onCloseRequest, title = projectName, state = rememberWindowState(
             placement = WindowPlacement.Fullscreen,
@@ -108,20 +108,19 @@ fun ProjectEditorWindow(
                                 state = rendererState,
                                 collector = collector,
                                 dragAndDropState = dragAndDropState,
-                                modifier = Modifier.fillMaxHeight(.9f).dragTarget(dragAndDropState)
+                                settings = editorSettings.snapshotPreview,
+                                modifier = Modifier
+                                    .fillMaxHeight(.9f)
+                                    .dragTarget(dragAndDropState)
                             )
-                            DefaultButton(onClick = {
-                                rendererState.renderPreview(
-                                    holder
-                                )
-                            }) {
-                                Text("Render")
-                            }
                         }
                     }
 
                     else -> {
-                        RealtimePreviewSample(rendererState.currentDevice!!, holder)
+                        RealtimePreviewSample(
+                            rendererState.currentDevice!!,
+                            rendererState.lastHolder
+                        )
                     }
                 }
             }
@@ -131,12 +130,12 @@ fun ProjectEditorWindow(
 }
 
 @Composable
-fun RealtimePreviewSample(device: PreviewDevice, holder: ComposableStateHolder) {
+fun RealtimePreviewSample(device: PreviewDevice, holder: ComposableStateHolder?) {
     val rendererState = rememberRealtimeRenderState(
         device = device,
     )
     LaunchedEffect(Unit) {
-        rendererState.render(holder)
+        rendererState.render(holder ?: return@LaunchedEffect)
     }
     RealtimePreview(rendererState)
 }

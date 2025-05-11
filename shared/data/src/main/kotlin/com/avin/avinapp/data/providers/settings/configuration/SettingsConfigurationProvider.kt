@@ -9,5 +9,6 @@ interface SettingsConfigurationProvider {
 
     companion object Keys {
         val themeKey = AppPreferencesKeys.theme
+        val inspectOnHover = AppPreferencesKeys.inspectOnHover
     }
 }

@@ -1,6 +1,7 @@
 package com.avin.avinapp.preview.snapshot.widgets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.data.models.device.size
+import com.avin.avinapp.data.models.editor_settings.ProjectEditorSettings
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
@@ -62,16 +64,16 @@ fun SnapshotPreview(
     state: SnapshotRenderState,
     collector: ComponentRenderCollector,
     dragAndDropState: DragAndDropState,
+    settings: ProjectEditorSettings.SnapshotPreview,
     modifier: Modifier = Modifier
 ) {
-    if (state.currentImage != null) {
-        SnapshotPreviewImpl(
-            state = state,
-            collector = collector,
-            dragAndDropState = dragAndDropState,
-            modifier = modifier
-        )
-    }
+    SnapshotPreviewImpl(
+        state = state,
+        collector = collector,
+        dragAndDropState = dragAndDropState,
+        settings = settings,
+        modifier = modifier
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -80,6 +82,7 @@ fun SnapshotPreviewImpl(
     state: SnapshotRenderState,
     collector: ComponentRenderCollector,
     dragAndDropState: DragAndDropState,
+    settings: ProjectEditorSettings.SnapshotPreview,
     modifier: Modifier = Modifier
 ) {
     val currentDevice = state.currentDevice ?: return
@@ -142,6 +145,7 @@ fun SnapshotPreviewImpl(
 
         Box(
             modifier = Modifier
+                .background(Color.White)
                 .width(width)
                 .fillMaxHeight()
                 .focusRequester(focusRequester)
@@ -159,7 +163,12 @@ fun SnapshotPreviewImpl(
                 .thenIf(hoveredComponent.isNotNull()) {
                     pointerHoverIcon(PointerIcon.Hand)
                 }
-                .drawHighlight(hoveredComponent, imageSize, deviceSize, textMeasurer)
+                .drawHighlight(
+                    hoveredComponent,
+                    imageSize,
+                    deviceSize,
+                    textMeasurer.takeIf { settings.inspectOnHover }
+                )
                 .drawHighlight(selectedComponent, imageSize, deviceSize)
                 .drawHighlightRect(
                     draggedComponent,

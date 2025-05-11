@@ -17,6 +17,6 @@ data class SettingsConfiguration<T : Any>(
     val initialValues: Flow<T?>,
     val defaultValue: @Composable () -> T,
     val type: SettingsType<T>,
-    val hint: (@Composable (T) -> StringRes)? = null,
+    val hint: (@Composable (Any?) -> String)? = null,
     val onValueChange: suspend (T) -> Unit,
 )

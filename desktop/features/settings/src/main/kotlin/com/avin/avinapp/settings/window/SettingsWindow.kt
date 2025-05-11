@@ -13,8 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.data.models.settings.config.SettingsConfiguration
@@ -91,11 +93,23 @@ fun SettingsConfigurations(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = dynamicStringRes(configuration.name),
-                    )
+                    val value by configuration.initialValues.collectAsState(null)
+                    val requiredValue = value ?: configuration.defaultValue.invoke()
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            text = dynamicStringRes(configuration.name),
+                        )
+                        configuration.hint?.let {
+                            Text(
+                                text = it.invoke(requiredValue),
+                                fontSize = 10.sp,
+                                modifier = Modifier.alpha(.7f)
+                            )
+                        }
+                    }
                     ConfigurationItem(
                         configuration = configuration,
+                        value = requiredValue,
                         onValueChange = {
                             onValueChange(configuration, it)
                         }

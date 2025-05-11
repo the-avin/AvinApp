@@ -15,11 +15,14 @@ object StringResource {
     val dark = StringRes("dark")
     val light = StringRes("light")
     val general = StringRes("general")
+    val editor = StringRes("editor")
     val open = StringRes("open")
     val cloneRepository = StringRes("clone_repository")
     val name = StringRes("name")
     val path = StringRes("path")
     val theme = StringRes("theme")
+    val inspectOnHover = StringRes("inspect_on_hover")
+    val inspectOnHoverHint = StringRes("inspect_on_hover_hint")
     val url = StringRes("url")
     val openInFolder: StringRes
         get() = when {

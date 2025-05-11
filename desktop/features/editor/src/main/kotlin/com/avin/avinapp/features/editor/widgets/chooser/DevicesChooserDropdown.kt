@@ -1,4 +1,4 @@
-package com.avin.avinapp.features.editor.component
+package com.avin.avinapp.features.editor.widgets.chooser
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,13 +10,11 @@ import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.icon.ColoredIcon
-import com.avin.avinapp.utils.compose.foundation.menu.simpleItem
 import com.avin.avinapp.utils.compose.foundation.menu.simpleItems
 import org.jetbrains.jewel.foundation.theme.LocalContentColor
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
-import org.jetbrains.jewel.ui.component.items
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
 
 @Composable

@@ -1,6 +1,8 @@
 package com.avin.avinapp.utils.compose.nodes.expandable
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -61,7 +63,11 @@ fun <T> ExpandableListColumn(
                 isExpanded = isExpandedState.value,
                 onExpandChanged = { isExpandedState.value = it }
             )
-            AnimatedVisibility(isExpandedState.value) {
+            AnimatedVisibility(
+                isExpandedState.value,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
                 Column(modifier = Modifier.startPadding()) {
                     list.forEachIndexed { subIndex, item ->
                         val itemId = getId(index, subIndex)

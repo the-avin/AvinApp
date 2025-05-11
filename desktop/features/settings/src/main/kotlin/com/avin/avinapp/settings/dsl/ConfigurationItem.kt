@@ -15,13 +15,13 @@ import org.jetbrains.jewel.ui.theme.simpleListItemStyle
 
 @Composable
 fun ConfigurationItem(
+    value: Any,
     configuration: SettingsConfiguration<*>,
     onValueChange: (Any) -> Unit
 ) {
     when (configuration.type) {
         is SettingsType.Checkbox -> {
-            val value by configuration.initialValues.collectAsState(null)
-            val boolValue = (value ?: configuration.defaultValue.invoke()) as Boolean
+            val boolValue = value as Boolean
             Checkbox(
                 checked = boolValue,
                 onCheckedChange = { onValueChange(it) }

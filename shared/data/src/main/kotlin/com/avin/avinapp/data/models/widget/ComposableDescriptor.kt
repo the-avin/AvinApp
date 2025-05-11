@@ -33,3 +33,5 @@ data class ComposableDescriptor(
         )
     }
 }
+
+fun List<ComposableDescriptor>.findByDescriptorKey(key: String) = find { it.descriptorKey == key }

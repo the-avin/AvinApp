@@ -1,6 +1,5 @@
 package com.avin.avinapp.data.providers.settings.configuration
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.avin.avinapp.data.models.settings.config.SettingsConfiguration
 import com.avin.avinapp.data.models.settings.page.SettingsPage
@@ -19,7 +18,11 @@ class SettingsConfigurationProviderImpl(
             SettingsPage(
                 name = Resource.string.general,
                 configurations = generalConfigurations
-            )
+            ),
+            SettingsPage(
+                name = Resource.string.editor,
+                configurations = editorConfigurations
+            ),
         )
 
     private val generalConfigurations: List<SettingsConfiguration<*>>
@@ -36,17 +39,31 @@ class SettingsConfigurationProviderImpl(
             )
         )
 
+    private val editorConfigurations: List<SettingsConfiguration<*>>
+        get() = listOf(
+            booleanSetting(
+                name = Resource.string.inspectOnHover,
+                key = SettingsConfigurationProvider.Keys.inspectOnHover,
+                defaultValue = { true },
+                hint = { _ ->
+                    dynamicStringRes(Resource.string.inspectOnHoverHint)
+                }
+            )
+        )
+
     private fun booleanSetting(
         name: StringRes,
         key: PreferencesKey<Boolean>,
-        defaultValue: @Composable () -> Boolean
+        defaultValue: @Composable () -> Boolean,
+        hint: (@Composable (Boolean) -> String)? = null,
     ): SettingsConfiguration<Boolean> {
         return SettingsConfiguration(
             name = name,
             initialValues = preferences.get(key),
             type = SettingsType.Checkbox,
             defaultValue = defaultValue,
-            onValueChange = { preferences.set(key, it) }
+            onValueChange = { preferences.set(key, it) },
+            hint = hint?.let { { hint.invoke(it as Boolean) } }
         )
     }
 

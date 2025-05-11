@@ -18,9 +18,15 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
+import com.avin.avinapp.utils.compose.modifier.focus.focusWhenPressed
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
@@ -44,6 +50,13 @@ fun ExpandableTitle(title: String, isExpanded: Boolean, onExpandChanged: (Boolea
             .fillMaxWidth()
             .height(JewelTheme.globalMetrics.rowHeight)
             .hoverable(ins)
+            .onKeyEvent {
+                if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
+                    onExpandChanged.invoke(isExpanded.not())
+                    true
+                } else false
+            }
+            .focusWhenPressed(ins)
             .onPointerEvent(PointerEventType.Press) {
                 onExpandChanged.invoke(isExpanded.not())
             }

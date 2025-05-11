@@ -35,5 +35,12 @@
     "group": "Text",
     "parameters": [],
     "hasChildren": true
+  },
+  {
+    "name": "Column",
+    "descriptor_key": "foundation.column",
+    "group": "Layout",
+    "parameters": [],
+    "hasChildren": true
   }
 ]

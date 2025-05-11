@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.toSize
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
+import com.avin.avinapp.preview.holder.ComposableStateHolder
 import javax.management.Descriptor
 
 
@@ -73,3 +74,7 @@ private fun LayoutCoordinates.getComponentInfo(id: String, descriptor: Composabl
 fun Modifier.trackRender(id: String, descriptor: ComposableDescriptor): Modifier = this.then(
     TrackRenderElement(id, descriptor)
 )
+
+
+fun Modifier.trackRender(holder: ComposableStateHolder) =
+    trackRender(holder.composableId, holder.descriptor)

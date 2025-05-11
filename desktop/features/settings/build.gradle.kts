@@ -21,4 +21,5 @@ dependencies {
     implementation(project(":shared:locale"))
     implementation(project(":shared:resource"))
     implementation(project(":shared:data"))
+    implementation(project(":shared:preferences"))
 }
