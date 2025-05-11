@@ -61,11 +61,12 @@ fun ProjectEditorWindow(
     val descriptors by component.descriptors.collectAsState()
     val editorSettings by component.editorSettings.collectAsState()
     val collector = rememberComponentRenderCollector()
+    val dragAndDropState = rememberDragAndDropState()
     val rendererState = rememberSnapshotRenderState(
         devices = devices,
         collector = collector,
+        dragAndDropState = dragAndDropState
     )
-    val dragAndDropState = rememberDragAndDropState()
     LaunchedEffect(descriptors) {
         descriptors.findByDescriptorKey("foundation.column")?.let {
             rendererState.renderPreview(it.toHolder())

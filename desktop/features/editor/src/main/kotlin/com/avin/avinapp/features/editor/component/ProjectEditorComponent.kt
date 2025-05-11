@@ -29,7 +29,7 @@ class ProjectEditorComponent(
     private val repository: ProjectRepository,
     private val devicesRepository: DevicesRepository,
     private val composableRepository: ComposableRepository,
-    private val editorSettingsRepository: EditorSettingsRepository
+    editorSettingsRepository: EditorSettingsRepository
 ) : BaseComponent(context) {
     private val _project = MutableStateFlow<Project?>(null)
     val project = _project.asStateFlow()
@@ -46,10 +46,8 @@ class ProjectEditorComponent(
     private val _descriptors = MutableStateFlow<List<ComposableDescriptor>>(emptyList())
     val descriptors = _descriptors.asStateFlow()
 
-
     val editorSettings = editorSettingsRepository.getEditorSettings()
         .stateIn(scope, SharingStarted.WhileSubscribed(), ProjectEditorSettings())
-
 
     init {
         loadData()

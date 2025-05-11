@@ -123,7 +123,7 @@ private class DragSourceModifierNode(
             } else {
                 state.onDropped?.invoke(deltaOffset, data)
             }
-        }
+        } else state.onExit?.invoke()
     }
 }
 

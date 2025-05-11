@@ -3,16 +3,21 @@ package com.avin.avinapp.preview.snapshot.state
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
+import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.data.models.device.PreviewDevice
+import com.avin.avinapp.data.models.device.size
+import com.avin.avinapp.data.models.widget.ComposableDescriptor
 import com.avin.avinapp.logger.AppLogger
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
+import com.avin.avinapp.preview.data.models.findTopmostParentComponentByPosition
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
 import com.avin.avinapp.preview.registry.ComposableRegistry
 import com.avin.avinapp.preview.renderer.ComposableRenderer
 import com.avin.avinapp.preview.renderer.rememberComposableRenderer
+import com.avin.avinapp.preview.snapshot.utils.mapPointerToDevice
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -26,7 +31,9 @@ class SnapshotRenderState(
     private val devices: List<PreviewDevice>,
     initialDevice: PreviewDevice? = devices.firstOrNull(),
     private val scope: CoroutineScope,
-    private val renderer: ComposableRenderer
+    private val collector: ComponentRenderCollector,
+    private val renderer: ComposableRenderer,
+    private val dragAndDropState: DragAndDropState
 ) {
     var currentDevice by mutableStateOf(initialDevice)
         private set
@@ -42,7 +49,7 @@ class SnapshotRenderState(
     internal var currentImage by mutableStateOf<ImageBitmap?>(null)
         private set
 
-    internal var componentSize = Size.Zero
+    internal var componentSize by mutableStateOf(Size.Zero)
 
     private val mutex = Mutex()
 
@@ -50,7 +57,19 @@ class SnapshotRenderState(
     private var renderJob: Job? = null
 
     init {
-        invalidate()
+        initDragAndDrop()
+    }
+
+    private fun initDragAndDrop() {
+        dragAndDropState.onDroppedWithType<ComposableDescriptor> { offset, descriptor ->
+            currentDevice ?: return@onDroppedWithType
+            val mapped =
+                mapPointerToDevice(offset, componentSize, currentDevice!!.resolution.size)
+            collector.components.findTopmostParentComponentByPosition(mapped)?.let { info ->
+                addChild(info.id, descriptor.toHolder())
+                renderPreview()
+            }
+        }
     }
 
     fun selectDevice(device: PreviewDevice) {
@@ -120,7 +139,8 @@ fun rememberSnapshotRenderState(
     collector: ComponentRenderCollector,
     initialDevice: PreviewDevice? = devices.firstOrNull(),
     registry: ComposableRegistry = rememberDefaultComposableRegistry(),
-    renderer: ComposableRenderer = rememberComposableRenderer(collector, registry)
+    renderer: ComposableRenderer = rememberComposableRenderer(collector, registry),
+    dragAndDropState: DragAndDropState
 ): SnapshotRenderState {
     val scope = rememberCoroutineScope()
     val state = remember {
@@ -129,6 +149,8 @@ fun rememberSnapshotRenderState(
             initialDevice = initialDevice,
             scope = scope,
             renderer = renderer,
+            collector = collector,
+            dragAndDropState = dragAndDropState
         )
     }
     LaunchedEffect(devices) {

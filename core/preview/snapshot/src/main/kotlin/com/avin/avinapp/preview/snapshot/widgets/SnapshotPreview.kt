@@ -85,9 +85,9 @@ fun SnapshotPreviewImpl(
     settings: ProjectEditorSettings.SnapshotPreview,
     modifier: Modifier = Modifier
 ) {
-    val currentDevice = state.currentDevice ?: return
+    val currentDevice by rememberUpdatedState(state.currentDevice ?: return)
     val imageSize by rememberUpdatedState(state.componentSize)
-    val deviceSize by rememberUpdatedState(currentDevice.resolution.size)
+    val deviceSize = currentDevice.resolution.size
     val aspectRatio = deviceSize.aspectRatio
 
     var hoverPosition by remember { mutableStateOf<Offset?>(null) }
@@ -126,14 +126,6 @@ fun SnapshotPreviewImpl(
                 draggedComponent = collector.components.findTopmostParentComponentByPosition(mapped)
             }
 
-            onDroppedWithType<ComposableDescriptor> { offset, descriptor ->
-                val mapped = mapPointerToDevice(offset, imageSize, deviceSize)
-                collector.components.findTopmostParentComponentByPosition(mapped)?.let { info ->
-                    state.addChild(info.id, descriptor.toHolder())
-                    state.renderPreview()
-                }
-            }
-
             onExit {
                 draggedComponent = null
             }
@@ -163,19 +155,19 @@ fun SnapshotPreviewImpl(
                 .thenIf(hoveredComponent.isNotNull()) {
                     pointerHoverIcon(PointerIcon.Hand)
                 }
+                .drawHighlightRect(
+                    draggedComponent,
+                    imageSize,
+                    deviceSize,
+                    color = JewelTheme.colorPalette.blue[4].copy(.4f)
+                )
                 .drawHighlight(
                     hoveredComponent,
                     imageSize,
                     deviceSize,
                     textMeasurer.takeIf { settings.inspectOnHover }
                 )
-                .drawHighlight(selectedComponent, imageSize, deviceSize)
-                .drawHighlightRect(
-                    draggedComponent,
-                    imageSize,
-                    deviceSize,
-                    color = JewelTheme.colorPalette.blue[4].copy(.4f)
-                ),
+                .drawHighlight(selectedComponent, imageSize, deviceSize),
             contentAlignment = Alignment.Center
         ) {
             RenderImage(
