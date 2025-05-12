@@ -9,10 +9,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import com.avin.avinapp.utils.compose.nodes.scrubber.Scrubber
 import com.avin.avinapp.utils.compose.utils.formatSmart
 import kotlinx.coroutines.flow.collectLatest
 import net.objecthunter.exp4j.ExpressionBuilder
 import org.jetbrains.jewel.ui.component.TextField
+import kotlin.math.roundToInt
 
 private fun calculate(text: String): Double? {
     return runCatching { ExpressionBuilder(text).build().evaluate() }.getOrNull() ?: 0.0
@@ -26,10 +28,14 @@ fun ExpressionTextField(
 ) {
     val state = rememberTextFieldState(value.formatSmart())
 
+    fun updateValue(value: Double) {
+        state.edit { replace(0, state.text.length, value.toString()) }
+    }
+
     fun calculateValue() {
         if (value.formatSmart() != state.text.toString()) {
             val result = calculate(state.text.toString())?.also(onValueChanged) ?: return
-            state.edit { replace(0, state.text.length, result.toInt().toString()) }
+            updateValue(result)
         }
     }
 
@@ -49,6 +55,17 @@ fun ExpressionTextField(
             calculateValue()
             true
         } else false
+    }, trailingIcon = {
+        Scrubber(
+            onScrub = { change ->
+                state.text.toString().toDoubleOrNull()
+                    ?.let {
+                        val newValue = it.plus(change)
+                        onValueChanged.invoke(newValue)
+                        updateValue(newValue)
+                    }
+            }
+        )
     })
 }
 
@@ -67,11 +84,15 @@ fun ExpressionTextField(
         }
     }
 
+    fun updateValue(value: Int) {
+        state.edit { replace(0, state.text.length, value.toString()) }
+    }
+
     fun calculateValue() {
         val result = calculate(state.text.toString())
         if (result != null && result.toInt() != value) {
             onValueChanged(result.toInt())
-            state.edit { replace(0, state.text.length, result.toInt().toString()) }
+            updateValue(result.toInt())
         }
     }
 
@@ -86,6 +107,17 @@ fun ExpressionTextField(
                 calculateValue()
                 true
             } else false
+        }, trailingIcon = {
+            Scrubber(
+                onScrub = { change ->
+                    state.text.toString().toIntOrNull()
+                        ?.let {
+                            val newValue = it.plus(change.roundToInt())
+                            onValueChanged.invoke(newValue)
+                            updateValue(newValue)
+                        }
+                }
+            )
         }
     )
 }

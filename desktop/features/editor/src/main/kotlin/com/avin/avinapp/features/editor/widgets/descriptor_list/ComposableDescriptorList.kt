@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
 import com.avin.avinapp.theme.styles.panelTitleTextStyle
@@ -35,7 +36,7 @@ fun ComposableDescriptorList(
 ) {
     var width by remember { mutableStateOf(250.dp) }
     val groupedDescriptors = remember(descriptors) {
-        descriptors.groupBy { it.group }
+        descriptors.filter { it.group.isNotNull() }.groupBy { it.group!! }
     }
     val groupedDescriptorsWithAll = buildMap {
         put(dynamicStringRes(Resource.string.all), descriptors)

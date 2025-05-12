@@ -28,7 +28,7 @@ class ComposableStateHolder(
 
     private fun initializeDefaultParameters() {
         descriptor.parameters.forEach { param ->
-            parameterMap[param.key] = param.typedDefaultValue
+            parameterMap[param.parameterKey] = param.typedDefaultValue
         }
     }
 

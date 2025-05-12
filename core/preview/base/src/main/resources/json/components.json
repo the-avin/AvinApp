@@ -6,7 +6,7 @@
     "parameters": [
       {
         "name": "Label",
-        "key": "label",
+        "parameter_key": "label",
         "type": {
           "type": "StringType"
         },
@@ -17,7 +17,7 @@
       },
       {
         "name": "Max Lines",
-        "key": "maxLines",
+        "parameter_key": "maxLines",
         "type": {
           "type": "IntType"
         },

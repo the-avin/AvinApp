@@ -23,7 +23,7 @@
         </compositeConfiguration>
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="gradleJvm" value="jbr-21 (2)" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -45,6 +45,7 @@
             <option value="$PROJECT_DIR$/desktop/features/editor" />
             <option value="$PROJECT_DIR$/desktop/features/projects" />
             <option value="$PROJECT_DIR$/desktop/features/settings" />
+            <option value="$PROJECT_DIR$/desktop/utils" />
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/shared/compose" />
             <option value="$PROJECT_DIR$/shared/compose/dnd" />

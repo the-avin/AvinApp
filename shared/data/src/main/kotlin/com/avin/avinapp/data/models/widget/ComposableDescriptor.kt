@@ -12,15 +12,17 @@ data class ComposableDescriptor(
     val name: String,
     @SerialName("descriptor_key")
     val descriptorKey: String,
-    val group: String,
-    val parameters: List<Parameter>,
+    val group: String? = null,
+    val parameters: List<Parameter> = emptyList(),
+    val defaultModifiers: List<Modifier> = emptyList(),
     val hasChildren: Boolean
 ) {
     @Serializable
     @Immutable
     data class Parameter(
         val name: String,
-        val key: String,
+        @SerialName("parameter_key")
+        val parameterKey: String,
         val type: ParameterType,
         @SerialName("default_value")
         val defaultValue: ParameterValue? = null
@@ -32,6 +34,13 @@ data class ComposableDescriptor(
             val value: String
         )
     }
+
+    @Serializable
+    @Immutable
+    data class Modifier(
+        @SerialName("modifier_key")
+        val modifierKey: String,
+    )
 }
 
 fun List<ComposableDescriptor>.findByDescriptorKey(key: String) = find { it.descriptorKey == key }
