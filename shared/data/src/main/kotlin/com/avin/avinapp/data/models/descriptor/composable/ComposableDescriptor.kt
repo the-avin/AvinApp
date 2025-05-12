@@ -1,7 +1,7 @@
 package com.avin.avinapp.data.models.descriptor.composable
 
 import androidx.compose.runtime.Immutable
-import com.avin.avinapp.data.models.descriptor.modifier.ModifierDescriptor
+import com.avin.avinapp.data.models.descriptor.default_modifier.DefaultModifierDescriptor
 import com.avin.avinapp.data.models.descriptor.parameter.ParameterDescriptor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -15,7 +15,7 @@ data class ComposableDescriptor(
     val group: String? = null,
     val parameters: List<ParameterDescriptor> = emptyList(),
     @SerialName("default_modifiers")
-    val defaultModifiers: List<ModifierDescriptor> = emptyList(),
+    val defaultModifiers: List<DefaultModifierDescriptor> = emptyList(),
     val hasChildren: Boolean
 )
 

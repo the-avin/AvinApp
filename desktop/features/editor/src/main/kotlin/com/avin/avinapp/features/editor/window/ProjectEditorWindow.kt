@@ -16,11 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -29,11 +24,11 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.compose.dnd.modifiers.dragTarget
 import com.avin.avinapp.compose.dnd.state.rememberDragAndDropState
-import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.descriptor.composable.findByDescriptorKey
+import com.avin.avinapp.data.models.device.PreviewDevice
+import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
-import com.avin.avinapp.features.editor.component.ProjectEditorComponent
 import com.avin.avinapp.features.editor.widgets.descriptor_list.ComposableDescriptorList
 import com.avin.avinapp.features.editor.widgets.properties.PropertiesBar
 import com.avin.avinapp.preview.collector.rememberComponentRenderCollector
@@ -51,21 +46,6 @@ import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
-
-
-private fun Modifier.handleDefaultKeyActions(
-    onDelete: () -> Unit,
-    onEscape: () -> Unit,
-) = onPreviewKeyEvent { event ->
-    if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
-    when (event.key) {
-        Key.Escape -> onEscape.invoke()
-        Key.Delete, Key.Backspace -> onDelete.invoke()
-        else -> return@onPreviewKeyEvent false
-    }
-    return@onPreviewKeyEvent true
-}
-
 
 @OptIn(InternalComposeUiApi::class)
 @Composable

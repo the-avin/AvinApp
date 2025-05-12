@@ -1,13 +1,9 @@
 package com.avin.avinapp.preview.renderer
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.scene.CanvasLayersComposeScene
@@ -18,27 +14,25 @@ import com.avin.avinapp.data.models.device.intSize
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.collector.NewLocalComponentRenderCollector
 import com.avin.avinapp.preview.holder.ComposableStateHolder
-import com.avin.avinapp.preview.registry.ComposableRegistry
-import com.avin.avinapp.preview.registry.ProvideComposableRegistry
+import com.avin.avinapp.preview.registry.composable.ComposableRegistry
+import com.avin.avinapp.preview.registry.composable.ProvideComposableRegistry
+import com.avin.avinapp.preview.registry.modifier.ModifierRegistry
+import com.avin.avinapp.preview.registry.modifier.ProvideModifierRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
 class ComposableRendererImpl(
     private val collector: ComponentRenderCollector?,
-    private val registry: ComposableRegistry
+    private val registry: ComposableRegistry,
+    private val modifierRegistry: ModifierRegistry
 ) : ComposableRenderer {
     override fun renderComposable(holder: ComposableStateHolder): @Composable (() -> Unit) {
         return {
-            NewLocalComponentRenderCollector(collector) {
-                ProvideComposableRegistry(
-                    registry = registry
-                ) {
-                    MaterialTheme {
-                        Box(
-                            Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
+            ProvideComposableRegistry(registry = registry) {
+                ProvideModifierRegistry(registry = modifierRegistry) {
+                    NewLocalComponentRenderCollector(collector) {
+                        MaterialTheme {
                             registry.renderComposable(holder)
                         }
                     }
@@ -86,5 +80,9 @@ class ComposableRendererImpl(
 
 
 @Composable
-fun rememberComposableRenderer(collector: ComponentRenderCollector?, registry: ComposableRegistry) =
-    remember { ComposableRendererImpl(collector, registry) }
+fun rememberComposableRenderer(
+    collector: ComponentRenderCollector?,
+    registry: ComposableRegistry,
+    modifierRegistry: ModifierRegistry
+) =
+    remember { ComposableRendererImpl(collector, registry, modifierRegistry) }

@@ -1,20 +1,27 @@
 package com.avin.avinapp.preview.snapshot.state
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
-import com.avin.avinapp.preview.collector.ComponentRenderCollector
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.device.size
-import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.logger.AppLogger
+import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findTopmostParentComponentByPosition
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.holder.toHolder
 import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
-import com.avin.avinapp.preview.registry.ComposableRegistry
+import com.avin.avinapp.preview.providers.registry.rememberDefaultModifierRegistry
 import com.avin.avinapp.preview.renderer.ComposableRenderer
 import com.avin.avinapp.preview.renderer.rememberComposableRenderer
 import com.avin.avinapp.preview.snapshot.utils.mapPointerToDevice
@@ -144,8 +151,11 @@ fun rememberSnapshotRenderState(
     devices: List<PreviewDevice>,
     collector: ComponentRenderCollector,
     initialDevice: PreviewDevice? = devices.firstOrNull(),
-    registry: ComposableRegistry = rememberDefaultComposableRegistry(),
-    renderer: ComposableRenderer = rememberComposableRenderer(collector, registry),
+    renderer: ComposableRenderer = rememberComposableRenderer(
+        collector = collector,
+        registry = rememberDefaultComposableRegistry(),
+        modifierRegistry = rememberDefaultModifierRegistry()
+    ),
     dragAndDropState: DragAndDropState
 ): SnapshotRenderState {
     val scope = rememberCoroutineScope()

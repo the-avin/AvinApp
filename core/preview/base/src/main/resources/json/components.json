@@ -6,7 +6,7 @@
     "parameters": [
       {
         "name": "Label",
-        "parameter_key": "label",
+        "descriptor_key": "label",
         "type": {
           "type": "StringType"
         },
@@ -17,7 +17,7 @@
       },
       {
         "name": "Max Lines",
-        "parameter_key": "maxLines",
+        "descriptor_key": "maxLines",
         "type": {
           "type": "IntType"
         },
@@ -40,7 +40,24 @@
     "name": "Column",
     "descriptor_key": "foundation.column",
     "group": "Layout",
-    "parameters": [],
+    "default_modifiers": [
+      {
+        "descriptor_key": "fillMaxWidth"
+      },
+      {
+        "descriptor_key": "height",
+        "parameters": [
+          {
+            "key": "height",
+            "value": "200",
+            "type": {
+              "type": "DpType"
+            },
+            "source": "STATIC"
+          }
+        ]
+      }
+    ],
     "hasChildren": true
   }
 ]

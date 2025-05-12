@@ -10,7 +10,8 @@ import androidx.compose.runtime.setValue
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.providers.registry.rememberDefaultComposableRegistry
-import com.avin.avinapp.preview.registry.ComposableRegistry
+import com.avin.avinapp.preview.providers.registry.rememberDefaultModifierRegistry
+import com.avin.avinapp.preview.registry.composable.ComposableRegistry
 import com.avin.avinapp.preview.renderer.ComposableRenderer
 import com.avin.avinapp.preview.renderer.rememberComposableRenderer
 
@@ -31,9 +32,10 @@ class RealtimeRendererState(
 @Composable
 fun rememberRealtimeRenderState(
     device: PreviewDevice,
-    registry: ComposableRegistry = rememberDefaultComposableRegistry(),
     renderer: ComposableRenderer = rememberComposableRenderer(
-        collector = null, registry = registry
+        collector = null,
+        registry = rememberDefaultComposableRegistry(),
+        modifierRegistry = rememberDefaultModifierRegistry()
     )
 ): RealtimeRendererState {
     val state = remember {

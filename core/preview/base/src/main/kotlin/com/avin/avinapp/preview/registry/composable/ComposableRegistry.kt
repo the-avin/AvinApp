@@ -1,4 +1,4 @@
-package com.avin.avinapp.preview.registry
+package com.avin.avinapp.preview.registry.composable
 
 import androidx.compose.runtime.Composable
 import com.avin.avinapp.preview.holder.ComposableStateHolder

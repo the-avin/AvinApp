@@ -2,14 +2,18 @@ package com.avin.avinapp.preview.providers.registry
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.avin.avinapp.preview.providers.button.Material3ButtonProvider
-import com.avin.avinapp.preview.providers.layout.ColumnProvider
-import com.avin.avinapp.preview.providers.text.Material3TextComposableProvider
-import com.avin.avinapp.preview.registry.ComposableRegistry
-import com.avin.avinapp.preview.registry.ComposableRegistryImpl
+import com.avin.avinapp.preview.providers.components.button.Material3ButtonProvider
+import com.avin.avinapp.preview.providers.components.layout.ColumnProvider
+import com.avin.avinapp.preview.providers.components.text.Material3TextComposableProvider
+import com.avin.avinapp.preview.providers.modifiers.size.FillMaxSizeModifierProvider
+import com.avin.avinapp.preview.providers.modifiers.size.FillMaxWidthModifierProvider
+import com.avin.avinapp.preview.providers.modifiers.size.HeightModifierProvider
+import com.avin.avinapp.preview.registry.composable.ComposableRegistry
+import com.avin.avinapp.preview.registry.composable.ComposableRegistryImpl
+import com.avin.avinapp.preview.registry.modifier.ModifierRegistryImpl
 
 object RegistryProvider {
-    fun provide() = ComposableRegistryImpl().apply {
+    fun provideComposableRegistry() = ComposableRegistryImpl().apply {
         // Text
         addTextComposableProviders()
 
@@ -18,6 +22,12 @@ object RegistryProvider {
 
         // Layouts
         addLayoutComposableProviders()
+    }
+
+    fun provideModifierRegistry() = ModifierRegistryImpl().apply {
+        register(FillMaxWidthModifierProvider())
+        register(HeightModifierProvider())
+        register(FillMaxSizeModifierProvider())
     }
 
     private fun ComposableRegistry.addTextComposableProviders() {
@@ -35,5 +45,10 @@ object RegistryProvider {
 
 @Composable
 fun rememberDefaultComposableRegistry() = remember {
-    RegistryProvider.provide()
+    RegistryProvider.provideComposableRegistry()
+}
+
+@Composable
+fun rememberDefaultModifierRegistry() = remember {
+    RegistryProvider.provideModifierRegistry()
 }

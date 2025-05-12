@@ -2,6 +2,8 @@ package com.avin.avinapp.preview.holder
 
 import androidx.compose.runtime.Immutable
 import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
+import com.avin.avinapp.data.models.modifier.ModifierValues
+import com.avin.avinapp.preview.extensions.defaultValues
 import com.avin.avinapp.preview.extensions.typedDefaultValue
 import com.avin.avinapp.preview.utils.IdGenerator
 
@@ -13,6 +15,7 @@ class ComposableStateHolder(
 
     private val parameterMap = mutableMapOf<String, Any?>()
     private val childrenMap = mutableMapOf<String, MutableList<ComposableStateHolder>>()
+    private val modifiersMap = mutableMapOf<String, ModifierValues>()
 
     val parameters: Map<String, Any?>
         get() = synchronized(parameterMap) { parameterMap.toMap() }
@@ -22,13 +25,25 @@ class ComposableStateHolder(
             childrenMap.mapValues { it.value.toList() }
         }
 
+    val modifiers: Map<String, ModifierValues>
+        get() = synchronized(modifiersMap) {
+            modifiersMap
+        }
+
     init {
         initializeDefaultParameters()
+        initializeDefaultModifiers()
     }
 
     private fun initializeDefaultParameters() {
         descriptor.parameters.forEach { param ->
-            parameterMap[param.parameterKey] = param.typedDefaultValue
+            parameterMap[param.descriptorKey] = param.typedDefaultValue
+        }
+    }
+
+    private fun initializeDefaultModifiers() {
+        descriptor.defaultModifiers.forEach { modifier ->
+            modifiersMap[modifier.descriptorKey] = modifier.defaultValues
         }
     }
 

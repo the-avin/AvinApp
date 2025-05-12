@@ -120,12 +120,12 @@ private fun LazyListScope.parametersList(
 ) {
     val parameters = holder.descriptor.parameters
 
-    items(parameters, key = { it.parameterKey }) { parameter ->
+    items(parameters, key = { it.descriptorKey }) { parameter ->
         ParameterItem(
-            initialValue = holder.parameters[parameter.parameterKey],
+            initialValue = holder.parameters[parameter.descriptorKey],
             parameter = parameter,
             onUpdateValue = {
-                holder.updateParameter(parameter.parameterKey, it)
+                holder.updateParameter(parameter.descriptorKey, it)
                 onNewRenderRequest.invoke()
             }
         )

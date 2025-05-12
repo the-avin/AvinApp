@@ -1,4 +1,4 @@
-package com.avin.avinapp.preview.providers.text
+package com.avin.avinapp.preview.providers.components.text
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
