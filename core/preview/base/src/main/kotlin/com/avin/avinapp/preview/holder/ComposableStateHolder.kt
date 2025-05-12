@@ -1,7 +1,7 @@
 package com.avin.avinapp.preview.holder
 
 import androidx.compose.runtime.Immutable
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.preview.extensions.typedDefaultValue
 import com.avin.avinapp.preview.utils.IdGenerator
 

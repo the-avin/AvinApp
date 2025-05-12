@@ -17,15 +17,32 @@ fun Modifier.handlePointerEvents(
             while (true) {
                 val event = awaitPointerEvent()
                 val position = event.changes.lastOrNull()?.position
+                val change = event.changes.lastOrNull()
 
                 when (event.type) {
-                    PointerEventType.Move -> position?.let { onMove?.invoke(it) }
-                    PointerEventType.Press -> position?.let { onClick?.invoke(it) }
-                    PointerEventType.Exit -> position?.let { onExit?.invoke(it) }
-                    PointerEventType.Release -> position?.let { onRelease?.invoke(it) }
-                    PointerEventType.Enter -> position?.let { onEnter?.invoke(it) }
+                    PointerEventType.Move -> position?.let {
+                        onMove?.invoke(it)
+                    }
+
+                    PointerEventType.Press -> position?.let {
+                        onClick?.invoke(it)
+                    }
+
+                    PointerEventType.Exit -> position?.let {
+                        onExit?.invoke(it)
+                    }
+
+                    PointerEventType.Release -> position?.let {
+                        onRelease?.invoke(it)
+                    }
+
+                    PointerEventType.Enter -> position?.let {
+                        onEnter?.invoke(it)
+                    }
+
                     else -> Unit
                 }
+                change?.consume()
             }
         }
     }
@@ -39,6 +56,7 @@ fun Modifier.handlePointerEventsWithType(
                 val event = awaitPointerEvent()
                 val position = event.changes.lastOrNull()?.position
                 handle.invoke(event.type, position ?: continue)
+                event.changes.lastOrNull()?.consume()
             }
         }
     }

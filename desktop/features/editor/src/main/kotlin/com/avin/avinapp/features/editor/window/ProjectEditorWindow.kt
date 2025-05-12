@@ -2,6 +2,7 @@
 
 package com.avin.avinapp.features.editor.window
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
@@ -28,7 +30,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.avin.avinapp.compose.dnd.modifiers.dragTarget
 import com.avin.avinapp.compose.dnd.state.rememberDragAndDropState
 import com.avin.avinapp.data.models.device.PreviewDevice
-import com.avin.avinapp.data.models.widget.findByDescriptorKey
+import com.avin.avinapp.data.models.descriptor.composable.findByDescriptorKey
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.features.editor.dsl.titlebar.ProjectEditorTitleBar
 import com.avin.avinapp.features.editor.component.ProjectEditorComponent
@@ -139,10 +141,16 @@ fun ProjectEditorWindow(
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
             ComposableDescriptorList(descriptors, dragAndDropState)
-            Box(Modifier.fillMaxHeight().weight(1f), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxHeight().weight(1f).pointerInput(Unit) {
+                detectTapGestures {
+                    rendererState.clearSelectedComponents()
+                }
+            }, contentAlignment = Alignment.Center) {
                 when (currentPage) {
                     is EditorPages.Screens -> {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
                             SnapshotPreview(
                                 state = rendererState,
                                 collector = collector,

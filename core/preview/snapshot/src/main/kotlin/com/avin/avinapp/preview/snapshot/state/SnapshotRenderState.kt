@@ -7,7 +7,7 @@ import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.preview.collector.ComponentRenderCollector
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.device.size
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.logger.AppLogger
 import com.avin.avinapp.preview.data.models.RenderedComponentInfo
 import com.avin.avinapp.preview.data.models.findTopmostParentComponentByPosition

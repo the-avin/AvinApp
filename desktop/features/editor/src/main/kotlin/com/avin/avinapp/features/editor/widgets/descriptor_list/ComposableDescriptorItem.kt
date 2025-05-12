@@ -17,8 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -26,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import com.avin.avinapp.compose.dnd.modifiers.dragSource
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.utils.compose.hooks.LocalFocusRequester
 import com.avin.avinapp.utils.compose.modifier.focus.focusWhenPressed
 import org.jetbrains.jewel.foundation.theme.JewelTheme

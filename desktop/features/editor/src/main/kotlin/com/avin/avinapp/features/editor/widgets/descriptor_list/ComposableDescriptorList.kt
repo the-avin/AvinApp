@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.extensions.isNotNull
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource

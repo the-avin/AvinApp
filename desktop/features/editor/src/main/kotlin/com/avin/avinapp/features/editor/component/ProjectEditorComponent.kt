@@ -5,7 +5,7 @@ import com.avin.avinapp.components.BaseComponent
 import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.editor_settings.ProjectEditorSettings
 import com.avin.avinapp.data.models.project.Project
-import com.avin.avinapp.data.models.widget.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
 import com.avin.avinapp.data.repository.device.DevicesRepository
 import com.avin.avinapp.data.repository.editor_settings.EditorSettingsRepository
 import com.avin.avinapp.data.repository.project.ProjectRepository
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
