@@ -42,21 +42,14 @@ import org.jetbrains.jewel.ui.component.VerticallyScrollableContainer
 fun PropertiesBar(
     renderState: SnapshotRenderState,
 ) {
-    val width by rememberResizableSize {
-        DragHandler(
-            orientation = Orientation.Horizontal,
-            onDrag = it,
-            reverseDirection = true
-        )
-    }
 
-    Row {
+    Row(modifier = Modifier.fillMaxSize()) {
         if (renderState.selectedComponentId.isNotNull() && renderState.lastHolder.isNotNull()) {
-            Box(modifier = Modifier.width(width)) {
+            Box(modifier = Modifier) {
                 PropertiesBarImpl(renderState)
             }
         } else {
-            Column(modifier = Modifier.width(width).fillMaxHeight().allPadding()) {
+            Column(modifier = Modifier.fillMaxHeight().allPadding()) {
                 Text(
                     dynamicStringRes(Resource.string.properties),
                     style = JewelTheme.panelTitleTextStyle

@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,13 +26,17 @@ fun DragHandler(
     orientation: Orientation,
     onDrag: (Dp) -> Unit,
     modifier: Modifier = Modifier,
-    reverseDirection : Boolean = false
+    reverseDirection: Boolean = false
 ) {
     val density = LocalDensity.current
     val reverseDirection =
         (LocalLayoutDirection.current == LayoutDirection.Rtl && orientation == Orientation.Horizontal) || reverseDirection
     Box(
-        modifier = modifier.width(4.dp)
+        modifier = modifier
+            .then(
+                if (orientation == Orientation.Vertical) Modifier.fillMaxWidth()
+                    .height(4.dp) else Modifier.fillMaxHeight().width(4.dp)
+            )
             .draggable(
                 rememberDraggableState { delta ->
                     onDrag.invoke(with(density) { delta.toDp() })
@@ -49,7 +54,6 @@ fun DragHandler(
                     )
                 ), true
             )
-            .then(if (orientation == Orientation.Vertical) Modifier.fillMaxWidth() else Modifier.fillMaxHeight())
     ) {
         Divider(
             if (orientation == Orientation.Horizontal) JewelOrientation.Vertical else JewelOrientation.Horizontal,

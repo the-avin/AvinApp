@@ -44,6 +44,8 @@ import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
 import com.avin.avinapp.utils.compose.modifier.focus.clearFocusWhenPressed
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
+import com.avin.avinapp.utils.compose.nodes.resizable.ResizableColumnSplit
+import com.avin.avinapp.utils.compose.nodes.resizable.ResizableStartPanel
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
 
@@ -155,13 +157,16 @@ fun ProjectEditorWindow(
                     }
                 }
             }
-            Column {
-                Box(Modifier.weight(1f)) {
-                    PropertiesBar(rendererState)
-                }
-                Box(Modifier.weight(1f)) {
-                    ModifiersBar(rendererState, modifiersDescriptors)
-                }
+
+            ResizableStartPanel {
+                ResizableColumnSplit(
+                    topContent = {
+                        PropertiesBar(rendererState)
+                    },
+                    bottomContent = {
+                        ModifiersBar(rendererState, modifiersDescriptors)
+                    },
+                )
             }
         }
     }

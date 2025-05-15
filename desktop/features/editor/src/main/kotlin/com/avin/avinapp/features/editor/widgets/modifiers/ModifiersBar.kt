@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.descriptor.modifier.ModifierDescriptor
 import com.avin.avinapp.extensions.isNotNull
-import com.avin.avinapp.features.editor.widgets.properties.ParameterItem
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.preview.holder.ComposableStateHolder
 import com.avin.avinapp.preview.snapshot.state.SnapshotRenderState
@@ -46,28 +44,17 @@ fun ModifiersBar(
     renderState: SnapshotRenderState,
     modifiers: List<ModifierDescriptor>
 ) {
-    val width by rememberResizableSize {
-        DragHandler(
-            orientation = Orientation.Horizontal,
-            onDrag = it,
-            reverseDirection = true
-        )
-    }
 
-    Row {
-        if (renderState.selectedComponentId.isNotNull() && renderState.lastHolder.isNotNull()) {
-            Box(modifier = Modifier.width(width)) {
-                ModifiersBarImpl(renderState, modifiers)
-            }
-        } else {
-            Column(modifier = Modifier.width(width).fillMaxHeight().allPadding()) {
-                Text(
-                    dynamicStringRes(Resource.string.modifiers),
-                    style = JewelTheme.panelTitleTextStyle
-                )
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No component selected", modifier = Modifier.alpha(.7f))
-                }
+    if (renderState.selectedComponentId.isNotNull() && renderState.lastHolder.isNotNull()) {
+        ModifiersBarImpl(renderState, modifiers)
+    } else {
+        Column(modifier = Modifier.fillMaxSize().allPadding()) {
+            Text(
+                dynamicStringRes(Resource.string.modifiers),
+                style = JewelTheme.panelTitleTextStyle
+            )
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No component selected", modifier = Modifier.alpha(.7f))
             }
         }
     }

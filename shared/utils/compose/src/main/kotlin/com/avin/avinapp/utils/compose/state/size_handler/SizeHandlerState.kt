@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun rememberResizableSize(
     initialSize: Dp = 300.dp,
-    sizeRange: ClosedRange<Dp> = 200.dp..500.dp,
+    sizeRange: ClosedRange<Dp>? = 200.dp..500.dp,
     dragHandle: @Composable (onDrag: (Dp) -> Unit) -> Unit
 ): State<Dp> {
     var size by remember { mutableStateOf(initialSize) }
 
-    fun coerceSize(size: Dp) = size.coerceIn(sizeRange)
+    fun coerceSize(size: Dp) = sizeRange?.let { size.coerceIn(it) } ?: size
 
     dragHandle { delta ->
         size = coerceSize(size + delta)
