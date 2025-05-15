@@ -25,6 +25,7 @@ import androidx.compose.ui.text.withStyle
 import com.avin.avinapp.compose.dnd.modifiers.dragSource
 import com.avin.avinapp.compose.dnd.state.DragAndDropState
 import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
+import com.avin.avinapp.theme.extensions.hoverColor
 import com.avin.avinapp.utils.compose.hooks.LocalFocusRequester
 import com.avin.avinapp.utils.compose.modifier.focus.focusWhenPressed
 import org.jetbrains.jewel.foundation.theme.JewelTheme
@@ -45,7 +46,7 @@ fun ComposableDescriptorItem(
     val isDragging by ins.collectIsDraggedAsState()
     val color = when {
         isFocused && !isDragging -> style.colors.backgroundSelectedFocused
-        isHovered -> JewelTheme.contentColor.copy(.1f)
+        isHovered -> JewelTheme.hoverColor
         else -> Color.Transparent
     }
     val focusRequester = LocalFocusRequester.current

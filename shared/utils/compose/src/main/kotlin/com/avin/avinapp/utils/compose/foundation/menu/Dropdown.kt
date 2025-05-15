@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.locale.StringRes
 import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.theme.extensions.hoverColor
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.foundation.theme.LocalContentColor
 import org.jetbrains.jewel.ui.component.Icon
@@ -53,8 +54,8 @@ fun MenuScope.simpleItem(
         val ins = remember { MutableInteractionSource() }
         val isHovered by ins.collectIsHoveredAsState()
         val color = when {
-            isHovered -> style.colors.backgroundSelectedFocused
             isSelected -> style.colors.backgroundSelectedFocused
+            isHovered -> JewelTheme.hoverColor
             else -> Color.Transparent
         }
         Box(

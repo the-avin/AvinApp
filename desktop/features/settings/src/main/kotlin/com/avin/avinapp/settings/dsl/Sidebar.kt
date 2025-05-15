@@ -24,10 +24,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.settings.page.SettingsPage
 import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.theme.extensions.hoverColor
 import com.avin.avinapp.utils.compose.nodes.resizable.ResizableEndPanel
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
+import org.jetbrains.jewel.ui.theme.simpleListItemStyle
 
 @Composable
 fun Sidebar(
@@ -53,8 +55,8 @@ fun Sidebar(
                         .fillMaxWidth()
                         .background(
                             when {
-                                currentPage?.name == page.name -> JewelTheme.colorPalette.blue[3]
-                                isHovered -> JewelTheme.colorPalette.blue[5].copy(.3f)
+                                currentPage?.name == page.name -> JewelTheme.simpleListItemStyle.colors.backgroundSelectedFocused
+                                isHovered -> JewelTheme.hoverColor
                                 else -> Color.Transparent
                             }
                         )
