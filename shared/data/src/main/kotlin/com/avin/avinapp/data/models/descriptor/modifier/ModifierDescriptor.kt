@@ -10,5 +10,6 @@ import kotlinx.serialization.Serializable
 data class ModifierDescriptor(
     @SerialName("descriptor_key")
     val descriptorKey: String,
+    val name: String = descriptorKey.replaceFirstChar { it.uppercase() },
     val parameters: List<ParameterDescriptor> = emptyList()
 )
