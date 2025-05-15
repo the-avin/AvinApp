@@ -6,13 +6,15 @@ import com.avin.avinapp.data.models.device.PreviewDevice
 import com.avin.avinapp.data.models.editor_settings.ProjectEditorSettings
 import com.avin.avinapp.data.models.project.Project
 import com.avin.avinapp.data.models.descriptor.composable.ComposableDescriptor
+import com.avin.avinapp.data.models.descriptor.modifier.ModifierDescriptor
 import com.avin.avinapp.data.repository.device.DevicesRepository
 import com.avin.avinapp.data.repository.editor_settings.EditorSettingsRepository
 import com.avin.avinapp.data.repository.project.ProjectRepository
-import com.avin.avinapp.data.repository.widget.ComposableRepository
+import com.avin.avinapp.data.repository.descriptors.DescriptorsRepository
 import com.avin.avinapp.features.editor.data.pages.EditorPages
 import com.avin.avinapp.pages.AppPages
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +29,7 @@ class ProjectEditorComponent(
     private val info: AppPages.Editor,
     private val repository: ProjectRepository,
     private val devicesRepository: DevicesRepository,
-    private val composableRepository: ComposableRepository,
+    private val descriptorsRepository: DescriptorsRepository,
     editorSettingsRepository: EditorSettingsRepository
 ) : BaseComponent(context) {
     private val _project = MutableStateFlow<Project?>(null)
@@ -45,6 +47,9 @@ class ProjectEditorComponent(
     private val _descriptors = MutableStateFlow<List<ComposableDescriptor>>(emptyList())
     val descriptors = _descriptors.asStateFlow()
 
+    private val _modifiersDescriptors = MutableStateFlow<List<ModifierDescriptor>>(emptyList())
+    val modifiersDescriptors = _modifiersDescriptors.asStateFlow()
+
     val editorSettings = editorSettingsRepository.getEditorSettings()
         .stateIn(scope, SharingStarted.WhileSubscribed(), ProjectEditorSettings())
 
@@ -55,8 +60,14 @@ class ProjectEditorComponent(
     }
 
     private fun loadDescriptors() = scope.launch(Dispatchers.IO) {
-        val newDescriptors = composableRepository.getAllComposableDescriptors()
-        _descriptors.update { newDescriptors }
+        val newComposableDescriptorsDeferred =
+            async { descriptorsRepository.getAllComposableDescriptors() }
+        val newModifierDescriptorsDeferred =
+            async { descriptorsRepository.getAllModifiersDescriptors() }
+        val newMComposableDescriptors = newComposableDescriptorsDeferred.await()
+        val newModifierDescriptors = newModifierDescriptorsDeferred.await()
+        _descriptors.update { newMComposableDescriptors }
+        _modifiersDescriptors.update { newModifierDescriptors }
     }
 
     private fun loadData() = scope.launch(Dispatchers.IO) {

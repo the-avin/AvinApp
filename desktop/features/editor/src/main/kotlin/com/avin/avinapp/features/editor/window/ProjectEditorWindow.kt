@@ -2,7 +2,6 @@
 
 package com.avin.avinapp.features.editor.window
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
@@ -43,6 +41,7 @@ import com.avin.avinapp.shortcut.desktop.DesktopShortcutManager
 import com.avin.avinapp.shortcut.handleShortcutManager
 import com.avin.avinapp.theme.window.AppCustomWindow
 import com.avin.avinapp.utils.compose.foundation.window.ApplyWindowMinimumSize
+import com.avin.avinapp.utils.compose.modifier.focus.clearFocusWhenPressed
 import com.avin.avinapp.utils.compose.nodes.navigation_bar.VerticalNavigationBar
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.Divider
@@ -64,6 +63,7 @@ fun ProjectEditorWindow(
     val devices by component.devices.collectAsState()
     val currentPage by component.currentPage.collectAsState()
     val descriptors by component.descriptors.collectAsState()
+    val modifiersDescriptors by component.modifiersDescriptors.collectAsState()
     val editorSettings by component.editorSettings.collectAsState()
     val collector = rememberComponentRenderCollector()
     val dragAndDropState = rememberDragAndDropState()
@@ -72,6 +72,7 @@ fun ProjectEditorWindow(
         collector = collector,
         dragAndDropState = dragAndDropState
     )
+
     LaunchedEffect(descriptors) {
         descriptors.findByDescriptorKey("foundation.column")?.let {
             rendererState.renderPreview(it.toHolder())
@@ -121,11 +122,13 @@ fun ProjectEditorWindow(
             )
             Divider(Orientation.Vertical, modifier = Modifier.fillMaxHeight())
             ComposableDescriptorList(descriptors, dragAndDropState)
-            Box(Modifier.fillMaxHeight().weight(1f).pointerInput(Unit) {
-                detectTapGestures {
-                    rendererState.clearSelectedComponents()
-                }
-            }, contentAlignment = Alignment.Center) {
+            Box(
+                Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .clearFocusWhenPressed { rendererState.clearSelectedComponents() },
+                contentAlignment = Alignment.Center
+            ) {
                 when (currentPage) {
                     is EditorPages.Screens -> {
                         Column(

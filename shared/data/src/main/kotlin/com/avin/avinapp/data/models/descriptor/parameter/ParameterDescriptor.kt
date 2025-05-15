@@ -9,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class ParameterDescriptor(
-    val name: String,
     @SerialName("descriptor_key")
     val descriptorKey: String,
+    val name: String = descriptorKey.replaceFirstChar { it.uppercase() },
     val type: ParameterType,
     @SerialName("default_value")
     val defaultValue: ParameterValue? = null

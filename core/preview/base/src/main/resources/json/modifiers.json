@@ -1,0 +1,17 @@
+[
+  {
+    "descriptor_key": "fillMaxWidth",
+    "parameters": [
+      {
+        "descriptor_key": "fraction",
+        "type": {
+          "type": "FloatType"
+        },
+        "default_value": {
+          "source": "STATIC",
+          "value": "1"
+        }
+      }
+    ]
+  }
+]

@@ -21,103 +21,105 @@ private fun calculate(text: String): Double? {
 }
 
 @Composable
-fun ExpressionTextField(
-    value: Double,
-    onValueChanged: (Double) -> Unit,
+private fun <T : Number> ExpressionTextFieldImpl(
+    value: T,
+    onValueChanged: (T) -> Unit,
+    parse: (String) -> T?,
+    format: (T) -> String,
+    add: (T, Float) -> T,
     modifier: Modifier = Modifier
 ) {
-    val state = rememberTextFieldState(value.formatSmart())
+    val state = rememberTextFieldState(format(value))
 
-    fun updateValue(value: Double) {
-        state.edit { replace(0, state.text.length, value.toString()) }
+    fun updateValue(newValue: T) {
+        state.edit {
+            replace(0, state.text.length, format(newValue))
+        }
     }
 
     fun calculateValue() {
-        if (value.formatSmart() != state.text.toString()) {
-            val result = calculate(state.text.toString())?.also(onValueChanged) ?: return
-            updateValue(result)
+        if (format(value) != state.text.toString()) {
+            val result = calculate(state.text.toString())
+            val parsed = result?.let { parse(it.toString()) } ?: return
+            onValueChanged(parsed)
+            updateValue(parsed)
         }
     }
 
     LaunchedEffect(Unit) {
         snapshotFlow { state.text }.collectLatest {
-            val newDouble = it.toString().toDoubleOrNull()
-            onValueChanged.invoke(newDouble ?: return@collectLatest)
-        }
-    }
-
-    TextField(state, modifier = modifier.onFocusChanged {
-        if (!it.isFocused) {
-            calculateValue()
-        }
-    }.onPreviewKeyEvent {
-        if (it.key.keyCode == Key.Enter.keyCode) {
-            calculateValue()
-            true
-        } else false
-    }, trailingIcon = {
-        Scrubber(
-            onScrub = { change ->
-                state.text.toString().toDoubleOrNull()
-                    ?.let {
-                        val newValue = it.plus(change)
-                        onValueChanged.invoke(newValue)
-                        updateValue(newValue)
-                    }
-            }
-        )
-    })
-}
-
-@Composable
-fun ExpressionTextField(
-    value: Int,
-    onValueChanged: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val state = rememberTextFieldState(initialText = value.toString())
-
-    LaunchedEffect(Unit) {
-        snapshotFlow { state.text }.collectLatest {
-            val newValue = it.toString().toIntOrNull()
-            onValueChanged.invoke(newValue ?: return@collectLatest)
-        }
-    }
-
-    fun updateValue(value: Int) {
-        state.edit { replace(0, state.text.length, value.toString()) }
-    }
-
-    fun calculateValue() {
-        val result = calculate(state.text.toString())
-        if (result != null && result.toInt() != value) {
-            onValueChanged(result.toInt())
-            updateValue(result.toInt())
+            val parsed = parse(it.toString())
+            parsed?.let(onValueChanged)
         }
     }
 
     TextField(
         state = state,
-        modifier = modifier.onFocusChanged { focusState ->
-            if (!focusState.isFocused) {
-                calculateValue()
+        modifier = modifier
+            .onFocusChanged {
+                if (!it.isFocused) {
+                    calculateValue()
+                }
             }
-        }.onPreviewKeyEvent {
-            if (it.key.keyCode == Key.Enter.keyCode) {
-                calculateValue()
-                true
-            } else false
-        }, trailingIcon = {
+            .onPreviewKeyEvent {
+                if (it.key.keyCode == Key.Enter.keyCode) {
+                    calculateValue()
+                    true
+                } else false
+            },
+        trailingIcon = {
             Scrubber(
                 onScrub = { change ->
-                    state.text.toString().toIntOrNull()
-                        ?.let {
-                            val newValue = it.plus(change.roundToInt())
-                            onValueChanged.invoke(newValue)
-                            updateValue(newValue)
-                        }
+                    val current = parse(state.text.toString()) ?: return@Scrubber
+                    val newValue = add(current, change)
+                    onValueChanged(newValue)
+                    updateValue(newValue)
                 }
             )
         }
+    )
+}
+
+@Composable
+fun ExpressionTextField(
+    value: Double,
+    onValueChanged: (Double) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ExpressionTextFieldImpl(
+        value = value,
+        onValueChanged = onValueChanged,
+        parse = { it.toDoubleOrNull() },
+        format = { "%.2f".format(it) },
+        add = { v, delta -> v + delta },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ExpressionTextField(
+    value: Float,
+    onValueChanged: (Float) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ExpressionTextFieldImpl(
+        value = value,
+        onValueChanged = onValueChanged,
+        parse = { it.toFloatOrNull() },
+        format = { "%.2f".format(it) },
+        add = { v, delta -> v + delta },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ExpressionTextField(value: Int, onValueChanged: (Int) -> Unit, modifier: Modifier = Modifier) {
+    ExpressionTextFieldImpl(
+        value = value,
+        onValueChanged = onValueChanged,
+        parse = { it.toIntOrNull() },
+        format = { it.toString() },
+        add = { v, delta -> v + delta.roundToInt() },
+        modifier = modifier
     )
 }

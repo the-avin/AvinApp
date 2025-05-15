@@ -96,7 +96,7 @@ class RootComponent(context: ComponentContext) : BaseComponent(context), KoinCom
                 info = config,
                 repository = projectRepository,
                 devicesRepository = get(),
-                composableRepository = get(),
+                descriptorsRepository = get(),
                 editorSettingsRepository = get()
             )
         }
