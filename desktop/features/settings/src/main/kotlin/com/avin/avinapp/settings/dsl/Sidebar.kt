@@ -24,6 +24,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.avin.avinapp.data.models.settings.page.SettingsPage
 import com.avin.avinapp.manager.compose.dynamicStringRes
+import com.avin.avinapp.utils.compose.nodes.resizable.ResizableEndPanel
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.theme.colorPalette
@@ -35,35 +36,40 @@ fun Sidebar(
     onPageChange: (SettingsPage) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(16.dp)
+    ResizableEndPanel(
+        initialSize = 200.dp,
+        sizeRange = 100.dp..300.dp
     ) {
-        items(pages, key = { it.name.resId }) { page ->
-            val interactionSource = remember { MutableInteractionSource() }
-            val isHovered by interactionSource.collectIsHoveredAsState()
-            Box(
-                Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .fillMaxWidth()
-                    .background(
-                        when {
-                            currentPage?.name == page.name -> JewelTheme.colorPalette.blue[3]
-                            isHovered -> JewelTheme.colorPalette.blue[5].copy(.3f)
-                            else -> Color.Transparent
+        LazyColumn(
+            modifier = modifier,
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(pages, key = { it.name.resId }) { page ->
+                val interactionSource = remember { MutableInteractionSource() }
+                val isHovered by interactionSource.collectIsHoveredAsState()
+                Box(
+                    Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .fillMaxWidth()
+                        .background(
+                            when {
+                                currentPage?.name == page.name -> JewelTheme.colorPalette.blue[3]
+                                isHovered -> JewelTheme.colorPalette.blue[5].copy(.3f)
+                                else -> Color.Transparent
+                            }
+                        )
+                        .hoverable(interactionSource)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                onPageChange.invoke(page)
+                            }
                         }
-                    )
-                    .hoverable(interactionSource)
-                    .pointerInput(Unit) {
-                        detectTapGestures {
-                            onPageChange.invoke(page)
-                        }
-                    }
-                    .pointerHoverIcon(PointerIcon.Hand)
-                    .padding(8.dp)
+                        .pointerHoverIcon(PointerIcon.Hand)
+                        .padding(8.dp)
 
-            ) {
-                Text(dynamicStringRes(page.name))
+                ) {
+                    Text(dynamicStringRes(page.name))
+                }
             }
         }
     }

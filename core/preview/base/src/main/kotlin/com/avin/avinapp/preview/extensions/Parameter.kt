@@ -1,7 +1,7 @@
 package com.avin.avinapp.preview.extensions
 
 import com.avin.avinapp.data.models.descriptor.parameter.ParameterDescriptor
-import com.avin.avinapp.preview.utils.convertParameterToType
+import com.avin.avinapp.preview.mappers.convertParameterToType
 
 val ParameterDescriptor.typedDefaultValue: Any?
     get() {

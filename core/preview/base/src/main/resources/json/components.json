@@ -42,17 +42,7 @@
     "group": "Layout",
     "default_modifiers": [
       {
-        "descriptor_key": "fillMaxWidth",
-        "parameters": [
-          {
-            "key": "fraction",
-            "type": {
-              "type": "FloatType"
-            },
-            "source": "STATIC",
-            "value": "1.0"
-          }
-        ]
+        "descriptor_key": "fillMaxWidth"
       },
       {
         "descriptor_key": "height",

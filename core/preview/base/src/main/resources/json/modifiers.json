@@ -5,7 +5,10 @@
       {
         "descriptor_key": "fraction",
         "type": {
-          "type": "FloatType"
+          "type": "FloatType",
+          "field_type": "SLIDER",
+          "min_value": 0,
+          "max_value": 1
         },
         "default_value": {
           "source": "STATIC",

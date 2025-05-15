@@ -40,5 +40,5 @@ include("shared:git")
 include("core:project")
 
 includeBuild("./composite/shared") {
-    name = "shred-modules"
+    name = "shared-modules"
 }
