@@ -3,8 +3,8 @@ package com.avin.avinapp.preview.mappers
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.avin.avinapp.data.domain.parameter.ParameterType
-import com.avin.avinapp.data.domain.parameter.ParameterValueSource
+import com.avin.avinapp.data.domain.parameter.type.ParameterType
+import com.avin.avinapp.data.domain.parameter.value.ParameterValue
 import com.avin.avinapp.preview.extensions.toComposeColor
 
 const val MAX_VALUE = "MAX"
@@ -49,13 +49,11 @@ private fun <T : Number> parseNumericOrLimit(
     }
 }
 
-fun convertParameterToType(
-    value: String?,
+private fun convertStaticParameterToType(
+    valueObject: ParameterValue.Static,
     type: ParameterType,
-    source: ParameterValueSource
 ): Any? {
-    if (value == null || source == ParameterValueSource.CONTEXTUAL) return null
-
+    val value = valueObject.value ?: return null
     return when (type) {
         is ParameterType.BooleanType -> parseBoolean(value)
         is ParameterType.FloatType -> parseFloat(value)
@@ -64,5 +62,15 @@ fun convertParameterToType(
         is ParameterType.SpType -> parseFloat(value)?.sp
         is ParameterType.ColorType -> parseColor(value)
         is ParameterType.StringType -> value
+    }
+}
+
+fun convertParameterToType(
+    valueObject: ParameterValue,
+    type: ParameterType,
+): Any? {
+    return when (valueObject) {
+        is ParameterValue.Static -> convertStaticParameterToType(valueObject, type)
+        is ParameterValue.Contextual -> null
     }
 }

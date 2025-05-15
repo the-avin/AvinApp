@@ -1,6 +1,6 @@
 package com.avin.avinapp.data.serialization.parameter
 
-import com.avin.avinapp.data.domain.parameter.ParameterType
+import com.avin.avinapp.data.domain.parameter.type.ParameterType
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.avin.avinapp.data.domain.parameter.ParameterType
+import com.avin.avinapp.data.domain.parameter.type.ParameterType
 import com.avin.avinapp.data.models.descriptor.parameter.ParameterDescriptor
 import com.avin.avinapp.features.editor.widgets.properties.items.float.ParameterFloatItem
 import com.avin.avinapp.features.editor.widgets.properties.items.ParameterIntItem

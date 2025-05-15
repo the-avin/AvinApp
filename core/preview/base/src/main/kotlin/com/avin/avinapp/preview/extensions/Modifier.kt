@@ -6,5 +6,7 @@ import com.avin.avinapp.preview.mappers.convertParameterToType
 
 val DefaultModifierDescriptor.defaultValues: ModifierValues
     get() = parameters.associate {
-        it.key to convertParameterToType(it.value, it.type, it.source)
+        it.key to it.value?.let { valueObject ->
+            convertParameterToType(valueObject, it.type)
+        }
     }.toMutableMap()

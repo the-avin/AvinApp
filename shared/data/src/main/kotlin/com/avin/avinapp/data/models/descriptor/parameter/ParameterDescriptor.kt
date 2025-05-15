@@ -1,8 +1,8 @@
 package com.avin.avinapp.data.models.descriptor.parameter
 
 import androidx.compose.runtime.Immutable
-import com.avin.avinapp.data.domain.parameter.ParameterType
-import com.avin.avinapp.data.domain.parameter.ParameterValueSource
+import com.avin.avinapp.data.domain.parameter.type.ParameterType
+import com.avin.avinapp.data.domain.parameter.value.ParameterValue
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,11 +15,4 @@ data class ParameterDescriptor(
     val type: ParameterType,
     @SerialName("default_value")
     val defaultValue: ParameterValue? = null
-) {
-    @Serializable
-    @Immutable
-    data class ParameterValue(
-        val source: ParameterValueSource,
-        val value: String
-    )
-}
+)

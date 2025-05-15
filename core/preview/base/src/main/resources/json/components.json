@@ -11,8 +11,8 @@
           "type": "StringType"
         },
         "default_value": {
-          "source": "STATIC",
-          "value": "Hello, world!"
+          "type": "static",
+          "value": "Label"
         }
       },
       {
@@ -22,7 +22,7 @@
           "type": "IntType"
         },
         "default_value": {
-          "source": "STATIC",
+          "type": "static",
           "value": "MAX"
         }
       }
@@ -49,11 +49,13 @@
         "parameters": [
           {
             "key": "height",
-            "value": "200",
             "type": {
               "type": "DpType"
             },
-            "source": "STATIC"
+            "value": {
+              "type": "static",
+              "value": "200"
+            }
           }
         ]
       }

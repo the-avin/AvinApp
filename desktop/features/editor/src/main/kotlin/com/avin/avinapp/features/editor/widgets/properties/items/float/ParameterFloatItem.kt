@@ -3,11 +3,10 @@ package com.avin.avinapp.features.editor.widgets.properties.items.float
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.avin.avinapp.data.domain.parameter.FieldType
-import com.avin.avinapp.data.domain.parameter.ParameterType
+import com.avin.avinapp.data.domain.parameter.type.FieldType
+import com.avin.avinapp.data.domain.parameter.type.ParameterType
 import com.avin.avinapp.data.extensions.parameter.valueRange
 import com.avin.avinapp.utils.compose.nodes.field.ExpressionTextField
-import org.jetbrains.jewel.ui.component.Slider
 
 @Composable
 fun ParameterFloatItem(

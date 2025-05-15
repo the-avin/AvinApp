@@ -1,4 +1,4 @@
-package com.avin.avinapp.data.domain.parameter
+package com.avin.avinapp.data.domain.parameter.type
 
 import com.avin.avinapp.data.domain.parameter.limits.NumberLimitable
 import kotlinx.serialization.SerialName

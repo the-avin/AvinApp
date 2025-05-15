@@ -11,7 +11,7 @@
           "max_value": 1
         },
         "default_value": {
-          "source": "STATIC",
+          "type": "static",
           "value": "1.0"
         }
       }

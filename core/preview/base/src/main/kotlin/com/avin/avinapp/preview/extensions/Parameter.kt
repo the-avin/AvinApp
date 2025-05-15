@@ -5,7 +5,9 @@ import com.avin.avinapp.preview.mappers.convertParameterToType
 
 val ParameterDescriptor.typedDefaultValue: Any?
     get() {
-        return convertParameterToType(
-            value = defaultValue?.value, type = type, source = defaultValue?.source ?: return null
-        )
+        return defaultValue?.let {
+            convertParameterToType(
+                valueObject = it, type = type
+            )
+        }
     }
