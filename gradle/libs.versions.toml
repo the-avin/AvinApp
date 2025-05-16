@@ -14,6 +14,7 @@ jewel = "1.0.0-SNAPSHOT"
 kotlinx-serialization = "1.8.1"
 coil = "3.1.0"
 exp4j = "0.4.8"
+compose_color_picker = "0.7.0"
 
 [libraries]
 pluginComposeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
@@ -61,6 +62,9 @@ jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 
 # Kaml
 kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+
+# Color picker
+compose-color-picker = { module = "com.godaddy.android.colorpicker:compose-color-picker-jvm", version.ref = "compose_color_picker" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

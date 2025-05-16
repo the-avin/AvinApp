@@ -1,14 +1,21 @@
 package com.avin.avinapp.features.projects.page
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
+import com.avin.avinapp.color_picker.ColorPickerPopup
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
@@ -19,6 +26,7 @@ import com.avin.avinapp.utils.compose.modifier.allPadding
 import com.avin.avinapp.utils.compose.modifier.horizontalPadding
 import com.avin.avinapp.utils.compose.modifier.topPadding
 import com.avin.avinapp.utils.compose.modifier.windowBackground
+import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
@@ -45,7 +53,10 @@ fun ProjectsWindow(
     ) {
         window.ApplyWindowMinimumSize()
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd) {
-            Column(modifier = Modifier.fillMaxSize().windowBackground().horizontalPadding().topPadding()) {
+            Column(
+                modifier = Modifier.fillMaxSize().windowBackground().horizontalPadding()
+                    .topPadding()
+            ) {
                 Header(
                     searchValue = searchValue,
                     onSearchValueChange = component::search,
@@ -56,7 +67,10 @@ fun ProjectsWindow(
                 if (loading) {
                     IndeterminateHorizontalProgressBar(Modifier.fillMaxWidth().topPadding())
                 } else {
-                    Divider(Orientation.Horizontal, modifier = Modifier.padding(top = 8.dp).fillMaxWidth())
+                    Divider(
+                        Orientation.Horizontal,
+                        modifier = Modifier.padding(top = 8.dp).fillMaxWidth()
+                    )
                 }
                 ProjectsList(
                     projects = projects,
@@ -82,19 +96,32 @@ fun Header(
     onOpenFilePicker: () -> Unit,
     onOpenCloneRepository: () -> Unit,
 ) {
+    val searchState = rememberTextFieldState()
+    LaunchedEffect(Unit) {
+        snapshotFlow { searchState.text }.collectLatest {
+            onSearchValueChange.invoke(it.toString())
+        }
+    }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextField(
-            value = searchValue,
-            onValueChange = onSearchValueChange,
+            state = searchState,
             modifier = Modifier.weight(1f),
             placeholder = { Text("Search") },
         )
-        SecondaryButton(onClick = onNewProjectClick) {
-            Text(dynamicStringRes(Resource.string.newProject))
+        Box {
+            SecondaryButton(onClick = onNewProjectClick) {
+                Text(dynamicStringRes(Resource.string.newProject))
+            }
+            var visible by remember { mutableStateOf(true) }
+            if (visible) {
+                ColorPickerPopup {
+                    visible = false
+                }
+            }
         }
         SecondaryButton(onClick = onOpenFilePicker) {
             Text(dynamicStringRes(Resource.string.open))

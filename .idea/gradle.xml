@@ -48,6 +48,7 @@
             <option value="$PROJECT_DIR$/desktop/utils" />
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/shared/compose" />
+            <option value="$PROJECT_DIR$/shared/compose/color_picker" />
             <option value="$PROJECT_DIR$/shared/compose/dnd" />
             <option value="$PROJECT_DIR$/shared/compose/eyedropper" />
             <option value="$PROJECT_DIR$/shared/data" />

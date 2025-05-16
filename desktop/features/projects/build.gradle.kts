@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":desktop:utils"))
     implementation(project(":core:theme"))
     implementation(project(":shared:data"))
+    implementation(project(":shared:compose:color_picker"))
     implementation(project(":shared:git"))
     implementation(project(":shared:utils:app"))
     implementation(project(":shared:utils:compose"))
