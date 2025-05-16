@@ -8,18 +8,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.awt.AWTEvent
 import java.awt.MouseInfo
+import java.awt.Point
+import java.awt.Rectangle
 import java.awt.Robot
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
+import java.awt.image.BufferedImage
 
 
 /**
@@ -27,6 +32,7 @@ import java.awt.event.MouseEvent
  */
 @Stable
 class EyedropperState(
+    private val takeScreenshot: Boolean = false,
     private val scope: CoroutineScope
 ) {
     private var job: Job? = null
@@ -42,15 +48,22 @@ class EyedropperState(
         Toolkit.getDefaultToolkit()
     }
 
+    var mousePosition by mutableStateOf(IntOffset(0, 0))
+        private set
+
+    var magnifierImage by mutableStateOf<BufferedImage?>(null)
+        private set
+
+
     private val awtEventListener by lazy {
         AWTEventListener { event ->
             when (event) {
                 is MouseEvent -> {
                     val location = MouseInfo.getPointerInfo().location
+                    takeScreenshot(location)
                     val awtColor = robot.getPixelColor(location.x, location.y)
                     val color = Color(awtColor.red, awtColor.green, awtColor.blue)
                     onColorHovered.invoke(color)
-                    println(color)
 
                     if (event.id == MouseEvent.MOUSE_PRESSED) {
                         onColorPicked.invoke(color)
@@ -65,6 +78,22 @@ class EyedropperState(
                 }
             }
         }
+    }
+
+    private fun takeScreenshot(location: Point) {
+        if (takeScreenshot.not()) return
+        mousePosition = IntOffset(location.x, location.y)
+
+        val screenshotSize = 15
+        val screenshot = robot.createScreenCapture(
+            Rectangle(
+                location.x - screenshotSize / 2,
+                location.y - screenshotSize / 2,
+                screenshotSize,
+                screenshotSize
+            )
+        )
+        magnifierImage = screenshot
     }
 
     fun start() {
@@ -104,9 +133,9 @@ class EyedropperState(
 
 
 @Composable
-fun rememberEyedropperState(): EyedropperState {
+fun rememberEyedropperState(takeScreenshot: Boolean = false): EyedropperState {
     val scope = rememberCoroutineScope()
-    val state = remember { EyedropperState(scope) }
+    val state = remember { EyedropperState(takeScreenshot, scope) }
     DisposableEffect(Unit) {
         onDispose { state.stop() }
     }

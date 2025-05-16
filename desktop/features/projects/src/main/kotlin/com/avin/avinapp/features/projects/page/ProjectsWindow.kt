@@ -1,21 +1,23 @@
 package com.avin.avinapp.features.projects.page
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
-import com.avin.avinapp.color_picker.ColorPickerPopup
 import com.avin.avinapp.features.projects.component.ProjectsComponent
 import com.avin.avinapp.manager.compose.dynamicStringRes
 import com.avin.avinapp.resource.Resource
@@ -28,7 +30,12 @@ import com.avin.avinapp.utils.compose.modifier.topPadding
 import com.avin.avinapp.utils.compose.modifier.windowBackground
 import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.jewel.ui.Orientation
-import org.jetbrains.jewel.ui.component.*
+import org.jetbrains.jewel.ui.component.Divider
+import org.jetbrains.jewel.ui.component.Icon
+import org.jetbrains.jewel.ui.component.IconButton
+import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
+import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
 
 @Composable
@@ -42,7 +49,6 @@ fun ProjectsWindow(
     onOpenProject: (Long) -> Unit,
 ) {
     val projects by component.projects.collectAsState(emptyList())
-    val searchValue by component.searchValue.collectAsState()
     val loading by component.loading.collectAsState()
     AppCustomWindow(
         onCloseRequest = onCloseRequest,
@@ -58,7 +64,6 @@ fun ProjectsWindow(
                     .topPadding()
             ) {
                 Header(
-                    searchValue = searchValue,
                     onSearchValueChange = component::search,
                     onNewProjectClick = onNewProjectClick,
                     onOpenFilePicker = onOpenFilePicker,
@@ -90,7 +95,6 @@ fun ProjectsWindow(
 
 @Composable
 fun Header(
-    searchValue: String,
     onSearchValueChange: (String) -> Unit,
     onNewProjectClick: () -> Unit,
     onOpenFilePicker: () -> Unit,
@@ -112,16 +116,8 @@ fun Header(
             modifier = Modifier.weight(1f),
             placeholder = { Text("Search") },
         )
-        Box {
-            SecondaryButton(onClick = onNewProjectClick) {
-                Text(dynamicStringRes(Resource.string.newProject))
-            }
-            var visible by remember { mutableStateOf(true) }
-            if (visible) {
-                ColorPickerPopup {
-                    visible = false
-                }
-            }
+        SecondaryButton(onClick = onNewProjectClick) {
+            Text(dynamicStringRes(Resource.string.newProject))
         }
         SecondaryButton(onClick = onOpenFilePicker) {
             Text(dynamicStringRes(Resource.string.open))

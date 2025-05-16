@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.avin.avinapp.compose.eyedropper.EyedropperDefaults
 import com.avin.avinapp.compose.eyedropper.rememberEyedropperState
 import com.avin.avinapp.utils.compose.nodes.popup.PopupContainer
 import com.godaddy.android.colorpicker.ClassicColorPicker
@@ -31,9 +32,10 @@ import org.jetbrains.jewel.ui.icons.AllIconsKeys
 @Composable
 fun ColorPickerPopup(
     initialColor: Color? = null,
+    onColorChanged: (Color) -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    val eyedropperState = rememberEyedropperState()
+    val eyedropperState = rememberEyedropperState(true)
     var color by remember {
         mutableStateOf(HsvColor.from(initialColor ?: Color.Red))
     }
@@ -65,7 +67,7 @@ fun ColorPickerPopup(
             ReusableContent(color) {
                 ClassicColorPicker(
                     color = color,
-                    onColorChanged = {},
+                    onColorChanged = { onColorChanged.invoke(it.toColor()) },
                     modifier = Modifier.size(300.dp, 150.dp)
                 )
             }
@@ -87,4 +89,5 @@ fun ColorPickerPopup(
             }
         }
     }
+    EyedropperDefaults.MagnifierOverlay(eyedropperState)
 }
